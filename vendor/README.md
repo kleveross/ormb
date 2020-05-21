@@ -1,0 +1,3 @@
+<!-- DOCTOC SKIP -->
+
+Golang vendor

@@ -1,0 +1,5 @@
+# Output folder of build
+bin
+
+# Output file of unit test coverage
+coverage.out

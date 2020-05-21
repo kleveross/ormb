@@ -1,0 +1,23 @@
+_config:
+  _metadata:
+    description: "A basic template for application"
+    name: template-controller
+    namespace: kube-system
+    template:
+      type: template.caicloud.io/application
+      version: 1.0.0
+    version: "v0.0.1"
+  controllers:
+  - containers:
+    - image: '[[ registry_release ]]/template-controller:v0.0.1'
+      imagePullPolicy: IfNotPresent
+      resources:
+        limits:
+          cpu: 200m
+          memory: 200Mi
+        requests:
+          cpu: 100m
+          memory: 100Mi
+    controller:
+      replica: 1
+    type: Deployment
