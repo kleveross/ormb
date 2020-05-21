@@ -15,7 +15,7 @@
 
 # ormb
 
-Manage Machine Learning/Deep Learning Models like Docker Images.
+Managing Machine Learning/Deep Learning Models like Docker Images.
 
 ormb helps you manage your Machine Learning/Deep Learning models. It makes your models easy to create, version, share and publish.
 
@@ -82,6 +82,6 @@ resnet_v2_fp32_savedmodel_NCHW
 
 ## Community
 
-ormb project is a part of Clever, which is a Cloud Native Machine Learning platform. We are going to open source the platform soon.
+ormb project is part of Clever, a Cloud Native Machine Learning platform. We are going to open source a community edition soon.
 
 The Clever slack workspace is caicloud-clever.slack.com. To join, click this [invitation to our Slack workspace](https://join.slack.com/t/caicloud-clever/shared_invite/zt-efz4rdrm-kcOg0Qvs_B8aIWGdZv9E6g).
