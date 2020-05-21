@@ -105,7 +105,7 @@ func (cache *Cache) FetchReference(ref *Reference) (*CacheRefSummary, error) {
 			var contentLayer *ocispec.Descriptor
 			for _, layer := range manifest.Layers {
 				switch layer.MediaType {
-				case consts.ModelContentLayerMediaType:
+				case consts.MediaTypeModelContentLayer:
 					contentLayer = &layer
 				}
 			}
@@ -113,13 +113,13 @@ func (cache *Cache) FetchReference(ref *Reference) (*CacheRefSummary, error) {
 				return &r, errors.New(
 					fmt.Sprintf(
 						"manifest does not contain a layer with mediatype %s",
-						consts.ModelContentLayerMediaType))
+						consts.MediaTypeModelContentLayer))
 			}
 			if contentLayer.Size == 0 {
 				return &r, errors.New(
 					fmt.Sprintf(
 						"manifest layer with mediatype %s is of size 0",
-						consts.ModelContentLayerMediaType))
+						consts.MediaTypeModelContentLayer))
 			}
 			r.ContentLayer = contentLayer
 			info, err := cache.ociStore.Info(ctx(cache.out, cache.debug), contentLayer.Digest)
@@ -315,7 +315,7 @@ func (cache *Cache) saveModelConfig(m *model.Model) (*ocispec.Descriptor, bool, 
 	if err != nil {
 		return nil, configExists, err
 	}
-	descriptor := cache.memoryStore.Add("", consts.ModelConfigMediaType, configBytes)
+	descriptor := cache.memoryStore.Add("", consts.MediaTypeModelConfig, configBytes)
 	return &descriptor, configExists, nil
 }
 
@@ -329,7 +329,7 @@ func (cache *Cache) saveModelContentLayer(m *model.Model) (*ocispec.Descriptor, 
 	if err != nil {
 		return nil, contentExists, err
 	}
-	descriptor := cache.memoryStore.Add("", consts.ModelContentLayerMediaType, m.Content)
+	descriptor := cache.memoryStore.Add("", consts.MediaTypeModelContentLayer, m.Content)
 	return &descriptor, contentExists, nil
 }
 
