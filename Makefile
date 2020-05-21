@@ -26,10 +26,10 @@
 #
 
 # This repo's root import path (under GOPATH).
-ROOT := github.com/caicloud/golang-template-project
+ROOT := github.com/caicloud/ormb
 
 # Target binaries. You can build multiple binaries for a single project.
-TARGETS := admin controller
+TARGETS := ormb
 
 # Container image prefix and suffix added to targets.
 # The final built images are:
