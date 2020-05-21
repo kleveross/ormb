@@ -2,124 +2,86 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Golang Template Project](#golang-template-project)
-  - [About the project](#about-the-project)
-    - [API docs](#api-docs)
-    - [Design](#design)
-    - [Status](#status)
-    - [See also](#see-also)
-  - [Getting started](#getting-started)
-    - [Layout](#layout)
-  - [Notes](#notes)
+- [ormb](#ormb)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Save the model](#save-the-model)
+    - [Push the model to a remote registry](#push-the-model-to-a-remote-registry)
+    - [Pull the model from a remote registry](#pull-the-model-from-a-remote-registry)
+    - [Export the model to the current directory](#export-the-model-to-the-current-directory)
+  - [Community](#community)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Golang Template Project
+# ormb
 
-## About the project
+Managing Machine Learning/Deep Learning Models like Docker Images.
 
-The template is used to create golang project. All golang projects must follow the conventions in the
-template. Calling for exceptions must be brought up in the engineering team.
+ormb helps you manage your Machine Learning/Deep Learning models. It makes your models easy to create, version, share and publish.
 
-### API docs
+ormb can publish models by reading the information from a `ormbfile.yaml`. A `ormbfile.yaml` is a text document that contains all the information about the model.
 
-The template doesn't have API docs. For web service, please include API docs here, whether it's
-auto-generated or hand-written. For auto-generated API docs, you can also give instructions on the
-build process.
+## Installation
 
-### Design
+```bash
+go install github.com/caicloud/ormb
+```
+## Usage
 
-The template follows project convention doc.
+### Save the model
 
-* [Repository Conventions](https://github.com/caicloud/engineering/blob/master/guidelines/repo_conventions.md)
-
-### Status
-
-The template project is in alpha status.
-
-### See also
-
-* [nirvana project template](https://github.com/caicloud/nirvana-template-project)
-* [python project template](https://github.com/caicloud/python-template-project)
-* [common project template](https://github.com/caicloud/common-template-project)
-
-## Getting started
-
-Below we describe the conventions or tools specific to golang project.
-
-### Layout
-
-```tree
-├── .github
-│   ├── ISSUE_TEMPLATE.md
-│   └── PULL_REQUEST_TEMPLATE.md
-├── .gitignore
-├── .golangci.yml
-├── CHANGELOG.md
-├── Makefile
-├── OWNERS
-├── README.md
-├── build
-│   ├── admin
-│   │   └── Dockerfile
-│   └── controller
-│       └── Dockerfile
-├── cmd
-│   ├── admin
-│   │   └── admin.go
-│   └── controller
-│       └── controller.go
-├── docs
-│   └── README.md
-├── hack
-│   ├── README.md
-│   ├── deployment.yaml
-│   └── script.sh
-├── pkg
-│   ├── apis
-│   │   └── v1
-│   │       └── README.md
-│   ├── utils
-│   │   └── net
-│   │       └── net.go
-│   └── version
-│       └── version.go
-├── release
-│   ├── template-admin.yaml
-│   └── template-controller.yaml
-├── test
-│   ├── README.md
-│   └── test_make.sh
-├── third_party
-│   └── README.md
-└── vendor
-    └── README.md
+```bash
+$ ormb save ./resnet_v2_fp32_savedmodel_NCHW caicloud/resnetv2:v1
+ref:     caicloud/resnetv2:v1
+digest:  f51973c855608ab06d8f5e4333925a635f87f01ff992ffc5f9988f26d1da24e9
+size:    90.6 MiB
+v1: saved
 ```
 
-A brief description of the layout:
+### Push the model to a remote registry
 
-* `.github` has two template files for creating PR and issue. Please see the files for more details.
-* `.gitignore` varies per project, but all projects need to ignore `bin` directory.
-* `.golangci.yml` is the golangci-lint config file.
-* `Makefile` is used to build the project. **You need to tweak the variables based on your project**.
-* `CHANGELOG.md` contains auto-generated changelog information.
-* `OWNERS` contains owners of the project.
-* `README.md` is a detailed description of the project.
-* `bin` is to hold build outputs.
-* `cmd` contains main packages, each subdirecoty of `cmd` is a main package.
-* `build` contains scripts, yaml files, dockerfiles, etc, to build and package the project.
-* `docs` for project documentations.
-* `hack` contains scripts used to manage this repository, e.g. codegen, installation, verification, etc.
-* `pkg` places most of project business logic and locate `api` package.
-* `release` [chart](https://github.com/caicloud/charts) for production deployment.
-* `test` holds all tests (except unit tests), e.g. integration, e2e tests.
-* `third_party` for all third party libraries and tools, e.g. swagger ui, protocol buf, etc.
-* `vendor` contains all vendored code.
+```bash
+$ ormb push caicloud/resnetv2:v1
+The push refers to repository [caicloud/resnetv2]
+ref:     caicloud/resnetv2:v1
+digest:  f51973c855608ab06d8f5e4333925a635f87f01ff992ffc5f9988f26d1da24e9
+size:    90.6 MiB
+v1: pushed to remote (1 layer, 90.6 MiB total)
+```
 
-## Notes
+### Pull the model from a remote registry
 
-* Makefile **MUST NOT** change well-defined command semantics, see Makefile for details.
-* Every project **MUST** use `dep` for vendor management and **MUST** checkin `vendor` direcotry.
-* `cmd` and `build` **MUST** have the same set of subdirectories for main targets
-  * For example, `cmd/admin,cmd/controller` and `build/admin,build/controller`.
-  * Dockerfile **MUST** be put under `build` directory even if you have only one Dockerfile.
+```bash
+$ ormb pull caicloud/resnetv2:v1 
+v1: Pulling from caicloud/resnetv2
+ref:     caicloud/resnetv2:v1
+digest:  f51973c855608ab06d8f5e4333925a635f87f01ff992ffc5f9988f26d1da24e9
+size:    90.6 MiB
+Status: Downloaded newer model for caicloud/resnetv2:v1
+```
+
+### Export the model to the current directory
+
+```bash
+$ ormb export caicloud/resnetv2:v1
+ref:     localhost:5000/caicloud/resnetv2:v1
+digest:  f51973c855608ab06d8f5e4333925a635f87f01ff992ffc5f9988f26d1da24e9
+size:    90.6 MiB
+
+$ tree ./resnet_v2_fp32_savedmodel_NCHW
+resnet_v2_fp32_savedmodel_NCHW
+├── 1538687196
+│   ├── saved_model.pb
+│   └── variables
+│       ├── variables.data-00000-of-00001
+│       └── variables.index
+└── ormbfile.yaml
+
+2 directories, 4 files
+```
+
+## Community
+
+ormb project is part of Clever, a Cloud Native Machine Learning platform. We are going to open source a community edition soon.
+
+The Clever slack workspace is caicloud-clever.slack.com. To join, click this [invitation to our Slack workspace](https://join.slack.com/t/caicloud-clever/shared_invite/zt-efz4rdrm-kcOg0Qvs_B8aIWGdZv9E6g).
