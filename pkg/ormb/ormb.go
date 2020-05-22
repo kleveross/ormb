@@ -8,7 +8,9 @@ import (
 	"github.com/caicloud/ormb/pkg/oci"
 )
 
-type ormb interface {
+// ORMB is the interface to save/pull/push/export
+// models in/to a remote registry.
+type ORMB interface {
 	Login(hostname, username, password string, insecureOpt bool) error
 	Push(refStr string) error
 	Pull(refStr string) error
@@ -16,25 +18,26 @@ type ormb interface {
 	Save(src, refStr string) error
 }
 
-type ociormb struct {
+type ociORMB struct {
 	client *oci.Client
 }
 
-func NewDefaultOCIormb() (ormb, error) {
+// NewDefaultOCIormb creates a OCI-based ORMB client.
+func NewDefaultOCIormb() (ORMB, error) {
 	c, err := oci.NewClient(oci.ClientOptWriter(os.Stdout))
 	if err != nil {
 		return nil, err
 	}
-	return &ociormb{
+	return &ociORMB{
 		client: c,
 	}, nil
 }
 
-func (o ociormb) Login(hostname, username, password string, insecureOpt bool) error {
+func (o ociORMB) Login(hostname, username, password string, insecureOpt bool) error {
 	return o.client.Login(hostname, username, password, insecureOpt)
 }
 
-func (o ociormb) Push(refStr string) error {
+func (o ociORMB) Push(refStr string) error {
 	ref, err := oci.ParseReference(refStr)
 	if err != nil {
 		panic(err)
@@ -42,7 +45,7 @@ func (o ociormb) Push(refStr string) error {
 	return o.client.PushModel(ref)
 }
 
-func (o ociormb) Pull(refStr string) error {
+func (o ociORMB) Pull(refStr string) error {
 	ref, err := oci.ParseReference(refStr)
 	if err != nil {
 		return err
@@ -50,7 +53,7 @@ func (o ociormb) Pull(refStr string) error {
 	return o.client.PullModel(ref)
 }
 
-func (o ociormb) Export(refStr, dst string) error {
+func (o ociORMB) Export(refStr, dst string) error {
 	path, err := filepath.Abs(dst)
 	if err != nil {
 		return err
@@ -73,7 +76,7 @@ func (o ociormb) Export(refStr, dst string) error {
 	return nil
 }
 
-func (o ociormb) Save(src, refStr string) error {
+func (o ociORMB) Save(src, refStr string) error {
 	path, err := filepath.Abs(src)
 	if err != nil {
 		return err

@@ -30,6 +30,7 @@ func NewDefaultLoader() Loader {
 
 // Load loads the model from the path.
 func (d defaultLoader) Load(path string) (*Model, error) {
+	// Load model config from <path>/ormbfile.yaml.
 	dat, err := ioutil.ReadFile(filepath.Join(path, consts.ORMBfileName))
 	if err != nil {
 		return nil, err
@@ -40,8 +41,9 @@ func (d defaultLoader) Load(path string) (*Model, error) {
 		return nil, err
 	}
 
+	// Load the model from <path>/model.
 	buf := &bytes.Buffer{}
-	if err := Tar(path, buf); err != nil {
+	if err := Tar(filepath.Join(path, consts.ORMBModelDirectory), buf); err != nil {
 		return nil, err
 	}
 
