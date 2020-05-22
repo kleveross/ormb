@@ -1,0 +1,835 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PMML version="4.1" xmlns="http://www.dmg.org/PMML-4_1">
+  <Header copyright="KNIME">
+    <Application name="KNIME" version="2.8.0"/>
+  </Header>
+  <DataDictionary numberOfFields="10">
+    <DataField dataType="integer" name="Age" optype="continuous">
+      <Interval closure="closedClosed" leftMargin="17.0" rightMargin="90.0"/>
+    </DataField>
+    <DataField dataType="string" name="Employment" optype="categorical">
+      <Value value="Private"/>
+      <Value value="Consultant"/>
+      <Value value="SelfEmp"/>
+      <Value value="PSLocal"/>
+      <Value value="PSState"/>
+      <Value value="PSFederal"/>
+      <Value value="Unemployed"/>
+      <Value value="NA"/>
+      <Value value="Volunteer"/>
+    </DataField>
+    <DataField dataType="string" name="Education" optype="categorical">
+      <Value value="College"/>
+      <Value value="Associate"/>
+      <Value value="HSgrad"/>
+      <Value value="Bachelor"/>
+      <Value value="Yr12"/>
+      <Value value="Vocational"/>
+      <Value value="Master"/>
+      <Value value="Yr11"/>
+      <Value value="Yr10"/>
+      <Value value="Doctorate"/>
+      <Value value="Yr9"/>
+      <Value value="Yr5t6"/>
+      <Value value="Professional"/>
+      <Value value="Yr7t8"/>
+      <Value value="Preschool"/>
+      <Value value="Yr1t4"/>
+    </DataField>
+    <DataField dataType="string" name="Marital" optype="categorical">
+      <Value value="Unmarried"/>
+      <Value value="Absent"/>
+      <Value value="Divorced"/>
+      <Value value="Married"/>
+      <Value value="Widowed"/>
+      <Value value="Married-spouse-absent"/>
+    </DataField>
+    <DataField dataType="string" name="Occupation" optype="categorical">
+      <Value value="Service"/>
+      <Value value="Transport"/>
+      <Value value="Clerical"/>
+      <Value value="Repair"/>
+      <Value value="Executive"/>
+      <Value value="Machinist"/>
+      <Value value="Sales"/>
+      <Value value="Professional"/>
+      <Value value="Support"/>
+      <Value value="Cleaner"/>
+      <Value value="Farming"/>
+      <Value value="NA"/>
+      <Value value="Protective"/>
+      <Value value="Home"/>
+      <Value value="Military"/>
+    </DataField>
+    <DataField dataType="double" name="Income" optype="continuous">
+      <Interval closure="closedClosed" leftMargin="609.72" rightMargin="481259.5"/>
+    </DataField>
+    <DataField dataType="string" name="Gender" optype="categorical">
+      <Value value="Female"/>
+      <Value value="Male"/>
+    </DataField>
+    <DataField dataType="double" name="Deductions" optype="continuous">
+      <Interval closure="closedClosed" leftMargin="0.0" rightMargin="2904.0"/>
+    </DataField>
+    <DataField dataType="integer" name="Hours" optype="continuous">
+      <Interval closure="closedClosed" leftMargin="1.0" rightMargin="99.0"/>
+    </DataField>
+    <DataField dataType="integer" name="TARGET_Adjusted" optype="continuous">
+      <Interval closure="closedClosed" leftMargin="0.0" rightMargin="1.0"/>
+    </DataField>
+  </DataDictionary>
+  <TransformationDictionary/>
+  <NeuralNetwork functionName="regression" algorithmName="RProp" activationFunction="logistic" normalizationMethod="none" width="0.0" numberOfLayers="2">
+    <MiningSchema>
+      <MiningField name="Income" invalidValueTreatment="asIs"/>
+      <MiningField name="Deductions" invalidValueTreatment="asIs"/>
+      <MiningField name="Hours" invalidValueTreatment="asIs"/>
+      <MiningField name="TARGET_Adjusted" invalidValueTreatment="asIs" usageType="predicted"/>
+      <MiningField name="Employment" invalidValueTreatment="asIs"/>
+      <MiningField name="Education" invalidValueTreatment="asIs"/>
+      <MiningField name="Marital" invalidValueTreatment="asIs"/>
+      <MiningField name="Occupation" invalidValueTreatment="asIs"/>
+      <MiningField name="Gender" invalidValueTreatment="asIs"/>
+      <MiningField name="Age" invalidValueTreatment="asIs"/>
+    </MiningSchema>
+    <LocalTransformations>
+      <DerivedField dataType="integer" name="Private_Employment" optype="ordinal">
+        <NormDiscrete field="Employment" mapMissingTo="0.0" value="Private"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Consultant_Employment" optype="ordinal">
+        <NormDiscrete field="Employment" mapMissingTo="0.0" value="Consultant"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="SelfEmp_Employment" optype="ordinal">
+        <NormDiscrete field="Employment" mapMissingTo="0.0" value="SelfEmp"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="PSLocal_Employment" optype="ordinal">
+        <NormDiscrete field="Employment" mapMissingTo="0.0" value="PSLocal"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="PSState_Employment" optype="ordinal">
+        <NormDiscrete field="Employment" mapMissingTo="0.0" value="PSState"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="PSFederal_Employment" optype="ordinal">
+        <NormDiscrete field="Employment" mapMissingTo="0.0" value="PSFederal"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Unemployed_Employment" optype="ordinal">
+        <NormDiscrete field="Employment" mapMissingTo="0.0" value="Unemployed"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="NA_Employment" optype="ordinal">
+        <NormDiscrete field="Employment" mapMissingTo="0.0" value="NA"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Volunteer_Employment" optype="ordinal">
+        <NormDiscrete field="Employment" mapMissingTo="0.0" value="Volunteer"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="College_Education" optype="ordinal">
+        <NormDiscrete field="Education" mapMissingTo="0.0" value="College"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Associate_Education" optype="ordinal">
+        <NormDiscrete field="Education" mapMissingTo="0.0" value="Associate"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="HSgrad_Education" optype="ordinal">
+        <NormDiscrete field="Education" mapMissingTo="0.0" value="HSgrad"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Bachelor_Education" optype="ordinal">
+        <NormDiscrete field="Education" mapMissingTo="0.0" value="Bachelor"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Yr12_Education" optype="ordinal">
+        <NormDiscrete field="Education" mapMissingTo="0.0" value="Yr12"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Vocational_Education" optype="ordinal">
+        <NormDiscrete field="Education" mapMissingTo="0.0" value="Vocational"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Master_Education" optype="ordinal">
+        <NormDiscrete field="Education" mapMissingTo="0.0" value="Master"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Yr11_Education" optype="ordinal">
+        <NormDiscrete field="Education" mapMissingTo="0.0" value="Yr11"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Yr10_Education" optype="ordinal">
+        <NormDiscrete field="Education" mapMissingTo="0.0" value="Yr10"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Doctorate_Education" optype="ordinal">
+        <NormDiscrete field="Education" mapMissingTo="0.0" value="Doctorate"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Yr9_Education" optype="ordinal">
+        <NormDiscrete field="Education" mapMissingTo="0.0" value="Yr9"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Yr5t6_Education" optype="ordinal">
+        <NormDiscrete field="Education" mapMissingTo="0.0" value="Yr5t6"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Professional_Education" optype="ordinal">
+        <NormDiscrete field="Education" mapMissingTo="0.0" value="Professional"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Yr7t8_Education" optype="ordinal">
+        <NormDiscrete field="Education" mapMissingTo="0.0" value="Yr7t8"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Preschool_Education" optype="ordinal">
+        <NormDiscrete field="Education" mapMissingTo="0.0" value="Preschool"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Yr1t4_Education" optype="ordinal">
+        <NormDiscrete field="Education" mapMissingTo="0.0" value="Yr1t4"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Unmarried_Marital" optype="ordinal">
+        <NormDiscrete field="Marital" mapMissingTo="0.0" value="Unmarried"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Absent_Marital" optype="ordinal">
+        <NormDiscrete field="Marital" mapMissingTo="0.0" value="Absent"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Divorced_Marital" optype="ordinal">
+        <NormDiscrete field="Marital" mapMissingTo="0.0" value="Divorced"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Married_Marital" optype="ordinal">
+        <NormDiscrete field="Marital" mapMissingTo="0.0" value="Married"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Widowed_Marital" optype="ordinal">
+        <NormDiscrete field="Marital" mapMissingTo="0.0" value="Widowed"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Married-spouse-absent_Marital" optype="ordinal">
+        <NormDiscrete field="Marital" mapMissingTo="0.0" value="Married-spouse-absent"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Service_Occupation" optype="ordinal">
+        <NormDiscrete field="Occupation" mapMissingTo="0.0" value="Service"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Transport_Occupation" optype="ordinal">
+        <NormDiscrete field="Occupation" mapMissingTo="0.0" value="Transport"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Clerical_Occupation" optype="ordinal">
+        <NormDiscrete field="Occupation" mapMissingTo="0.0" value="Clerical"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Repair_Occupation" optype="ordinal">
+        <NormDiscrete field="Occupation" mapMissingTo="0.0" value="Repair"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Executive_Occupation" optype="ordinal">
+        <NormDiscrete field="Occupation" mapMissingTo="0.0" value="Executive"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Machinist_Occupation" optype="ordinal">
+        <NormDiscrete field="Occupation" mapMissingTo="0.0" value="Machinist"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Sales_Occupation" optype="ordinal">
+        <NormDiscrete field="Occupation" mapMissingTo="0.0" value="Sales"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Professional_Occupation" optype="ordinal">
+        <NormDiscrete field="Occupation" mapMissingTo="0.0" value="Professional"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Support_Occupation" optype="ordinal">
+        <NormDiscrete field="Occupation" mapMissingTo="0.0" value="Support"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Cleaner_Occupation" optype="ordinal">
+        <NormDiscrete field="Occupation" mapMissingTo="0.0" value="Cleaner"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Farming_Occupation" optype="ordinal">
+        <NormDiscrete field="Occupation" mapMissingTo="0.0" value="Farming"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="NA_Occupation" optype="ordinal">
+        <NormDiscrete field="Occupation" mapMissingTo="0.0" value="NA"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Protective_Occupation" optype="ordinal">
+        <NormDiscrete field="Occupation" mapMissingTo="0.0" value="Protective"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Home_Occupation" optype="ordinal">
+        <NormDiscrete field="Occupation" mapMissingTo="0.0" value="Home"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Military_Occupation" optype="ordinal">
+        <NormDiscrete field="Occupation" mapMissingTo="0.0" value="Military"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Female_Gender" optype="ordinal">
+        <NormDiscrete field="Gender" mapMissingTo="0.0" value="Female"/>
+      </DerivedField>
+      <DerivedField dataType="integer" name="Male_Gender" optype="ordinal">
+        <NormDiscrete field="Gender" mapMissingTo="0.0" value="Male"/>
+      </DerivedField>
+      <DerivedField dataType="string" name="Age_binned" optype="categorical">
+        <Discretize field="Age">
+          <DiscretizeBin binValue="0.92">
+            <Interval closure="openOpen" rightMargin="18.0"/>
+          </DiscretizeBin>
+          <DiscretizeBin binValue="0.83">
+            <Interval closure="closedOpen" leftMargin="18.0" rightMargin="32.0"/>
+          </DiscretizeBin>
+          <DiscretizeBin binValue="0.69">
+            <Interval closure="closedOpen" leftMargin="32.0" rightMargin="40.0"/>
+          </DiscretizeBin>
+          <DiscretizeBin binValue="0.32">
+            <Interval closure="closedOpen" leftMargin="40.0" rightMargin="57.0"/>
+          </DiscretizeBin>
+          <DiscretizeBin binValue="0.12">
+            <Interval closure="closedOpen" leftMargin="57.0"/>
+          </DiscretizeBin>
+        </Discretize>
+      </DerivedField>
+      <DerivedField dataType="double" displayName="Income" name="Income*" optype="continuous">
+        <Extension extender="KNIME" name="summary" value="Z-Score (Gaussian) normalization on 3 column(s)"/>
+        <NormContinuous field="Income">
+          <LinearNorm norm="-1.2164099347279616" orig="0.0"/>
+          <LinearNorm norm="-1.2163955713786447" orig="1.0"/>
+        </NormContinuous>
+      </DerivedField>
+      <DerivedField dataType="double" displayName="Deductions" name="Deductions*" optype="continuous">
+        <Extension extender="KNIME" name="summary" value="Z-Score (Gaussian) normalization on 3 column(s)"/>
+        <NormContinuous field="Deductions">
+          <LinearNorm norm="-0.1983193433770224" orig="0.0"/>
+          <LinearNorm norm="-0.19538425035943" orig="1.0"/>
+        </NormContinuous>
+      </DerivedField>
+      <DerivedField dataType="double" displayName="Hours" name="Hours*" optype="continuous">
+        <Extension extender="KNIME" name="summary" value="Z-Score (Gaussian) normalization on 3 column(s)"/>
+        <NormContinuous field="Hours">
+          <LinearNorm norm="-3.297304369766391" orig="0.0"/>
+          <LinearNorm norm="-3.2150250058375485" orig="1.0"/>
+        </NormContinuous>
+      </DerivedField>
+      <DerivedField dataType="double" displayName="Age_binned" name="Age_binned*" optype="continuous">
+        <FieldRef field="Age_binned"/>
+      </DerivedField>
+    </LocalTransformations>
+    <NeuralInputs numberOfInputs="52">
+      <NeuralInput id="0,0">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Income*"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,1">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Deductions*"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,2">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Hours*"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,3">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Private_Employment"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,4">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Consultant_Employment"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,5">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="SelfEmp_Employment"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,6">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="PSLocal_Employment"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,7">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="PSState_Employment"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,8">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="PSFederal_Employment"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,9">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Unemployed_Employment"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,10">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="NA_Employment"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,11">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Volunteer_Employment"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,12">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="College_Education"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,13">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Associate_Education"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,14">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="HSgrad_Education"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,15">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Bachelor_Education"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,16">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Yr12_Education"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,17">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Vocational_Education"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,18">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Master_Education"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,19">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Yr11_Education"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,20">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Yr10_Education"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,21">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Doctorate_Education"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,22">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Yr9_Education"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,23">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Yr5t6_Education"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,24">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Professional_Education"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,25">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Yr7t8_Education"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,26">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Preschool_Education"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,27">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Yr1t4_Education"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,28">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Unmarried_Marital"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,29">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Absent_Marital"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,30">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Divorced_Marital"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,31">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Married_Marital"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,32">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Widowed_Marital"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,33">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Married-spouse-absent_Marital"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,34">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Service_Occupation"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,35">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Transport_Occupation"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,36">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Clerical_Occupation"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,37">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Repair_Occupation"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,38">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Executive_Occupation"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,39">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Machinist_Occupation"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,40">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Sales_Occupation"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,41">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Professional_Occupation"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,42">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Support_Occupation"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,43">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Cleaner_Occupation"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,44">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Farming_Occupation"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,45">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="NA_Occupation"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,46">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Protective_Occupation"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,47">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Home_Occupation"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,48">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Military_Occupation"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,49">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Female_Gender"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,50">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Male_Gender"/>
+        </DerivedField>
+      </NeuralInput>
+      <NeuralInput id="0,51">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="Age_binned*"/>
+        </DerivedField>
+      </NeuralInput>
+    </NeuralInputs>
+    <NeuralLayer>
+      <Neuron id="1,0" bias="-0.32489904588926194">
+        <Con from="0,0" weight="1.1378319932311558"/>
+        <Con from="0,1" weight="-0.2789412975297712"/>
+        <Con from="0,2" weight="0.17646673881243427"/>
+        <Con from="0,3" weight="-1.3124943157260716"/>
+        <Con from="0,4" weight="-3.2494402585932227"/>
+        <Con from="0,5" weight="0.3417853845034904"/>
+        <Con from="0,6" weight="0.7076092548930227"/>
+        <Con from="0,7" weight="0.9074353193734939"/>
+        <Con from="0,8" weight="-1.0687719181675766"/>
+        <Con from="0,9" weight="29.04603872898326"/>
+        <Con from="0,10" weight="-1.239926372723717"/>
+        <Con from="0,11" weight="47.51749433711838"/>
+        <Con from="0,12" weight="1.8082917418581876"/>
+        <Con from="0,13" weight="-1.697888320921568"/>
+        <Con from="0,14" weight="2.6048888428147294"/>
+        <Con from="0,15" weight="-4.095150187404107"/>
+        <Con from="0,16" weight="-2.554859450841093"/>
+        <Con from="0,17" weight="2.0484500404046933"/>
+        <Con from="0,18" weight="-2.765874190972186"/>
+        <Con from="0,19" weight="4.87578046299358"/>
+        <Con from="0,20" weight="-3.8137541852563324"/>
+        <Con from="0,21" weight="-7.243149292865754"/>
+        <Con from="0,22" weight="-0.32791158422764954"/>
+        <Con from="0,23" weight="6.704633089190031"/>
+        <Con from="0,24" weight="-4.308998105869946"/>
+        <Con from="0,25" weight="58.12223620671837"/>
+        <Con from="0,26" weight="49.90636292911773"/>
+        <Con from="0,27" weight="58.167636785468076"/>
+        <Con from="0,28" weight="0.12652518783145933"/>
+        <Con from="0,29" weight="2.1288274146293906"/>
+        <Con from="0,30" weight="0.5798359472500451"/>
+        <Con from="0,31" weight="-5.911123952326681"/>
+        <Con from="0,32" weight="3.1749635705494077"/>
+        <Con from="0,33" weight="10.434825098586076"/>
+        <Con from="0,34" weight="-0.6752128705050597"/>
+        <Con from="0,35" weight="3.4173424888432864"/>
+        <Con from="0,36" weight="-2.69036168574141"/>
+        <Con from="0,37" weight="-6.19934578099183"/>
+        <Con from="0,38" weight="-1.0285391335413507"/>
+        <Con from="0,39" weight="0.32741614596760815"/>
+        <Con from="0,40" weight="0.8219575050976051"/>
+        <Con from="0,41" weight="0.15140486009708407"/>
+        <Con from="0,42" weight="1.1128778571061944"/>
+        <Con from="0,43" weight="0.3493528740862718"/>
+        <Con from="0,44" weight="3.672634572739352"/>
+        <Con from="0,45" weight="0.3027791066640751"/>
+        <Con from="0,46" weight="-0.4112047118054987"/>
+        <Con from="0,47" weight="33.709144683616834"/>
+        <Con from="0,48" weight="34.29832721467988"/>
+        <Con from="0,49" weight="2.688054878211823"/>
+        <Con from="0,50" weight="-0.3168352314592815"/>
+        <Con from="0,51" weight="3.3305008750665515"/>
+      </Neuron>
+      <Neuron id="1,1" bias="-1.0996134124846741">
+        <Con from="0,0" weight="-3.533411566184436"/>
+        <Con from="0,1" weight="0.9885940597369943"/>
+        <Con from="0,2" weight="6.530699110523797"/>
+        <Con from="0,3" weight="-0.38097672474368893"/>
+        <Con from="0,4" weight="2.309263106339378"/>
+        <Con from="0,5" weight="-1.4469356927230441"/>
+        <Con from="0,6" weight="4.058485356460277"/>
+        <Con from="0,7" weight="1.9387844069250733"/>
+        <Con from="0,8" weight="0.43327833746832795"/>
+        <Con from="0,9" weight="-22.1600573079802"/>
+        <Con from="0,10" weight="-4.203196461769683"/>
+        <Con from="0,11" weight="-46.31690951201855"/>
+        <Con from="0,12" weight="6.9575214245541375"/>
+        <Con from="0,13" weight="0.3192580154964246"/>
+        <Con from="0,14" weight="1.905310141292542"/>
+        <Con from="0,15" weight="-0.6825630626297745"/>
+        <Con from="0,16" weight="-47.14455179399057"/>
+        <Con from="0,17" weight="-1.231486230477239"/>
+        <Con from="0,18" weight="5.597157764635725"/>
+        <Con from="0,19" weight="-2.4376549298152037"/>
+        <Con from="0,20" weight="-56.85958481011107"/>
+        <Con from="0,21" weight="3.7241706372072443"/>
+        <Con from="0,22" weight="-75.45842104837566"/>
+        <Con from="0,23" weight="-13.724432420032597"/>
+        <Con from="0,24" weight="-6.374729145626334"/>
+        <Con from="0,25" weight="-54.68037459977563"/>
+        <Con from="0,26" weight="-45.37160781851995"/>
+        <Con from="0,27" weight="-46.369186672236175"/>
+        <Con from="0,28" weight="-2.569592040701347"/>
+        <Con from="0,29" weight="-0.5996684130274912"/>
+        <Con from="0,30" weight="-3.574161018186543"/>
+        <Con from="0,31" weight="1.37242842532287"/>
+        <Con from="0,32" weight="1.6637341649431965"/>
+        <Con from="0,33" weight="2.521277447256175"/>
+        <Con from="0,34" weight="-2.771478026048855"/>
+        <Con from="0,35" weight="-0.6646660623051199"/>
+        <Con from="0,36" weight="-1.5817974767121228"/>
+        <Con from="0,37" weight="-0.3273844881131095"/>
+        <Con from="0,38" weight="0.24082332461436218"/>
+        <Con from="0,39" weight="4.671047474478552"/>
+        <Con from="0,40" weight="0.41612163633381183"/>
+        <Con from="0,41" weight="4.8097172381342705"/>
+        <Con from="0,42" weight="-2.6579585308304425"/>
+        <Con from="0,43" weight="-0.722417960423636"/>
+        <Con from="0,44" weight="-1.7849161926896566"/>
+        <Con from="0,45" weight="-4.1107334341992114"/>
+        <Con from="0,46" weight="8.500568772496525"/>
+        <Con from="0,47" weight="-38.66221082874551"/>
+        <Con from="0,48" weight="-38.9766468072081"/>
+        <Con from="0,49" weight="2.5873680371457946"/>
+        <Con from="0,50" weight="0.031010204716278075"/>
+        <Con from="0,51" weight="-4.452819209526881"/>
+      </Neuron>
+      <Neuron id="1,2" bias="0.4430814050727018">
+        <Con from="0,0" weight="-5.064084254970537"/>
+        <Con from="0,1" weight="3.476576986348313"/>
+        <Con from="0,2" weight="4.468229374888671"/>
+        <Con from="0,3" weight="0.37431475881737614"/>
+        <Con from="0,4" weight="11.019646313151002"/>
+        <Con from="0,5" weight="-0.009412776136024117"/>
+        <Con from="0,6" weight="-2.3765199322193684"/>
+        <Con from="0,7" weight="-17.571599119989827"/>
+        <Con from="0,8" weight="-5.26242921620266"/>
+        <Con from="0,9" weight="59.39315462986399"/>
+        <Con from="0,10" weight="-0.18278312292989196"/>
+        <Con from="0,11" weight="45.33117397154688"/>
+        <Con from="0,12" weight="2.9025028193497744"/>
+        <Con from="0,13" weight="0.25262171275820333"/>
+        <Con from="0,14" weight="0.5657570008007126"/>
+        <Con from="0,15" weight="-4.347429229838434"/>
+        <Con from="0,16" weight="13.533459704226908"/>
+        <Con from="0,17" weight="-6.992115396652548"/>
+        <Con from="0,18" weight="-4.598118978951734"/>
+        <Con from="0,19" weight="-8.098266133899303"/>
+        <Con from="0,20" weight="-11.868226571665648"/>
+        <Con from="0,21" weight="-8.513333547936414"/>
+        <Con from="0,22" weight="54.371968958820446"/>
+        <Con from="0,23" weight="-6.2239874757224465"/>
+        <Con from="0,24" weight="-77.63909072882242"/>
+        <Con from="0,25" weight="70.22092079092506"/>
+        <Con from="0,26" weight="44.93991716261006"/>
+        <Con from="0,27" weight="45.741633369193686"/>
+        <Con from="0,28" weight="-8.198784896891885"/>
+        <Con from="0,29" weight="3.520131509914882"/>
+        <Con from="0,30" weight="29.123326407837716"/>
+        <Con from="0,31" weight="-2.0569641627037343"/>
+        <Con from="0,32" weight="15.867864300497914"/>
+        <Con from="0,33" weight="-3.7275103712484894"/>
+        <Con from="0,34" weight="137.78193052746894"/>
+        <Con from="0,35" weight="-11.195664851206766"/>
+        <Con from="0,36" weight="-2.8310278263919257"/>
+        <Con from="0,37" weight="3.9957934095069607"/>
+        <Con from="0,38" weight="-3.9431606888764836"/>
+        <Con from="0,39" weight="65.92313826773638"/>
+        <Con from="0,40" weight="0.9158984721971405"/>
+        <Con from="0,41" weight="-2.3684712177538425"/>
+        <Con from="0,42" weight="-6.071360685536341"/>
+        <Con from="0,43" weight="1.572272948936339"/>
+        <Con from="0,44" weight="-7.209001079104088"/>
+        <Con from="0,45" weight="0.4822318799935745"/>
+        <Con from="0,46" weight="-0.5173507950396328"/>
+        <Con from="0,47" weight="53.35073313591885"/>
+        <Con from="0,48" weight="39.677741171220376"/>
+        <Con from="0,49" weight="-2.9964140255507945"/>
+        <Con from="0,50" weight="0.915571684869012"/>
+        <Con from="0,51" weight="0.9995418541493963"/>
+      </Neuron>
+      <Neuron id="1,3" bias="0.047139644377116555">
+        <Con from="0,0" weight="4.409226032087196"/>
+        <Con from="0,1" weight="1.3772189722717494"/>
+        <Con from="0,2" weight="0.061322888448043726"/>
+        <Con from="0,3" weight="-1.339163289734436"/>
+        <Con from="0,4" weight="2.0890471586072072"/>
+        <Con from="0,5" weight="0.0016060789976047618"/>
+        <Con from="0,6" weight="0.7436224865392179"/>
+        <Con from="0,7" weight="1.2855899567421192"/>
+        <Con from="0,8" weight="-1.5469731814715841"/>
+        <Con from="0,9" weight="-38.85581485674122"/>
+        <Con from="0,10" weight="-0.3744242990290434"/>
+        <Con from="0,11" weight="-40.111615171851085"/>
+        <Con from="0,12" weight="-0.541394387058703"/>
+        <Con from="0,13" weight="-0.4679621473188433"/>
+        <Con from="0,14" weight="-1.5118862719023016"/>
+        <Con from="0,15" weight="-0.8185550611705439"/>
+        <Con from="0,16" weight="-5.562771763283441"/>
+        <Con from="0,17" weight="4.5393301323549"/>
+        <Con from="0,18" weight="0.4952279078987505"/>
+        <Con from="0,19" weight="-6.297410456289177"/>
+        <Con from="0,20" weight="-88.59910928471054"/>
+        <Con from="0,21" weight="1.715027220460989"/>
+        <Con from="0,22" weight="-55.84319160200903"/>
+        <Con from="0,23" weight="6.943012603555335"/>
+        <Con from="0,24" weight="57.79732535685217"/>
+        <Con from="0,25" weight="-62.8702268446957"/>
+        <Con from="0,26" weight="-45.82682666210622"/>
+        <Con from="0,27" weight="-40.20573743662099"/>
+        <Con from="0,28" weight="-47.490188601270276"/>
+        <Con from="0,29" weight="-5.454553362855034"/>
+        <Con from="0,30" weight="-0.900279529459151"/>
+        <Con from="0,31" weight="1.563289740274838"/>
+        <Con from="0,32" weight="1.5929740625750335"/>
+        <Con from="0,33" weight="45.17712491942817"/>
+        <Con from="0,34" weight="-100.86377644304034"/>
+        <Con from="0,35" weight="-2.7085920965311394"/>
+        <Con from="0,36" weight="-3.8305632563182055"/>
+        <Con from="0,37" weight="-3.574014484110892"/>
+        <Con from="0,38" weight="-2.760479337653"/>
+        <Con from="0,39" weight="1.4684992470191531"/>
+        <Con from="0,40" weight="0.1236284709108508"/>
+        <Con from="0,41" weight="-6.289830749734761"/>
+        <Con from="0,42" weight="3.9911030759988444"/>
+        <Con from="0,43" weight="1.6456153805396831"/>
+        <Con from="0,44" weight="0.3154597318770799"/>
+        <Con from="0,45" weight="1.203843099636764"/>
+        <Con from="0,46" weight="3.540342546578821"/>
+        <Con from="0,47" weight="-51.68766252913232"/>
+        <Con from="0,48" weight="-32.792938889408745"/>
+        <Con from="0,49" weight="6.032022327046697"/>
+        <Con from="0,50" weight="0.05320714934459766"/>
+        <Con from="0,51" weight="-4.657772906014796"/>
+      </Neuron>
+      <Neuron id="1,4" bias="-0.17872745387244438">
+        <Con from="0,0" weight="-3.4537136855432564"/>
+        <Con from="0,1" weight="-3.082883155365992"/>
+        <Con from="0,2" weight="-4.738110925346263"/>
+        <Con from="0,3" weight="-0.6480023660769235"/>
+        <Con from="0,4" weight="16.79485413345311"/>
+        <Con from="0,5" weight="-4.550236159438723"/>
+        <Con from="0,6" weight="28.648555956573826"/>
+        <Con from="0,7" weight="5.637421574141385"/>
+        <Con from="0,8" weight="16.407685540863888"/>
+        <Con from="0,9" weight="45.736415418146905"/>
+        <Con from="0,10" weight="-7.4229710715105615"/>
+        <Con from="0,11" weight="72.51608734876582"/>
+        <Con from="0,12" weight="5.224992159748823"/>
+        <Con from="0,13" weight="-24.71053849055847"/>
+        <Con from="0,14" weight="2.46432935779046"/>
+        <Con from="0,15" weight="-7.4002370311587935"/>
+        <Con from="0,16" weight="10.167055596437706"/>
+        <Con from="0,17" weight="0.23631225632377387"/>
+        <Con from="0,18" weight="-4.2323939350636"/>
+        <Con from="0,19" weight="-6.603574571184752"/>
+        <Con from="0,20" weight="66.82646980906574"/>
+        <Con from="0,21" weight="1.208949140481265"/>
+        <Con from="0,22" weight="63.7414941136188"/>
+        <Con from="0,23" weight="-9.061188800946184"/>
+        <Con from="0,24" weight="-68.7664041769138"/>
+        <Con from="0,25" weight="56.074095214362686"/>
+        <Con from="0,26" weight="46.12881034651149"/>
+        <Con from="0,27" weight="45.29407377763177"/>
+        <Con from="0,28" weight="1.3904714191837513"/>
+        <Con from="0,29" weight="1.63618193092857"/>
+        <Con from="0,30" weight="1.5372367473099933"/>
+        <Con from="0,31" weight="0.11937535060601125"/>
+        <Con from="0,32" weight="-8.618167895776546"/>
+        <Con from="0,33" weight="62.11091786382288"/>
+        <Con from="0,34" weight="91.6814165123331"/>
+        <Con from="0,35" weight="79.11495364810915"/>
+        <Con from="0,36" weight="-4.478295594956985"/>
+        <Con from="0,37" weight="8.14773920803674"/>
+        <Con from="0,38" weight="-0.6889273078120677"/>
+        <Con from="0,39" weight="67.37233701477453"/>
+        <Con from="0,40" weight="-0.5976803134339043"/>
+        <Con from="0,41" weight="0.15873209827816523"/>
+        <Con from="0,42" weight="5.476019146161344"/>
+        <Con from="0,43" weight="3.8699129292271706"/>
+        <Con from="0,44" weight="-4.983119551902001"/>
+        <Con from="0,45" weight="-8.120866730955871"/>
+        <Con from="0,46" weight="52.177159987041414"/>
+        <Con from="0,47" weight="51.963038781265986"/>
+        <Con from="0,48" weight="33.007062014196"/>
+        <Con from="0,49" weight="-0.6504886958021919"/>
+        <Con from="0,50" weight="1.2419446063305337"/>
+        <Con from="0,51" weight="0.8025107939811406"/>
+      </Neuron>
+    </NeuralLayer>
+    <NeuralLayer>
+      <Neuron id="2,0" bias="-0.5689701812152946">
+        <Con from="1,0" weight="-6.652420580539204"/>
+        <Con from="1,1" weight="4.136119157152987"/>
+        <Con from="1,2" weight="-2.2632017002307854"/>
+        <Con from="1,3" weight="3.637387792978827"/>
+        <Con from="1,4" weight="-2.279051408458644"/>
+      </Neuron>
+    </NeuralLayer>
+    <NeuralOutputs numberOfOutputs="1">
+      <NeuralOutput outputNeuron="2,0">
+        <DerivedField optype="continuous" dataType="double">
+          <FieldRef field="TARGET_Adjusted"/>
+        </DerivedField>
+      </NeuralOutput>
+    </NeuralOutputs>
+  </NeuralNetwork>
+</PMML>
