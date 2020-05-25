@@ -93,8 +93,10 @@ Status: Downloaded newer model for localhost:5000/ormb/pmml:v1
 We can export the model from the local cache to the target directory.
 
 ```bash
-$ ormb pull localhost:5000/ormb/pmml:v1
+$ ormb export localhost:5000/ormb/pmml:v1
 ref:     localhost:5000/ormb/pmml:v1
 digest:  c41f49e5d49d301d58b9b37590c833f2a85c3d083e09b680735f190fbdb8158a
 size:    6.1 KiB
+$ ls ./model
+single_audit_mlp.pmml
 ```
