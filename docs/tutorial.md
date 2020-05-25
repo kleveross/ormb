@@ -1,3 +1,17 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Tutorial](#tutorial)
+  - [Prepare the model](#prepare-the-model)
+  - [Login to a remote registry.](#login-to-a-remote-registry)
+  - [Package and cache the model](#package-and-cache-the-model)
+  - [Push the model to a remote Docker Registry](#push-the-model-to-a-remote-docker-registry)
+  - [Remove the model from local cache and pull it from the remote registry](#remove-the-model-from-local-cache-and-pull-it-from-the-remote-registry)
+  - [Export the model to the directory](#export-the-model-to-the-directory)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Tutorial
 
 ## Prepare the model

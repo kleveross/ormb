@@ -9,6 +9,7 @@
     - [Push the model to a remote registry](#push-the-model-to-a-remote-registry)
     - [Pull the model from a remote registry](#pull-the-model-from-a-remote-registry)
     - [Export the model to the current directory](#export-the-model-to-the-current-directory)
+  - [Tutorial](#tutorial)
   - [Community](#community)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -79,6 +80,10 @@ resnet_v2_fp32_savedmodel_NCHW
 
 2 directories, 4 files
 ```
+
+## Tutorial
+
+Please have a look at [docs/tutorial.md](docs/tutorial.md)
 
 ## Community
 
