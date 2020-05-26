@@ -4,7 +4,7 @@ const (
 	// MediaTypeModelContentLayer is the media type of the content layer.
 	MediaTypeModelContentLayer = "application/tar+gzip"
 	// MediaTypeModelConfig is the media type of the model config.
-	MediaTypeModelConfig = "application/vnd.caicloud.model.config.v1+json"
+	MediaTypeModelConfig = "application/vnd.caicloud.model.config.v1alpha1+json"
 
 	// ORMBfileName is the filename of the config file.
 	ORMBfileName = "ormbfile.yaml"
