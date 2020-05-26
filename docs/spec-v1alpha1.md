@@ -1,3 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [OCI Model Configuration Specification](#oci-model-configuration-specification)
+  - [Terminology](#terminology)
+    - [Tensor](#tensor)
+    - [GitRepo](#gitrepo)
+  - [Properties](#properties)
+  - [Example](#example)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # OCI Model Configuration Specification
 
 An OCI Model is a Machine Learning/Deep Learning model. This specification outlines the JSON format describing models for use and execution tool and its relationship to filesystem changesets.
