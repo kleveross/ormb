@@ -68,6 +68,10 @@ Note: Any OPTIONAL field MAY also be set to null, which is equivalent to being a
 
     The field contains arbitrary metadata for the container. This property MUST use the annotation rules.
 
+- **framework** string, OPTIONAL
+
+    The framework of the model (e.g. TensorFlow)
+
 - **format** string, REQUIRED
 
     The format of the model (savedmodel, onnx and so on)
@@ -145,6 +149,7 @@ Here is an example model configuration JSON document:
    "labels": {
        "tensorflow.version": "2.0.0"
    },
+   "framework": "TensorFlow",
    "format": "SavedModel",
    "size": 9223372036854775807,
    "metrics": [
