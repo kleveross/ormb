@@ -16,7 +16,6 @@ limitations under the License.
 package cmd
 
 import (
-	"github.com/caicloud/ormb/pkg/ormb"
 	"github.com/spf13/cobra"
 )
 
@@ -27,14 +26,10 @@ var pushCmd = &cobra.Command{
 	Long: `Upload a model to a remote registry.
 
 Must first run "ormb save" or "ormb pull".`,
+	PreRunE: preRunE,
 	Run: func(cmd *cobra.Command, args []string) {
 		// TODO(gaocegege): Validate.
-		o, err := ormb.NewDefaultOCIormb()
-		if err != nil {
-			panic(err)
-		}
-
-		if err := o.Push(args[0]); err != nil {
+		if err := ormbClient.Push(args[0]); err != nil {
 			panic(err)
 		}
 	},
@@ -42,14 +37,4 @@ Must first run "ormb save" or "ormb pull".`,
 
 func init() {
 	rootCmd.AddCommand(pushCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// pushCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// pushCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

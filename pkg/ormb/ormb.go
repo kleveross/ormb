@@ -1,7 +1,6 @@
 package ormb
 
 import (
-	"os"
 	"path/filepath"
 
 	"github.com/caicloud/ormb/pkg/model"
@@ -22,9 +21,9 @@ type ociORMB struct {
 	client *oci.Client
 }
 
-// NewDefaultOCIormb creates a OCI-based ORMB client.
-func NewDefaultOCIormb() (ORMB, error) {
-	c, err := oci.NewClient(oci.ClientOptWriter(os.Stdout))
+// NewOCIORMB creates a OCI-based ORMB client.
+func NewOCIORMB(opts ...oci.ClientOption) (ORMB, error) {
+	c, err := oci.NewClient(opts...)
 	if err != nil {
 		return nil, err
 	}

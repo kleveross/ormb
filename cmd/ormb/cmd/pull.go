@@ -17,8 +17,6 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-
-	"github.com/caicloud/ormb/pkg/ormb"
 )
 
 // pullCmd represents the pull command
@@ -28,14 +26,10 @@ var pullCmd = &cobra.Command{
 	Long: `Download a model from a remote registry.
 
 This will store the model in the local registry cache to be used later.`,
+	PreRunE: preRunE,
 	Run: func(cmd *cobra.Command, args []string) {
 		// TODO(gaocegege): Validate.
-		o, err := ormb.NewDefaultOCIormb()
-		if err != nil {
-			panic(err)
-		}
-
-		if err := o.Pull(args[0]); err != nil {
+		if err := ormbClient.Pull(args[0]); err != nil {
 			panic(err)
 		}
 	},
@@ -43,14 +37,4 @@ This will store the model in the local registry cache to be used later.`,
 
 func init() {
 	rootCmd.AddCommand(pullCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// pullCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// pullCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

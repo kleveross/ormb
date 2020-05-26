@@ -23,7 +23,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/caicloud/ormb/pkg/ormb"
 	"github.com/docker/docker/pkg/term"
 	"github.com/spf13/cobra"
 )
@@ -35,9 +34,10 @@ var (
 
 // loginCmd represents the login command
 var loginCmd = &cobra.Command{
-	Use:   "login",
-	Short: "login to a remote registry",
-	Long:  `Authenticate to a remote registry.`,
+	Use:     "login",
+	Short:   "login to a remote registry",
+	Long:    `Authenticate to a remote registry.`,
+	PreRunE: preRunE,
 	Run: func(cmd *cobra.Command, args []string) {
 		// TODO(gaocegege): Validate.
 		hostname := args[0]
@@ -47,12 +47,7 @@ var loginCmd = &cobra.Command{
 			panic(err)
 		}
 
-		o, err := ormb.NewDefaultOCIormb()
-		if err != nil {
-			panic(err)
-		}
-
-		if err := o.Login(hostname, username, password, insecureOpt); err != nil {
+		if err := ormbClient.Login(hostname, username, password, insecureOpt); err != nil {
 			panic(err)
 		}
 	},
