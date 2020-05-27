@@ -47,7 +47,7 @@ GitRepo is the Git repository.
 
 - **repository** string, OPTIONAL
 
-    Repository of the training scripts
+    Git repository URL
 
 - **revision** string, OPTIONAL
 
@@ -79,7 +79,7 @@ Note: Any OPTIONAL field MAY also be set to null, which is equivalent to being a
 
 - **labels** object, OPTIONAL
 
-    The field contains arbitrary metadata for the container. This property MUST use the annotation rules.
+    The field contains arbitrary metadata for the container. This property MUST use the [annotation rules](https://github.com/opencontainers/image-spec/blob/master/annotations.md#rules).
 
 - **framework** string, OPTIONAL
 
@@ -87,7 +87,7 @@ Note: Any OPTIONAL field MAY also be set to null, which is equivalent to being a
 
 - **format** string, REQUIRED
 
-    The format of the model (savedmodel, onnx and so on)
+    The format of the model (SavedModel, ONNX and so on)
 
 - **size** int, REQUIRED
 
