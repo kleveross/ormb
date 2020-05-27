@@ -16,7 +16,6 @@ limitations under the License.
 package cmd
 
 import (
-	"github.com/caicloud/ormb/pkg/ormb"
 	"github.com/spf13/cobra"
 )
 
@@ -31,13 +30,9 @@ var exportCmd = &cobra.Command{
 This will create a new directory with the name of
 the model, in a format that developers can modify
 and check into source control if desired.`,
+	PreRunE: preRunE,
 	Run: func(cmd *cobra.Command, args []string) {
-		o, err := ormb.NewDefaultOCIormb()
-		if err != nil {
-			panic(err)
-		}
-
-		if err := o.Export(args[0], destination); err != nil {
+		if err := ormbClient.Export(args[0], destination); err != nil {
 			panic(err)
 		}
 	},

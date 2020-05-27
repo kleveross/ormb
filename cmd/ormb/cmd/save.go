@@ -17,8 +17,6 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-
-	"github.com/caicloud/ormb/pkg/ormb"
 )
 
 // saveCmd represents the save command
@@ -29,14 +27,10 @@ var saveCmd = &cobra.Command{
 
 Note: modifying the model after this operation will
 not change the item as it exists in the cache.`,
+	PreRunE: preRunE,
 	Run: func(cmd *cobra.Command, args []string) {
 		// TODO(gaocegege): Validate.
-		o, err := ormb.NewDefaultOCIormb()
-		if err != nil {
-			panic(err)
-		}
-
-		if err := o.Save(args[0], args[1]); err != nil {
+		if err := ormbClient.Save(args[0], args[1]); err != nil {
 			panic(err)
 		}
 	},
