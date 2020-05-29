@@ -37,4 +37,6 @@ This will store the model in the local registry cache to be used later.`,
 
 func init() {
 	rootCmd.AddCommand(pullCmd)
+
+	pullCmd.Flags().BoolVarP(&plainHTTPOpt, "plain-http", "", false, "use plain http and not https")
 }

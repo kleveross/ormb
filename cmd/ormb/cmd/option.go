@@ -15,28 +15,7 @@ limitations under the License.
 */
 package cmd
 
-import (
-	"github.com/spf13/cobra"
+var (
+	usernameOpt, passwordOpt                        string
+	passwordFromStdinOpt, insecureOpt, plainHTTPOpt bool
 )
-
-// pushCmd represents the push command
-var pushCmd = &cobra.Command{
-	Use:   "push",
-	Short: "Upload a model to a remote registry",
-	Long: `Upload a model to a remote registry.
-
-Must first run "ormb save" or "ormb pull".`,
-	PreRunE: preRunE,
-	Run: func(cmd *cobra.Command, args []string) {
-		// TODO(gaocegege): Validate.
-		if err := ormbClient.Push(args[0]); err != nil {
-			panic(err)
-		}
-	},
-}
-
-func init() {
-	rootCmd.AddCommand(pushCmd)
-
-	pushCmd.Flags().BoolVarP(&plainHTTPOpt, "plain-http", "", false, "use plain http and not https")
-}

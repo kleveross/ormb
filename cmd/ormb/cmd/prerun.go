@@ -21,6 +21,8 @@ func preRunE(cmd *cobra.Command, args []string) error {
 
 	ormbClient, err = ormb.NewOCIORMB(
 		oci.ClientOptRootPath(rootPath),
-		oci.ClientOptWriter(os.Stdout))
+		oci.ClientOptWriter(os.Stdout),
+		oci.ClientOptPlainHTTP(plainHTTPOpt),
+	)
 	return err
 }
