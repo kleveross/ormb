@@ -28,6 +28,7 @@ type Client struct {
 	resolver   *Resolver
 	cache      *Cache
 	rootPath   string
+	plainHTTP  bool
 }
 
 // NewClient returns a new registry client with config
@@ -50,7 +51,7 @@ func NewClient(opts ...ClientOption) (*Client, error) {
 		}
 	}
 	if client.resolver == nil {
-		resolver, err := client.authorizer.Resolver(context.Background(), http.DefaultClient, false)
+		resolver, err := client.authorizer.Resolver(context.Background(), http.DefaultClient, client.plainHTTP)
 		if err != nil {
 			return nil, err
 		}

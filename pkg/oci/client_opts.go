@@ -51,3 +51,10 @@ func ClientOptCache(cache *Cache) ClientOption {
 		client.cache = cache
 	}
 }
+
+// ClientOptPlainHTTP returns a function that sets the plainHTTP setting on client options set
+func ClientOptPlainHTTP(plainHTTP bool) ClientOption {
+	return func(client *Client) {
+		client.plainHTTP = plainHTTP
+	}
+}
