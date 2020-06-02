@@ -28,11 +28,9 @@ var saveCmd = &cobra.Command{
 Note: modifying the model after this operation will
 not change the item as it exists in the cache.`,
 	PreRunE: preRunE,
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		// TODO(gaocegege): Validate.
-		if err := ormbClient.Save(args[0], args[1]); err != nil {
-			panic(err)
-		}
+		return ormbClient.Save(args[0], args[1])
 	},
 }
 

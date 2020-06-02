@@ -39,7 +39,7 @@ func (o ociORMB) Login(hostname, username, password string, insecureOpt bool) er
 func (o ociORMB) Push(refStr string) error {
 	ref, err := oci.ParseReference(refStr)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	return o.client.PushModel(ref)
 }
