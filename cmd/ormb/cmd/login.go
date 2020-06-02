@@ -33,18 +33,20 @@ var loginCmd = &cobra.Command{
 	Short:   "login to a remote registry",
 	Long:    `Authenticate to a remote registry.`,
 	PreRunE: preRunE,
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		// TODO(gaocegege): Validate.
 		hostname := args[0]
 
 		username, password, err := getUsernamePassword(usernameOpt, passwordOpt, passwordFromStdinOpt)
 		if err != nil {
-			panic(err)
+			return err
 		}
 
 		if err := ormbClient.Login(hostname, username, password, insecureOpt); err != nil {
-			panic(err)
+			return err
 		}
+
+		return nil
 	},
 }
 

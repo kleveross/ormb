@@ -27,11 +27,9 @@ var pushCmd = &cobra.Command{
 
 Must first run "ormb save" or "ormb pull".`,
 	PreRunE: preRunE,
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		// TODO(gaocegege): Validate.
-		if err := ormbClient.Push(args[0]); err != nil {
-			panic(err)
-		}
+		return ormbClient.Push(args[0])
 	},
 }
 

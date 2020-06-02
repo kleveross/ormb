@@ -27,11 +27,9 @@ var pullCmd = &cobra.Command{
 
 This will store the model in the local registry cache to be used later.`,
 	PreRunE: preRunE,
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		// TODO(gaocegege): Validate.
-		if err := ormbClient.Pull(args[0]); err != nil {
-			panic(err)
-		}
+		return ormbClient.Pull(args[0])
 	},
 }
 

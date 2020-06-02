@@ -31,10 +31,8 @@ This will create a new directory with the name of
 the model, in a format that developers can modify
 and check into source control if desired.`,
 	PreRunE: preRunE,
-	Run: func(cmd *cobra.Command, args []string) {
-		if err := ormbClient.Export(args[0], destination); err != nil {
-			panic(err)
-		}
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return ormbClient.Export(args[0], destination)
 	},
 }
 
