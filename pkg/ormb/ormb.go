@@ -15,7 +15,7 @@ type ORMB interface {
 	Pull(refStr string) error
 	Export(refStr, dst string) error
 	Save(src, refStr string) error
-	Remove(refStr string) error 
+	Remove(refStr string) error
 }
 
 type ociORMB struct {
