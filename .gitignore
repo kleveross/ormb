@@ -9,3 +9,5 @@ coverage.out
 /config.json
 
 .vscode/
+
+training-serving.ipynb

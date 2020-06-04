@@ -15,6 +15,7 @@ type ORMB interface {
 	Pull(refStr string) error
 	Export(refStr, dst string) error
 	Save(src, refStr string) error
+	Remove(refStr string) error 
 }
 
 type ociORMB struct {
@@ -92,4 +93,13 @@ func (o ociORMB) Save(src, refStr string) error {
 		return err
 	}
 	return o.client.SaveModel(m, ref)
+}
+
+func (o ociORMB) Remove(refStr string) error {
+	ref, err := oci.ParseReference(refStr)
+	if err != nil {
+		return err
+	}
+
+	return o.client.RemoveModel(ref)
 }

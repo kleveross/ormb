@@ -137,7 +137,20 @@ func (c *Client) PushModel(ref *Reference) error {
 	return nil
 }
 
-// PullModel downloads a model from a registry
+// RemoveModel deletes a locally saved model.
+func (c *Client) RemoveModel(ref *Reference) error {
+	r, err := c.cache.DeleteReference(ref)
+	if err != nil {
+		return err
+	}
+	if !r.Exists {
+		return errors.New(fmt.Sprintf("Model not found: %s", ref.FullName()))
+	}
+	fmt.Fprintf(c.out, "%s: removed\n", r.Tag)
+	return nil
+}
+
+// PullModel downloads a model from a registry.
 func (c *Client) PullModel(ref *Reference) error {
 	if ref.Tag == "" {
 		return errors.New("tag explicitly required")
