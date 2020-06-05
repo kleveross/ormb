@@ -202,9 +202,8 @@ func (c *Client) LoadModel(ref *Reference) (*model.Model, error) {
 
 // printCacheRefSummary prints out model ref summary
 func (c *Client) printCacheRefSummary(r *CacheRefSummary) {
-	fmt.Fprintf(c.out, "ref:     %s\n", r.Name)
-	fmt.Fprintf(c.out, "digest:  %s\n", r.Digest.Hex())
-	fmt.Fprintf(c.out, "size:    %s\n", byteCountBinary(r.Size))
-	// fmt.Fprintf(c.out, "name:    %s\n", r.Model.Metadata.Name)
-	// fmt.Fprintf(c.out, "version: %s\n", r.Model.Metadata.Version)
+	fmt.Fprintf(c.out, "ref:       %s\n", r.Name)
+	fmt.Fprintf(c.out, "digest:    %s\n", r.Digest.Hex())
+	fmt.Fprintf(c.out, "size:      %s\n", byteCountBinary(r.Size))
+	fmt.Fprintf(c.out, "format:    %s\n", r.Model.Metadata.Format)
 }

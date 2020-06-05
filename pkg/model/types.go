@@ -16,7 +16,8 @@ type Metadata struct {
 	Description     string            `json:"description,omitempty"`
 	Tags            []string          `json:"tags,omitempty"`
 	Labels          map[string]string `json:"labels,omitempty"`
-	Format          string            `json:"format"`
+	Format          string            `json:"format,omitempty"`
+	Framework       string            `json:"framework,omitempty"`
 	Metrics         []Metric          `json:"metrics,omitempty"`
 	Hyperparameters []Hyperparameter  `json:"hyperparameters,omitempty"`
 }

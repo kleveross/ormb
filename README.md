@@ -37,6 +37,7 @@ $ ormb save ./resnet_v2_fp32_savedmodel_NCHW caicloud/resnetv2:v1
 ref:     caicloud/resnetv2:v1
 digest:  f51973c855608ab06d8f5e4333925a635f87f01ff992ffc5f9988f26d1da24e9
 size:    90.6 MiB
+format:  SavedModel
 v1: saved
 ```
 
@@ -48,6 +49,7 @@ The push refers to repository [caicloud/resnetv2]
 ref:     caicloud/resnetv2:v1
 digest:  f51973c855608ab06d8f5e4333925a635f87f01ff992ffc5f9988f26d1da24e9
 size:    90.6 MiB
+format:  SavedModel
 v1: pushed to remote (1 layer, 90.6 MiB total)
 ```
 
@@ -59,6 +61,7 @@ v1: Pulling from caicloud/resnetv2
 ref:     caicloud/resnetv2:v1
 digest:  f51973c855608ab06d8f5e4333925a635f87f01ff992ffc5f9988f26d1da24e9
 size:    90.6 MiB
+format:  SavedModel
 Status: Downloaded newer model for caicloud/resnetv2:v1
 ```
 
@@ -77,9 +80,8 @@ resnet_v2_fp32_savedmodel_NCHW
 │   └── variables
 │       ├── variables.data-00000-of-00001
 │       └── variables.index
-└── ormbfile.yaml
 
-2 directories, 4 files
+2 directories, 3 files
 ```
 
 ## Tutorial
