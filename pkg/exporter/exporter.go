@@ -1,28 +1,38 @@
-package model
+package exporter
 
 import (
 	"archive/tar"
 	"bytes"
 	"compress/gzip"
 	"io"
+	"io/ioutil"
 	"os"
 	"path/filepath"
+
+	"github.com/caicloud/ormb/pkg/consts"
+	"github.com/caicloud/ormb/pkg/model"
+	"gopkg.in/yaml.v2"
 )
 
-// Saver saves the model to the destination.
-type Saver interface {
-	Save(m *Model, dst string) (string, error)
+// Exporter exports the model to the destination.
+type Exporter interface {
+	Export(m *model.Model, dst string) (string, error)
 }
 
-type defaultSaver struct{}
+type defaultExporter struct{}
 
-// NewDefaultSaver creates a new defaultSaver.
-func NewDefaultSaver() Saver {
-	return &defaultSaver{}
+// NewDefaultExporter creates a new defaultExporter.
+func NewDefaultExporter() Exporter {
+	return &defaultExporter{}
 }
 
-// Save saves the model to the destination.
-func (d defaultSaver) Save(m *Model, dst string) (string, error) {
+// Export saves the model to the destination.
+func (d defaultExporter) Export(m *model.Model, dst string) (string, error) {
+	if err := d.exportMetadata(m, dst); err != nil {
+		return "", err
+	}
+
+	// Export model.
 	gzr, err := gzip.NewReader(bytes.NewBuffer(m.Content))
 	if err != nil {
 		return "", err
@@ -88,4 +98,14 @@ func (d defaultSaver) Save(m *Model, dst string) (string, error) {
 			f.Close()
 		}
 	}
+}
+
+func (d defaultExporter) exportMetadata(m *model.Model, dst string) error {
+	// Export ormbfile.yaml.
+	yamlBytes, err := yaml.Marshal(m.Metadata)
+	if err != nil {
+		return err
+	}
+
+	return ioutil.WriteFile(filepath.Join(dst, consts.ORMBfileName), yamlBytes, 0644)
 }

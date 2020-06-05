@@ -19,6 +19,7 @@ import (
 
 	"github.com/caicloud/ormb/pkg/consts"
 	"github.com/caicloud/ormb/pkg/model"
+	"github.com/caicloud/ormb/pkg/parser"
 )
 
 const (
@@ -28,9 +29,11 @@ const (
 
 // Cache handles local/in-memory storage of Helm charts, compliant with OCI Layout
 type Cache struct {
-	debug    bool
-	out      io.Writer
-	rootDir  string
+	debug   bool
+	out     io.Writer
+	rootDir string
+	parser  parser.Parser
+
 	ociStore *orascontent.OCIStore
 	// TODO(gaocegege): Do we really need it?
 	memoryStore *orascontent.Memorystore
@@ -55,7 +58,8 @@ type CacheRefSummary struct {
 // NewCache returns a new OCI Layout-compliant cache with config
 func NewCache(opts ...CacheOption) (*Cache, error) {
 	cache := &Cache{
-		out: ioutil.Discard,
+		out:    ioutil.Discard,
+		parser: parser.NewDefaultParser(),
 	}
 	for _, opt := range opts {
 		opt(cache)
@@ -133,10 +137,20 @@ func (cache *Cache) FetchReference(ref *Reference) (*CacheRefSummary, error) {
 			if err != nil {
 				return &r, err
 			}
+			configBytes, err := cache.fetchBlob(r.Config)
+			if err != nil {
+				return &r, err
+			}
+			metadata, err := cache.parser.Parse(configBytes)
+			if err != nil {
+				return &r, err
+			}
 
-			// TODO(gaocegege): Optimize the memory usage and support metadata.
+			// TODO(gaocegege): Optimize the memory usage.
 			r.Model = &model.Model{
-				Content: contentBytes,
+				Content:  contentBytes,
+				Config:   configBytes,
+				Metadata: metadata,
 			}
 		}
 	}

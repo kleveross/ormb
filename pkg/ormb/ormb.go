@@ -3,8 +3,9 @@ package ormb
 import (
 	"path/filepath"
 
-	"github.com/caicloud/ormb/pkg/model"
+	"github.com/caicloud/ormb/pkg/exporter"
 	"github.com/caicloud/ormb/pkg/oci"
+	"github.com/caicloud/ormb/pkg/saver"
 )
 
 // ORMB is the interface to save/pull/push/export
@@ -69,8 +70,8 @@ func (o ociORMB) Export(refStr, dst string) error {
 		return err
 	}
 
-	saver := model.NewDefaultSaver()
-	if _, err := saver.Save(m, path); err != nil {
+	e := exporter.NewDefaultExporter()
+	if _, err := e.Export(m, path); err != nil {
 		return err
 	}
 	return nil
@@ -87,8 +88,8 @@ func (o ociORMB) Save(src, refStr string) error {
 		return err
 	}
 
-	l := model.NewDefaultLoader()
-	m, err := l.Load(path)
+	s := saver.NewDefaultSaver()
+	m, err := s.Save(path)
 	if err != nil {
 		return err
 	}
