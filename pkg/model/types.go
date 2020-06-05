@@ -4,10 +4,10 @@ import "time"
 
 type Model struct {
 	// Metadata is the contents of the Chartfile.
-	Metadata *Metadata `json:"metadata"`
-	Path     string    `json:"path"`
-	Content  []byte    `json:"content"`
-	Config   []byte    `json:"content"`
+	Metadata *Metadata `json:"metadata,omitempty"`
+	Path     string    `json:"path,omitempty"`
+	Content  []byte    `json:"content,omitempty"`
+	Config   []byte    `json:"config,omitempty"`
 }
 
 type Metadata struct {
