@@ -34,6 +34,4 @@ var removeCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(removeCmd)
-
-	removeCmd.Flags().BoolVarP(&plainHTTPOpt, "plain-http", "", false, "use plain http and not https")
 }
