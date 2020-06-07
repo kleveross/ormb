@@ -1,4 +1,4 @@
-package model
+package saver
 
 import (
 	"archive/tar"
@@ -11,45 +11,50 @@ import (
 	"path/filepath"
 	"strings"
 
-	"gopkg.in/yaml.v2"
-
 	"github.com/caicloud/ormb/pkg/consts"
+	"github.com/caicloud/ormb/pkg/model"
+	"github.com/caicloud/ormb/pkg/parser"
 )
 
-// Loader loads the model from the path.
-type Loader interface {
-	Load(path string) (*Model, error)
+// Saver saves the model from the path to the memory.
+type Saver interface {
+	Save(path string) (*model.Model, error)
 }
 
-type defaultLoader struct{}
-
-// NewDefaultLoader creates a new defaultLoader.
-func NewDefaultLoader() Loader {
-	return &defaultLoader{}
+type defaultSaver struct {
+	Parser parser.Parser
 }
 
-// Load loads the model from the path.
-func (d defaultLoader) Load(path string) (*Model, error) {
-	// Load model config from <path>/ormbfile.yaml.
+// NewDefaultSaver creates a new defaultSaver.
+func NewDefaultSaver() Saver {
+	return &defaultSaver{
+		Parser: parser.NewDefaultParser(),
+	}
+}
+
+// Save saves the model from the path to the memory.
+func (d defaultSaver) Save(path string) (*model.Model, error) {
+	// Save model config from <path>/ormbfile.yaml.
 	dat, err := ioutil.ReadFile(filepath.Join(path, consts.ORMBfileName))
 	if err != nil {
 		return nil, err
 	}
 
-	metadata := &Metadata{}
-	if err := yaml.Unmarshal(dat, &metadata); err != nil {
+	metadata := &model.Metadata{}
+	if metadata, err = d.Parser.Parse(dat); err != nil {
 		return nil, err
 	}
 
-	// Load the model from <path>/model.
+	// Save the model from <path>/model.
 	buf := &bytes.Buffer{}
 	if err := Tar(filepath.Join(path, consts.ORMBModelDirectory), buf); err != nil {
 		return nil, err
 	}
 
-	m := &Model{
+	m := &model.Model{
 		Metadata: metadata,
 		Path:     path,
+		Config:   dat,
 		Content:  buf.Bytes(),
 	}
 	return m, nil
