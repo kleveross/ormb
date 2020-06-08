@@ -21,3 +21,7 @@ changelog:
     exclude:
     - '^docs:'
     - '^test:'
+release:
+  github:
+    owner: caicloud
+    name: ormb
