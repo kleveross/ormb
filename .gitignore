@@ -7,7 +7,7 @@ coverage.out
 /cache
 /ormb
 /config.json
-
+dist/
 .vscode/
 
 training-serving.ipynb
