@@ -2,6 +2,7 @@ package oci
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -51,7 +52,14 @@ func NewClient(opts ...ClientOption) (*Client, error) {
 		}
 	}
 	if client.resolver == nil {
-		resolver, err := client.authorizer.Resolver(context.Background(), http.DefaultClient, client.plainHTTP)
+		resolver, err := client.authorizer.Resolver(
+			context.Background(),
+			&http.Client{
+				// TODO(gaocegege): Make it optional.
+				Transport: &http.Transport{
+					TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+				},
+			}, client.plainHTTP)
 		if err != nil {
 			return nil, err
 		}
@@ -75,6 +83,9 @@ func NewClient(opts ...ClientOption) (*Client, error) {
 
 // Login logs into a registry
 func (c *Client) Login(hostname string, username string, password string, insecure bool) error {
+	if insecure {
+		fmt.Fprintf(c.out, "Login insecurely\n")
+	}
 	err := c.authorizer.Login(ctx(c.out, c.debug), hostname, username, password, insecure)
 	if err != nil {
 		return err
@@ -165,7 +176,7 @@ func (c *Client) PullModel(ref *Reference) error {
 		oras.WithAllowedMediaTypes(consts.KnownMediaTypes()),
 		oras.WithContentProvideIngester(c.cache.ProvideIngester()))
 	if err != nil {
-		return err
+		panic(err)
 	}
 	err = c.cache.AddManifest(ref, &manifest)
 	if err != nil {

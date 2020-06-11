@@ -29,17 +29,17 @@
 ROOT := github.com/caicloud/ormb
 
 # Target binaries. You can build multiple binaries for a single project.
-TARGETS := ormb
+TARGETS := ormb ormb-storage-initializer
 
 # Container image prefix and suffix added to targets.
 # The final built images are:
 #   $[REGISTRY]/$[IMAGE_PREFIX]$[TARGET]$[IMAGE_SUFFIX]:$[VERSION]
 # $[REGISTRY] is an item from $[REGISTRIES], $[TARGET] is an item from $[TARGETS].
-IMAGE_PREFIX ?= $(strip template-)
+IMAGE_PREFIX ?= $(strip clever-)
 IMAGE_SUFFIX ?= $(strip )
 
 # Container registries.
-REGISTRY ?= cargo.dev.caicloud.xyz/release
+REGISTRY ?= cleveross
 
 # Container registry for base images.
 BASE_REGISTRY ?= cargo.caicloud.xyz/library
