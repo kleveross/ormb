@@ -17,6 +17,7 @@ package cmd
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -25,6 +26,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
+	"github.com/caicloud/ormb/pkg/consts"
 	"github.com/caicloud/ormb/pkg/oci"
 	"github.com/caicloud/ormb/pkg/ormb"
 )
@@ -38,13 +40,16 @@ var rootCmd = &cobra.Command{
 	Long:    ``,
 	PreRunE: preRunE,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		modelURI := args[0]
+		dstDir := args[1]
+
 		// Get username and password from environment
 		username := viper.GetString("username")
 		pwd := viper.GetString("password")
 		// Get the host from the URL.
-		strs := strings.Split(args[0], "/")
+		strs := strings.Split(modelURI, "/")
 		if len(strs) == 0 {
-			return fmt.Errorf("Failed to get the host from %s", args[0])
+			return fmt.Errorf("Failed to get the host from %s", modelURI)
 		}
 		fmt.Printf("Logging to the remote registry %s\n", strs[0])
 		fmt.Printf("Username: %s\n", username)
@@ -69,12 +74,36 @@ var rootCmd = &cobra.Command{
 		}
 
 		// Pull the model from the remote registry.
-		if err := ormbClient.Pull(args[0]); err != nil {
+		if err := ormbClient.Pull(modelURI); err != nil {
 			return err
 		}
 		// Export it to the specified directory.
-		if err := ormbClient.Export(args[0], args[1]); err != nil {
+		if err := ormbClient.Export(modelURI, dstDir); err != nil {
 			return err
+		}
+
+		// Move the files in model directory to the upper directory.
+		// Seldon core will run `--model_base_path=dstDir` directly.
+		originalDir, err := filepath.Abs(
+			filepath.Join(dstDir, consts.ORMBModelDirectory))
+		if err != nil {
+			return err
+		}
+		destinationDir, err := filepath.Abs(dstDir)
+		if err != nil {
+			return err
+		}
+		files, err := ioutil.ReadDir(originalDir)
+		if err != nil {
+			return err
+		}
+		for _, f := range files {
+			oldPath := filepath.Join(originalDir, f.Name())
+			newPath := filepath.Join(destinationDir, f.Name())
+			fmt.Printf("Moving %s to %s\n", oldPath, newPath)
+			if err := os.Rename(oldPath, newPath); err != nil {
+				return err
+			}
 		}
 		return nil
 	},
