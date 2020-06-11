@@ -176,7 +176,7 @@ func (c *Client) PullModel(ref *Reference) error {
 		oras.WithAllowedMediaTypes(consts.KnownMediaTypes()),
 		oras.WithContentProvideIngester(c.cache.ProvideIngester()))
 	if err != nil {
-		panic(err)
+		return err
 	}
 	err = c.cache.AddManifest(ref, &manifest)
 	if err != nil {
