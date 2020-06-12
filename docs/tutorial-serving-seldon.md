@@ -52,15 +52,59 @@ Then we can get the model in the Harbor UI.
 
 ## Deploy Seldon Core on Kubernetes
 
-Then we can clone our own seldon-core fork and deploy it. We will contribute the implementation to upstream soon.
+### Helm Chart
 
-```bash
-$ git clone git@github.com:gaocegege/seldon-core.git
-$ git checkout ormb
-$ cd ./operator
+We need to deploy Seldon Core on Kubernetes. 
+
+If you are using Helm Chart to deploy Seldon Core, there are some changes need to be done in [helm-charts/seldon-core-operator/values.yaml#L80](https://github.com/SeldonIO/seldon-core/blob/00c691d0f947f5fe21fb408dd613a669d87062fc/helm-charts/seldon-core-operator/values.yaml#L80) and [helm-charts/seldon-core-operator/values.yaml#L137](https://github.com/SeldonIO/seldon-core/blob/00c691d0f947f5fe21fb408dd613a669d87062fc/helm-charts/seldon-core-operator/values.yaml#L137)
+
+```diff
+storageInitializer:
+  cpuLimit: "1"
+  cpuRequest: 100m
+-  image: gcr.io/kfserving/storage-initializer:0.2.2
++  image: clvoss/clever-ormb-storage-initializer:v0.0.2
+  memoryLimit: 1Gi
+  memoryRequest: 100Mi
+...
+ credentials:
+  gcs:
+    gcsCredentialFileName: gcloud-application-credentials.json
+  s3:
+-    s3AccessKeyIDName: awsAccessKeyID
+-    s3SecretAccessKeyName: awsSecretAccessKey
++    s3AccessKeyIDName: ormbUsername
++    s3SecretAccessKeyName: ormbPassword
 ```
 
-Follow the guide [here](https://docs.seldon.io/projects/seldon-core/en/latest/developer/readme.html) to deploy Seldon Core using kind.
+### Local Development
+
+If you are using the guide in [Seldon Core Development Documentation](https://docs.seldon.io/projects/seldon-core/en/latest/developer/readme.html) to deploy the operator, you need to update [operator/config/manager/configmap.yaml#L14](https://github.com/SeldonIO/seldon-core/blob/00c691d0f947f5fe21fb408dd613a669d87062fc/operator/config/manager/configmap.yaml#L14) and [operator/config/manager/configmap.yaml#L65](https://github.com/SeldonIO/seldon-core/blob/00c691d0f947f5fe21fb408dd613a669d87062fc/operator/config/manager/configmap.yaml#L65)
+
+```diff
+  credentials: |-
+    {
+       "gcs" : {
+           "gcsCredentialFileName": "gcloud-application-credentials.json"
+       },
+       "s3" : {
+-           "s3AccessKeyIDName": "awsAccessKeyID",
+-           "s3SecretAccessKeyName": "awsSecretAccessKey"
++           "s3AccessKeyIDName": "ormbUsername",
++           "s3SecretAccessKeyName": "ormbPassword"
+       }
+    }
+...
+  storageInitializer: |-
+    {
+-        "image" : "gcr.io/kfserving/storage-initializer:0.2.2",
++        "image" : "clvoss/clever-ormb-storage-initializer:v0.0.2",
+        "memoryRequest": "100Mi",
+        "memoryLimit": "1Gi",
+        "cpuRequest": "100m",
+        "cpuLimit": "1"
+    }
+```
 
 ## Create the SeldonDeployment
 
