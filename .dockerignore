@@ -1,0 +1,4 @@
+vendor/
+.ipynb*/
+.vscode/
+third_party/
