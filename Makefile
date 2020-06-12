@@ -129,18 +129,22 @@ build-linux:
 	        $(CMD_DIR)/$${target};                                                     \
 	    done'
 
-container: build-linux
-	@for target in $(TARGETS); do                                                      \
-	  image=$(IMAGE_PREFIX)$${target}$(IMAGE_SUFFIX);                                  \
-	  docker build -t $(REGISTRY)/$${image}:$(VERSION)                                 \
-	    --label $(DOCKER_LABELS)                                                       \
-	    -f $(BUILD_DIR)/$${target}/Dockerfile .;                                       \
-	done
+container-buildlocal: build-local container-skipbuild
+
+container: build-linux container-skipbuild
 
 push: container
 	@for target in $(TARGETS); do                                                      \
 	  image=$(IMAGE_PREFIX)$${target}$(IMAGE_SUFFIX);                                  \
 	  docker push $(REGISTRY)/$${image}:$(VERSION);                                    \
+	done
+
+container-skipbuild:
+	@for target in $(TARGETS); do                                                      \
+	  image=$(IMAGE_PREFIX)$${target}$(IMAGE_SUFFIX);                                  \
+	  docker build -t $(REGISTRY)/$${image}:$(VERSION)                                 \
+	    --label $(DOCKER_LABELS)                                                       \
+	    -f $(BUILD_DIR)/$${target}/Dockerfile .;                                       \
 	done
 
 .PHONY: clean
