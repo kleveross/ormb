@@ -129,7 +129,7 @@ Then we can port-forward `tfserving-default` to port 8080 in the host.
 kubectl port-forward service/tfserving-default 8000:8000
 ```
 
-use the code in [examples/SavedModel-fashion/training-serving.ipynb] to test it.
+use the code in [examples/SavedModel-fashion/training-serving.ipynb](../examples/SavedModel-fashion/training-serving.ipynb) to test it.
 
 ```python
 import tensorflow as tf
