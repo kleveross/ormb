@@ -44,8 +44,10 @@ var rootCmd = &cobra.Command{
 		dstDir := args[1]
 
 		// Get username and password from environment
-		username := viper.GetString("username")
-		pwd := viper.GetString("password")
+		// Here AWS_SECRET_ACCESS_KEY and AWS_ACCESS_KEY_ID are used
+		// because Seldon Core does not support renaming the environment variable name.
+		username := viper.GetString("AWS_ACCESS_KEY_ID")
+		pwd := viper.GetString("AWS_SECRET_ACCESS_KEY")
 		// Get the host from the URL.
 		strs := strings.Split(modelURI, "/")
 		if len(strs) == 0 {
@@ -123,7 +125,6 @@ func init() {
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
-	viper.SetEnvPrefix("ORMB")
 	viper.AutomaticEnv()
 
 	logrus.SetLevel(logrus.DebugLevel)
