@@ -1,6 +1,14 @@
 # Output folder of build
 bin
 
+# Related files of Mac and ide
+.idea
+.DS_Store
+
+# Middle files of python
+__pycache__
+*.pyc
+
 # Output file of unit test coverage
 coverage.out
 
