@@ -4,6 +4,8 @@
 
 - [ormb](#ormb)
   - [Installation](#installation)
+    - [Install the pre-compiled binary](#install-the-pre-compiled-binary)
+    - [Compile from source](#compile-from-source)
   - [Usage](#usage)
     - [Save the model](#save-the-model)
     - [Push the model to a remote registry](#push-the-model-to-a-remote-registry)
@@ -17,17 +19,45 @@
 
 # ormb
 
-Managing Machine Learning/Deep Learning Models like Docker Images.
+ormb is an open-source model registry to manage machine learning model. 
 
 ormb helps you manage your Machine Learning/Deep Learning models. It makes your models easy to create, version, share and publish.
 
-ormb can publish models by reading the information from a `ormbfile.yaml`. A `ormbfile.yaml` is a text document that contains all the information about the model.
-
 ## Installation
 
-```bash
-go install github.com/caicloud/ormb
+You can install the pre-compiled binary, or compile from source.
+
+### Install the pre-compiled binary
+
+Download the pre-compiled binaries from [the releases](https://github.com/caicloud/ormb/releases) page and copy to the desired location.
+
+### Compile from source
+
+Clone:
+
 ```
+$ git clone https://github.com/caicloud/ormb
+$ cd goreleaser
+```
+
+Get the dependencies:
+
+```
+$ go mod tidy
+```
+
+Build:
+
+```
+$ make build-local
+```
+
+Verify it works:
+
+```
+$ ./bin/ormb --help
+```
+
 ## Usage
 
 ### Save the model
