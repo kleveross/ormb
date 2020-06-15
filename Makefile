@@ -42,7 +42,7 @@ IMAGE_SUFFIX ?= $(strip )
 REGISTRY ?= cleveross
 
 # Container registry for base images.
-BASE_REGISTRY ?= cargo.caicloud.xyz/library
+BASE_REGISTRY ?= docker.io
 
 #
 # These variables should not need tweaking.

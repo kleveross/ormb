@@ -37,7 +37,7 @@ Clone:
 
 ```
 $ git clone https://github.com/caicloud/ormb
-$ cd goreleaser
+$ cd ormb
 ```
 
 Get the dependencies:
