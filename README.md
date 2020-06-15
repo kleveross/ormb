@@ -4,6 +4,8 @@
 
 - [ormb](#ormb)
   - [Installation](#installation)
+    - [Install the pre-compiled binary](#install-the-pre-compiled-binary)
+    - [Compile from source](#compile-from-source)
   - [Usage](#usage)
     - [Save the model](#save-the-model)
     - [Push the model to a remote registry](#push-the-model-to-a-remote-registry)
