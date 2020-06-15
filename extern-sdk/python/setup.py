@@ -24,7 +24,7 @@ setup(
     url="https://github.com/caicloud/ormb",
     project_urls={
         "Documentation": "https://github.com/caicloud/ormb/wikis/home",
-        "Code": "",
+        "Code": "https://github.com/caicloud/ormb",
         "Issue tracker": "https://github.com/caicloud/ormb/issues",
     },
     maintainer="gaocegege, ZhuYuJin",
