@@ -12,6 +12,8 @@
     - [Pull the model from a remote registry](#pull-the-model-from-a-remote-registry)
     - [Export the model to the current directory](#export-the-model-to-the-current-directory)
   - [Tutorial](#tutorial)
+    - [Training and serving](#training-and-serving)
+    - [Serving with Seldon Core](#serving-with-seldon-core)
   - [OCI Model Configuration Specification](#oci-model-configuration-specification)
   - [Community](#community)
 
@@ -116,7 +118,13 @@ resnet_v2_fp32_savedmodel_NCHW
 
 ## Tutorial
 
+### Training and serving
+
 Please have a look at [docs/tutorial.md](docs/tutorial.md)
+
+### Serving with Seldon Core
+
+Please have a look at [docs/tutorial-serving-seldon.md](docs/tutorial-serving-seldon.md)
 
 ## OCI Model Configuration Specification
 
