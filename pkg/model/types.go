@@ -20,6 +20,9 @@ type Metadata struct {
 	Framework       string            `json:"framework,omitempty" yaml:"framework,omitempty"`
 	Metrics         []Metric          `json:"metrics,omitempty" yaml:"metrics,omitempty"`
 	Hyperparameters []Hyperparameter  `json:"hyperparameters,omitempty" yaml:"hyperparameters,omitempty"`
+	Signature       Signature         `json:"signature,omitempty" yaml:"signature,omitempty"`
+	Training        Training          `json:"training,omitempty" yaml:"training,omitempty"`
+	Dataset         Dataset           `json:"dataset,omitempty" yaml:"dataset,omitempty"`
 }
 
 type Metric struct {
@@ -30,4 +33,33 @@ type Metric struct {
 type Hyperparameter struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
+}
+
+type Signature struct {
+	Inputs  []Tensor `json:"inputs,omitempty" yaml:"inputs,omitempty"`
+	Outputs []Tensor `json:"outputs,omitempty" yaml:"outputs,omitempty"`
+	Layers  []Layer  `json:"layers,omitempty" yaml:"layers,omitempty"`
+}
+
+type Tensor struct {
+	Name  string `json:"name,omitempty" yaml:"name,omitempty"`
+	Size  []int  `json:"size,omitempty" yaml:"size,omitempty"`
+	DType string `json:"dtype,omitempty" yaml:"dtype,omitempty"`
+}
+
+type Layer struct {
+	Name string `json:"name,omitempty" yaml:"name,omitempty"`
+}
+
+type Training struct {
+	Git GitRepo `json:"git,omitempty" yaml:"git,omitempty"`
+}
+
+type Dataset struct {
+	Git GitRepo `json:"git,omitempty" yaml:"git,omitempty"`
+}
+
+type GitRepo struct {
+	Repository string `json:"repository,omitempty" yaml:"repository,omitempty"`
+	Revision   string `json:"revision,omitempty" yaml:"revision,omitempty"`
 }
