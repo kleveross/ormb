@@ -8,9 +8,9 @@ import (
 	"github.com/caicloud/ormb/pkg/saver"
 )
 
-// ORMB is the interface to save/pull/push/export
-// models in/to a remote registry.
-type ORMB interface {
+// Interface is the interface to manage
+// models with a remote registry.
+type Interface interface {
 	Login(hostname, username, password string, insecureOpt bool) error
 	Push(refStr string) error
 	Pull(refStr string) error
@@ -19,26 +19,30 @@ type ORMB interface {
 	Remove(refStr string) error
 }
 
-type ociORMB struct {
-	client *oci.Client
+type ORMB struct {
+	client   oci.Interface
+	saver    saver.Interface
+	exporter exporter.Interface
 }
 
-// NewOCIORMB creates a OCI-based ORMB client.
-func NewOCIORMB(opts ...oci.ClientOption) (ORMB, error) {
+// New creates a OCI-based ORMB client.
+func New(opts ...oci.ClientOption) (Interface, error) {
 	c, err := oci.NewClient(opts...)
 	if err != nil {
 		return nil, err
 	}
-	return &ociORMB{
-		client: c,
+	return &ORMB{
+		client:   c,
+		saver:    saver.New(),
+		exporter: exporter.New(),
 	}, nil
 }
 
-func (o ociORMB) Login(hostname, username, password string, insecureOpt bool) error {
+func (o ORMB) Login(hostname, username, password string, insecureOpt bool) error {
 	return o.client.Login(hostname, username, password, insecureOpt)
 }
 
-func (o ociORMB) Push(refStr string) error {
+func (o ORMB) Push(refStr string) error {
 	ref, err := oci.ParseReference(refStr)
 	if err != nil {
 		return err
@@ -46,7 +50,7 @@ func (o ociORMB) Push(refStr string) error {
 	return o.client.PushModel(ref)
 }
 
-func (o ociORMB) Pull(refStr string) error {
+func (o ORMB) Pull(refStr string) error {
 	ref, err := oci.ParseReference(refStr)
 	if err != nil {
 		return err
@@ -54,7 +58,7 @@ func (o ociORMB) Pull(refStr string) error {
 	return o.client.PullModel(ref)
 }
 
-func (o ociORMB) Export(refStr, dst string) error {
+func (o ORMB) Export(refStr, dst string) error {
 	path, err := filepath.Abs(dst)
 	if err != nil {
 		return err
@@ -70,14 +74,13 @@ func (o ociORMB) Export(refStr, dst string) error {
 		return err
 	}
 
-	e := exporter.NewDefaultExporter()
-	if _, err := e.Export(m, path); err != nil {
+	if _, err := o.exporter.Export(m, path); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o ociORMB) Save(src, refStr string) error {
+func (o ORMB) Save(src, refStr string) error {
 	path, err := filepath.Abs(src)
 	if err != nil {
 		return err
@@ -88,15 +91,14 @@ func (o ociORMB) Save(src, refStr string) error {
 		return err
 	}
 
-	s := saver.NewDefaultSaver()
-	m, err := s.Save(path)
+	m, err := o.saver.Save(path)
 	if err != nil {
 		return err
 	}
 	return o.client.SaveModel(m, ref)
 }
 
-func (o ociORMB) Remove(refStr string) error {
+func (o ORMB) Remove(refStr string) error {
 	ref, err := oci.ParseReference(refStr)
 	if err != nil {
 		return err

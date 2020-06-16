@@ -33,7 +33,7 @@ type Client struct {
 }
 
 // NewClient returns a new registry client with config
-func NewClient(opts ...ClientOption) (*Client, error) {
+func NewClient(opts ...ClientOption) (Interface, error) {
 	client := &Client{
 		out: ioutil.Discard,
 	}

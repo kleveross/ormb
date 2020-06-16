@@ -19,7 +19,7 @@ func preRunE(cmd *cobra.Command, args []string) error {
 	}
 	fmt.Printf("Using %s as the root path\n", rootPath)
 
-	ormbClient, err = ormb.NewOCIORMB(
+	ormbClient, err = ormb.New(
 		oci.ClientOptRootPath(rootPath),
 		oci.ClientOptWriter(os.Stdout),
 		oci.ClientOptPlainHTTP(plainHTTPOpt),

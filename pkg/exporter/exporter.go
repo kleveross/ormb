@@ -14,20 +14,15 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// Exporter exports the model to the destination.
-type Exporter interface {
-	Export(m *model.Model, dst string) (string, error)
-}
+type Exporter struct{}
 
-type defaultExporter struct{}
-
-// NewDefaultExporter creates a new defaultExporter.
-func NewDefaultExporter() Exporter {
-	return &defaultExporter{}
+// New creates a new Exporter.
+func New() Interface {
+	return &Exporter{}
 }
 
 // Export saves the model to the destination.
-func (d defaultExporter) Export(m *model.Model, dst string) (string, error) {
+func (d Exporter) Export(m *model.Model, dst string) (string, error) {
 	if err := d.exportMetadata(m, dst); err != nil {
 		return "", err
 	}
@@ -100,7 +95,7 @@ func (d defaultExporter) Export(m *model.Model, dst string) (string, error) {
 	}
 }
 
-func (d defaultExporter) exportMetadata(m *model.Model, dst string) error {
+func (d Exporter) exportMetadata(m *model.Model, dst string) error {
 	// Export ormbfile.yaml.
 	yamlBytes, err := yaml.Marshal(m.Metadata)
 	if err != nil {

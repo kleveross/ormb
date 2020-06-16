@@ -100,7 +100,12 @@ lint: $(GOLANGCI_LINT)
 $(GOLANGCI_LINT):
 	curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(BIN_DIR) v1.23.6
 
-test:
+generate:
+	@mockgen -source pkg/oci/interface.go -destination pkg/oci/mock/mock.go -package mock
+	@mockgen -source pkg/saver/interface.go -destination pkg/saver/mock/mock.go -package mock
+	@mockgen -source pkg/exporter/interface.go -destination pkg/exporter/mock/mock.go -package mock
+
+test: generate
 	@go test -coverprofile=coverage.out ./...
 	@go tool cover -func coverage.out | tail -n 1 | awk '{ print "Total coverage: " $$3 }'
 

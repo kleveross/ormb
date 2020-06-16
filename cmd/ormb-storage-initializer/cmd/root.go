@@ -31,7 +31,7 @@ import (
 	"github.com/caicloud/ormb/pkg/ormb"
 )
 
-var ormbClient ormb.ORMB
+var ormbClient ormb.Interface
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -66,7 +66,7 @@ var rootCmd = &cobra.Command{
 		}
 		fmt.Printf("Using %s as the root path\n", rootPath)
 
-		ormbClient, err = ormb.NewOCIORMB(
+		ormbClient, err = ormb.New(
 			oci.ClientOptRootPath(rootPath),
 			oci.ClientOptWriter(os.Stdout),
 			oci.ClientOptPlainHTTP(plainHTTPOpt),
