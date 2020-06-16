@@ -1,0 +1,21 @@
+language: go
+
+services:
+- docker
+
+script:
+  - go test ./... # replace this with your test script
+  - make
+  - curl -sfL https://git.io/goreleaser | sh -s -- check # check goreleaser config for deprecations
+
+after_success:
+- test -n "$TRAVIS_TAG" && docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+
+# calls goreleaser
+deploy:
+- provider: script
+  skip_cleanup: true
+  script: curl -sL https://git.io/goreleaser | bash
+  on:
+    tags: true
+    condition: $TRAVIS_OS_NAME = linux
