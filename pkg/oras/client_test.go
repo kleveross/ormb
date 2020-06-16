@@ -6,7 +6,12 @@ import (
 	"github.com/golang/mock/gomock"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"github.com/opencontainers/go-digest"
+	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
 
+	"github.com/caicloud/ormb/pkg/model"
+	"github.com/caicloud/ormb/pkg/oci"
+	"github.com/caicloud/ormb/pkg/oras/cache"
 	cachemock "github.com/caicloud/ormb/pkg/oras/cache/mock"
 	orasmock "github.com/caicloud/ormb/pkg/oras/mock"
 	orasclientmock "github.com/caicloud/ormb/pkg/oras/orasclient/mock"
@@ -43,6 +48,44 @@ var _ = Describe("OCI Client", func() {
 				gomock.Eq(insec),
 			).Return(nil).Times(1)
 			Expect(c.Login(host, user, pwd, insec)).To(BeNil())
+		})
+
+		It("Should logout successfully", func() {
+			host := "test.harbor.com"
+			c.authorizer.Client.(*orasmock.MockClient).EXPECT().Logout(
+				gomock.Any(),
+				gomock.Eq(host),
+			).Return(nil).Times(1)
+			Expect(c.Logout(host)).To(BeNil())
+		})
+
+		It("Should save the model successfully", func() {
+			refStr := "caicloud/resnet50:v1"
+			ref, err := oci.ParseReference(refStr)
+			Expect(err).To(BeNil())
+
+			ch := &model.Model{
+				Path: "/test",
+			}
+			returnedSummary := &cache.CacheRefSummary{
+				Manifest: &ocispec.Descriptor{
+					Digest: digest.Digest("sha256:123456"),
+					Size:   int64(1),
+				},
+				Digest: digest.Digest("sha256:154saf"),
+				Size:   int64(1),
+				Name:   "test",
+			}
+
+			c.cache.(*cachemock.MockInterface).EXPECT().StoreReference(
+				gomock.Eq(ref),
+				gomock.Eq(ch),
+			).Return(returnedSummary, nil).Times(1)
+			c.cache.(*cachemock.MockInterface).EXPECT().AddManifest(
+				gomock.Eq(ref),
+				gomock.Eq(returnedSummary.Manifest),
+			).Return(nil).Times(1)
+			Expect(c.SaveModel(ch, ref)).To(BeNil())
 		})
 	})
 })

@@ -227,5 +227,7 @@ func (c *Client) printCacheRefSummary(r *cache.CacheRefSummary) {
 	fmt.Fprintf(c.out, "ref:       %s\n", r.Name)
 	fmt.Fprintf(c.out, "digest:    %s\n", r.Digest.Hex())
 	fmt.Fprintf(c.out, "size:      %s\n", bts.ByteCountBinary(r.Size))
-	fmt.Fprintf(c.out, "format:    %s\n", r.Model.Metadata.Format)
+	if r.Model != nil && r.Model.Metadata != nil {
+		fmt.Fprintf(c.out, "format:    %s\n", r.Model.Metadata.Format)
+	}
 }
