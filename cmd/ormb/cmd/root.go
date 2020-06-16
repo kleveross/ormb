@@ -29,7 +29,7 @@ import (
 
 var cfgFile string
 
-var ormbClient ormb.ORMB
+var ormbClient ormb.Interface
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{

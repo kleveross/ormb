@@ -16,24 +16,20 @@ import (
 	"github.com/caicloud/ormb/pkg/parser"
 )
 
-// Saver saves the model from the path to the memory.
-type Saver interface {
-	Save(path string) (*model.Model, error)
-}
-
-type defaultSaver struct {
+// Saver is the implementation.
+type Saver struct {
 	Parser parser.Parser
 }
 
-// NewDefaultSaver creates a new defaultSaver.
-func NewDefaultSaver() Saver {
-	return &defaultSaver{
+// New creates a new defaultSaver.
+func New() Interface {
+	return &Saver{
 		Parser: parser.NewDefaultParser(),
 	}
 }
 
 // Save saves the model from the path to the memory.
-func (d defaultSaver) Save(path string) (*model.Model, error) {
+func (d Saver) Save(path string) (*model.Model, error) {
 	// Save model config from <path>/ormbfile.yaml.
 	dat, err := ioutil.ReadFile(filepath.Join(path, consts.ORMBfileName))
 	if err != nil {
