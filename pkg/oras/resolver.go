@@ -1,4 +1,4 @@
-package oci
+package oras
 
 import (
 	"github.com/containerd/containerd/remotes"

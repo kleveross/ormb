@@ -8,7 +8,7 @@ import (
 	exportermock "github.com/caicloud/ormb/pkg/exporter/mock"
 	"github.com/caicloud/ormb/pkg/model"
 	"github.com/caicloud/ormb/pkg/oci"
-	ocimock "github.com/caicloud/ormb/pkg/oci/mock"
+	orasmock "github.com/caicloud/ormb/pkg/oras/mock"
 	savermock "github.com/caicloud/ormb/pkg/saver/mock"
 )
 
@@ -20,7 +20,7 @@ var _ = Describe("ormb golang library", func() {
 		ctrl1 := gomock.NewController(GinkgoT())
 		ctrl2 := gomock.NewController(GinkgoT())
 		ociORMB = &ORMB{
-			client:   ocimock.NewMockInterface(ctrl),
+			client:   orasmock.NewMockInterface(ctrl),
 			saver:    savermock.NewMockInterface(ctrl1),
 			exporter: exportermock.NewMockInterface(ctrl2),
 		}
@@ -32,7 +32,7 @@ var _ = Describe("ormb golang library", func() {
 		user := "user"
 		pwd := "pwd"
 		insec := true
-		ociORMB.client.(*ocimock.MockInterface).EXPECT().Login(
+		ociORMB.client.(*orasmock.MockInterface).EXPECT().Login(
 			gomock.Eq(host),
 			gomock.Eq(user),
 			gomock.Eq(pwd),
@@ -45,7 +45,7 @@ var _ = Describe("ormb golang library", func() {
 		ref, err := oci.ParseReference(refStr)
 		Expect(err).To(BeNil())
 
-		ociORMB.client.(*ocimock.MockInterface).EXPECT().PushModel(
+		ociORMB.client.(*orasmock.MockInterface).EXPECT().PushModel(
 			gomock.Eq(ref),
 		).Return(nil).Times(1)
 		Expect(ociORMB.Push(refStr)).To(BeNil())
@@ -56,7 +56,7 @@ var _ = Describe("ormb golang library", func() {
 		ref, err := oci.ParseReference(refStr)
 		Expect(err).To(BeNil())
 
-		ociORMB.client.(*ocimock.MockInterface).EXPECT().PullModel(
+		ociORMB.client.(*orasmock.MockInterface).EXPECT().PullModel(
 			gomock.Eq(ref),
 		).Return(nil).Times(1)
 		Expect(ociORMB.Pull(refStr)).To(BeNil())
@@ -74,7 +74,7 @@ var _ = Describe("ormb golang library", func() {
 		ociORMB.saver.(*savermock.MockInterface).EXPECT().Save(
 			gomock.Eq(src),
 		).Return(ch, nil).Times(1)
-		ociORMB.client.(*ocimock.MockInterface).EXPECT().SaveModel(
+		ociORMB.client.(*orasmock.MockInterface).EXPECT().SaveModel(
 			gomock.Eq(ch),
 			gomock.Eq(ref),
 		).Return(nil).Times(1)
@@ -94,7 +94,7 @@ var _ = Describe("ormb golang library", func() {
 			gomock.Eq(ch),
 			gomock.Eq(dst),
 		).Return("", nil).Times(1)
-		ociORMB.client.(*ocimock.MockInterface).EXPECT().LoadModel(
+		ociORMB.client.(*orasmock.MockInterface).EXPECT().LoadModel(
 			gomock.Eq(ref),
 		).Return(ch, nil).Times(1)
 		Expect(ociORMB.Export(refStr, dst)).To(BeNil())
