@@ -21,7 +21,7 @@ type Saver struct {
 	Parser parser.Parser
 }
 
-// New creates a new defaultSaver.
+// New creates a new Saver.
 func New() Interface {
 	return &Saver{
 		Parser: parser.NewDefaultParser(),

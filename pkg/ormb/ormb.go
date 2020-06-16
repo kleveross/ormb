@@ -8,8 +8,8 @@ import (
 	"github.com/caicloud/ormb/pkg/saver"
 )
 
-// Interface is the interface to save/pull/push/export
-// models in/to a remote registry.
+// Interface is the interface to manage
+// models with a remote registry.
 type Interface interface {
 	Login(hostname, username, password string, insecureOpt bool) error
 	Push(refStr string) error
