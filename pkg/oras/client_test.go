@@ -15,6 +15,7 @@ import (
 var _ = Describe("OCI Client", func() {
 	Describe("with all things mocked", func() {
 		var c *Client
+
 		BeforeEach(func() {
 			ctrl := gomock.NewController(GinkgoT())
 			ctrl1 := gomock.NewController(GinkgoT())
@@ -28,6 +29,7 @@ var _ = Describe("OCI Client", func() {
 				orasClient: orasclientmock.NewMockInterface(ctrl3),
 			}
 		})
+
 		It("Should login successfully", func() {
 			host := "test.harbor.com"
 			user := "user"
