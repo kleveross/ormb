@@ -21,6 +21,8 @@
 
 # ormb
 
+[![Build Status](https://travis-ci.com/caicloud/ormb.svg?branch=master)](https://travis-ci.com/caicloud/ormb)
+
 ormb is an open-source model registry to manage machine learning model. 
 
 ormb helps you manage your Machine Learning/Deep Learning models. It makes your models easy to create, version, share and publish.
