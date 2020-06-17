@@ -22,6 +22,7 @@
 # ormb
 
 [![Build Status](https://travis-ci.com/caicloud/ormb.svg?branch=master)](https://travis-ci.com/caicloud/ormb)
+[![Coverage Status](https://coveralls.io/repos/github/caicloud/ormb/badge.svg?branch=master)](https://coveralls.io/github/caicloud/ormb?branch=master)
 
 ormb is an open-source model registry to manage machine learning model. 
 
