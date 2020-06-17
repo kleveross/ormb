@@ -33,6 +33,7 @@ var _ = Describe("OCI Client", func() {
 			Expect(c.(*Client).rootPath).To(Equal(rootPath))
 		})
 	})
+
 	Describe("with all things mocked", func() {
 		var c *Client
 
@@ -101,6 +102,48 @@ var _ = Describe("OCI Client", func() {
 				gomock.Eq(returnedSummary.Manifest),
 			).Return(nil).Times(1)
 			Expect(c.SaveModel(ch, ref)).To(BeNil())
+		})
+
+		It("Should push the model successfully", func() {
+			refStr := "caicloud/resnet50:v1"
+			ref, err := oci.ParseReference(refStr)
+			Expect(err).To(BeNil())
+
+			contentLayer := &ocispec.Descriptor{
+				Digest: digest.Digest("sha256:gvdfgd"),
+				Size:   int64(1),
+			}
+			layers := []ocispec.Descriptor{*contentLayer}
+			returnedSummary := &cache.CacheRefSummary{
+				Manifest: &ocispec.Descriptor{
+					Digest: digest.Digest("sha256:123456"),
+					Size:   int64(1),
+				},
+				Config: &ocispec.Descriptor{
+					Digest: digest.Digest("sha256:kfgdv"),
+					Size:   int64(1),
+				},
+				ContentLayer: contentLayer,
+				Digest:       digest.Digest("sha256:123456"),
+				Size:         int64(1),
+				Name:         refStr,
+				Exists:       true,
+			}
+
+			c.cache.(*cachemock.MockInterface).EXPECT().FetchReference(
+				gomock.Eq(ref),
+			).Return(returnedSummary, nil).Times(1)
+			c.cache.(*cachemock.MockInterface).EXPECT().Provider().Return(nil).Times(1)
+			c.orasClient.(*orasclientmock.MockInterface).EXPECT().Push(
+				gomock.Any(),
+				gomock.Eq(c.resolver),
+				gomock.Eq(refStr),
+				gomock.Nil(),
+				gomock.Eq(layers),
+				gomock.Any(),
+				gomock.Any(),
+			).Return(ocispec.Descriptor{}, nil).Times(1)
+			Expect(c.PushModel(ref)).To(BeNil())
 		})
 	})
 })

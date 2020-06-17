@@ -142,7 +142,8 @@ func (c *Client) PushModel(ref *oci.Reference) error {
 	fmt.Fprintf(c.out, "The push refers to repository [%s]\n", r.Repo)
 	c.printCacheRefSummary(r)
 	layers := []ocispec.Descriptor{*r.ContentLayer}
-	_, err = c.orasClient.Push(ctx.Context(c.out, c.debug), c.resolver, r.Name, c.cache.Provider(), layers,
+	_, err = c.orasClient.Push(ctx.Context(c.out, c.debug),
+		c.resolver, r.Name, c.cache.Provider(), layers,
 		oras.WithConfig(*r.Config), oras.WithNameValidation(nil))
 	if err != nil {
 		return err
