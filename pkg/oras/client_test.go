@@ -229,5 +229,41 @@ var _ = Describe("OCI Client", func() {
 			).Return(manifest, []ocispec.Descriptor{}, nil).Times(1)
 			Expect(c.PullModel(ref)).To(BeNil())
 		})
+
+		It("Should load the model successfully", func() {
+			refStr := "caicloud/resnet50:v1"
+			ref, err := oci.ParseReference(refStr)
+			Expect(err).To(BeNil())
+
+			m := &model.Model{
+				Path: "/test",
+			}
+
+			contentLayer := &ocispec.Descriptor{
+				Digest: digest.Digest("sha256:gvdfgd"),
+				Size:   int64(1),
+			}
+			returnedSummary := &cache.CacheRefSummary{
+				Manifest: &ocispec.Descriptor{
+					Digest: digest.Digest("sha256:123456"),
+					Size:   int64(1),
+				},
+				Config: &ocispec.Descriptor{
+					Digest: digest.Digest("sha256:kfgdv"),
+					Size:   int64(1),
+				},
+				ContentLayer: contentLayer,
+				Digest:       digest.Digest("sha256:123456"),
+				Size:         int64(1),
+				Name:         refStr,
+				Exists:       true,
+				Model:        m,
+			}
+
+			c.cache.(*cachemock.MockInterface).EXPECT().FetchReference(
+				gomock.Eq(ref),
+			).Return(returnedSummary, nil).Times(1)
+			Expect(c.LoadModel(ref)).To(Equal(m), BeNil())
+		})
 	})
 })
