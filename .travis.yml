@@ -6,10 +6,24 @@ go:
 services:
 - docker
 
-script:
-  - go test ./... # replace this with your test script
+before_install:
+  # get coveralls.io support
+  - go get github.com/mattn/goveralls
+
+install:
   - make
+
+script:
+  # Test if ormb works.
   - ./bin/ormb save ./examples/SavedModel-fashion demo.goharbor.io/tensorflow/fashion_model:v1
+  # We customize the build step because by default
+  # Travis runs go test -v ./... which will include the vendor
+  # directory.
+  # With go 1.9 vendor will be automatically excluded.
+  # For now though we just run all tests in pkg.
+  # And we can not use ** because goveralls uses filepath.Match
+  # to match ignore files and it does not support it.
+  - goveralls -service=travis-ci -v -package ./pkg/... -ignore "pkg/kernel/*.go"
   - curl -sfL https://git.io/goreleaser | sh -s -- check # check goreleaser config for deprecations
 
 after_success:
