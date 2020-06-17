@@ -1,4 +1,4 @@
-package oci
+package cache
 
 import (
 	"encoding/json"
@@ -19,13 +19,17 @@ import (
 
 	"github.com/caicloud/ormb/pkg/consts"
 	"github.com/caicloud/ormb/pkg/model"
+	"github.com/caicloud/ormb/pkg/oci"
 	"github.com/caicloud/ormb/pkg/parser"
+	"github.com/caicloud/ormb/pkg/util/ctx"
 )
 
 const (
-	// cacheRootDir is the root directory for a cache
-	cacheRootDir = "cache"
+	// CacheRootDir is the root directory for a cache
+	CacheRootDir = "cache"
 )
+
+var _ Interface = (*Cache)(nil)
 
 // Cache handles local/in-memory storage of Helm charts, compliant with OCI Layout
 type Cache struct {
@@ -55,8 +59,8 @@ type CacheRefSummary struct {
 	Model        *model.Model
 }
 
-// NewCache returns a new OCI Layout-compliant cache with config
-func NewCache(opts ...CacheOption) (*Cache, error) {
+// New returns a new OCI Layout-compliant cache with config
+func New(opts ...CacheOption) (Interface, error) {
 	cache := &Cache{
 		out:    ioutil.Discard,
 		parser: parser.NewDefaultParser(),
@@ -72,7 +76,7 @@ func NewCache(opts ...CacheOption) (*Cache, error) {
 }
 
 // FetchReference retrieves a model ref from cache.
-func (cache *Cache) FetchReference(ref *Reference) (*CacheRefSummary, error) {
+func (cache *Cache) FetchReference(ref *oci.Reference) (*CacheRefSummary, error) {
 	if err := cache.init(); err != nil {
 		return nil, err
 	}
@@ -126,7 +130,7 @@ func (cache *Cache) FetchReference(ref *Reference) (*CacheRefSummary, error) {
 						consts.MediaTypeModelContentLayer))
 			}
 			r.ContentLayer = contentLayer
-			info, err := cache.ociStore.Info(ctx(cache.out, cache.debug), contentLayer.Digest)
+			info, err := cache.ociStore.Info(ctx.Context(cache.out, cache.debug), contentLayer.Digest)
 			if err != nil {
 				return &r, err
 			}
@@ -158,7 +162,7 @@ func (cache *Cache) FetchReference(ref *Reference) (*CacheRefSummary, error) {
 }
 
 // StoreReference stores a model ref in cache
-func (cache *Cache) StoreReference(ref *Reference, m *model.Model) (*CacheRefSummary, error) {
+func (cache *Cache) StoreReference(ref *oci.Reference, m *model.Model) (*CacheRefSummary, error) {
 	if err := cache.init(); err != nil {
 		return nil, err
 	}
@@ -184,7 +188,7 @@ func (cache *Cache) StoreReference(ref *Reference, m *model.Model) (*CacheRefSum
 		return &r, err
 	}
 	r.ContentLayer = contentLayer
-	info, err := cache.ociStore.Info(ctx(cache.out, cache.debug), contentLayer.Digest)
+	info, err := cache.ociStore.Info(ctx.Context(cache.out, cache.debug), contentLayer.Digest)
 	if err != nil {
 		return &r, err
 	}
@@ -204,7 +208,7 @@ func (cache *Cache) StoreReference(ref *Reference, m *model.Model) (*CacheRefSum
 
 // DeleteReference deletes a chart ref from cache
 // TODO: garbage collection, only manifest removed
-func (cache *Cache) DeleteReference(ref *Reference) (*CacheRefSummary, error) {
+func (cache *Cache) DeleteReference(ref *oci.Reference) (*CacheRefSummary, error) {
 	if err := cache.init(); err != nil {
 		return nil, err
 	}
@@ -231,7 +235,7 @@ func (cache *Cache) ListReferences() ([]*CacheRefSummary, error) {
 			}
 			continue
 		}
-		ref, err := ParseReference(name)
+		ref, err := oci.ParseReference(name)
 		if err != nil {
 			return rr, err
 		}
@@ -245,7 +249,7 @@ func (cache *Cache) ListReferences() ([]*CacheRefSummary, error) {
 }
 
 // AddManifest provides a manifest to the cache index.json.
-func (cache *Cache) AddManifest(ref *Reference, manifest *ocispec.Descriptor) error {
+func (cache *Cache) AddManifest(ref *oci.Reference, manifest *ocispec.Descriptor) error {
 	if err := cache.init(); err != nil {
 		return err
 	}
@@ -284,7 +288,7 @@ func (cache *Cache) init() error {
 
 // fetchBlob retrieves a blob from filesystem
 func (cache *Cache) fetchBlob(desc *ocispec.Descriptor) ([]byte, error) {
-	reader, err := cache.ociStore.ReaderAt(ctx(cache.out, cache.debug), *desc)
+	reader, err := cache.ociStore.ReaderAt(ctx.Context(cache.out, cache.debug), *desc)
 	if err != nil {
 		return nil, err
 	}
@@ -299,7 +303,7 @@ func (cache *Cache) fetchBlob(desc *ocispec.Descriptor) ([]byte, error) {
 // storeBlob stores a blob on filesystem
 func (cache *Cache) storeBlob(blobBytes []byte) (bool, error) {
 	var exists bool
-	writer, err := cache.ociStore.Store.Writer(ctx(cache.out, cache.debug),
+	writer, err := cache.ociStore.Store.Writer(ctx.Context(cache.out, cache.debug),
 		content.WithRef(digest.FromBytes(blobBytes).Hex()))
 	if err != nil {
 		return exists, err
@@ -308,7 +312,7 @@ func (cache *Cache) storeBlob(blobBytes []byte) (bool, error) {
 	if err != nil {
 		return exists, err
 	}
-	err = writer.Commit(ctx(cache.out, cache.debug), 0, writer.Digest())
+	err = writer.Commit(ctx.Context(cache.out, cache.debug), 0, writer.Digest())
 	if err != nil {
 		if !errdefs.IsAlreadyExists(err) {
 			return exists, err

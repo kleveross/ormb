@@ -9,6 +9,7 @@ services:
 script:
   - go test ./... # replace this with your test script
   - make
+  - ./bin/ormb save ./examples/SavedModel-fashion demo.goharbor.io/tensorflow/fashion_model:v1
   - curl -sfL https://git.io/goreleaser | sh -s -- check # check goreleaser config for deprecations
 
 after_success:

@@ -101,9 +101,13 @@ $(GOLANGCI_LINT):
 	curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(BIN_DIR) v1.23.6
 
 generate:
-	@mockgen -source pkg/oci/interface.go -destination pkg/oci/mock/mock.go -package mock
+	@mockgen -source pkg/oras/interface.go -destination pkg/oras/mock/mock.go -package mock
+	@mockgen -source pkg/oras/cache/interface.go -destination pkg/oras/cache/mock/mock.go -package mock
+	@mockgen -source pkg/oras/orasclient/interface.go -destination pkg/oras/orasclient/mock/mock.go -package mock
 	@mockgen -source pkg/saver/interface.go -destination pkg/saver/mock/mock.go -package mock
 	@mockgen -source pkg/exporter/interface.go -destination pkg/exporter/mock/mock.go -package mock
+	@mockgen -source vendor/github.com/deislabs/oras/pkg/auth/client.go -destination pkg/oras/mock/mock_auth.go -package mock
+	@mockgen -source vendor/github.com/containerd/containerd/remotes/resolver.go -destination pkg/oras/mock/mock_resolver.go -package mock
 
 test: generate
 	@go test -coverprofile=coverage.out ./...

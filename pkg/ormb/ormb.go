@@ -5,6 +5,7 @@ import (
 
 	"github.com/caicloud/ormb/pkg/exporter"
 	"github.com/caicloud/ormb/pkg/oci"
+	"github.com/caicloud/ormb/pkg/oras"
 	"github.com/caicloud/ormb/pkg/saver"
 )
 
@@ -20,14 +21,14 @@ type Interface interface {
 }
 
 type ORMB struct {
-	client   oci.Interface
+	client   oras.Interface
 	saver    saver.Interface
 	exporter exporter.Interface
 }
 
 // New creates a OCI-based ORMB client.
-func New(opts ...oci.ClientOption) (Interface, error) {
-	c, err := oci.NewClient(opts...)
+func New(opts ...oras.ClientOption) (Interface, error) {
+	c, err := oras.NewClient(opts...)
 	if err != nil {
 		return nil, err
 	}

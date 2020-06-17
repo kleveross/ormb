@@ -1,7 +1,9 @@
-package oci
+package oras
 
 import (
 	"io"
+
+	"github.com/caicloud/ormb/pkg/oras/cache"
 )
 
 type (
@@ -46,7 +48,7 @@ func ClientOptRootPath(rootPath string) ClientOption {
 }
 
 // ClientOptCache returns a function that sets the cache setting on a client options set
-func ClientOptCache(cache *Cache) ClientOption {
+func ClientOptCache(cache cache.Interface) ClientOption {
 	return func(client *Client) {
 		client.cache = cache
 	}

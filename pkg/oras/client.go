@@ -1,4 +1,4 @@
-package oci
+package oras
 
 import (
 	"context"
@@ -11,6 +11,11 @@ import (
 
 	"github.com/caicloud/ormb/pkg/consts"
 	"github.com/caicloud/ormb/pkg/model"
+	"github.com/caicloud/ormb/pkg/oci"
+	"github.com/caicloud/ormb/pkg/oras/cache"
+	"github.com/caicloud/ormb/pkg/oras/orasclient"
+	bts "github.com/caicloud/ormb/pkg/util/bytes"
+	"github.com/caicloud/ormb/pkg/util/ctx"
 	auth "github.com/deislabs/oras/pkg/auth/docker"
 	"github.com/deislabs/oras/pkg/oras"
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
@@ -21,13 +26,16 @@ const (
 	credentialsFileBasename = "config.json"
 )
 
+var _ Interface = (*Client)(nil)
+
 // Client works with OCI-compliant registries and local cache.
 type Client struct {
 	debug      bool
 	out        io.Writer
 	authorizer *Authorizer
 	resolver   *Resolver
-	cache      *Cache
+	cache      cache.Interface
+	orasClient orasclient.Interface
 	rootPath   string
 	plainHTTP  bool
 }
@@ -35,7 +43,8 @@ type Client struct {
 // NewClient returns a new registry client with config
 func NewClient(opts ...ClientOption) (Interface, error) {
 	client := &Client{
-		out: ioutil.Discard,
+		out:        ioutil.Discard,
+		orasClient: orasclient.New(),
 	}
 	for _, opt := range opts {
 		opt(client)
@@ -68,10 +77,10 @@ func NewClient(opts ...ClientOption) (Interface, error) {
 		}
 	}
 	if client.cache == nil {
-		cache, err := NewCache(
-			CacheOptDebug(client.debug),
-			CacheOptWriter(client.out),
-			CacheOptRoot(path.Join(client.rootPath, cacheRootDir)),
+		cache, err := cache.New(
+			cache.CacheOptDebug(client.debug),
+			cache.CacheOptWriter(client.out),
+			cache.CacheOptRoot(path.Join(client.rootPath, cache.CacheRootDir)),
 		)
 		if err != nil {
 			return nil, err
@@ -86,7 +95,7 @@ func (c *Client) Login(hostname string, username string, password string, insecu
 	if insecure {
 		fmt.Fprintf(c.out, "Login insecurely\n")
 	}
-	err := c.authorizer.Login(ctx(c.out, c.debug), hostname, username, password, insecure)
+	err := c.authorizer.Login(ctx.Context(c.out, c.debug), hostname, username, password, insecure)
 	if err != nil {
 		return err
 	}
@@ -96,7 +105,7 @@ func (c *Client) Login(hostname string, username string, password string, insecu
 
 // Logout logs out of a registry
 func (c *Client) Logout(hostname string) error {
-	err := c.authorizer.Logout(ctx(c.out, c.debug), hostname)
+	err := c.authorizer.Logout(ctx.Context(c.out, c.debug), hostname)
 	if err != nil {
 		return err
 	}
@@ -105,7 +114,7 @@ func (c *Client) Logout(hostname string) error {
 }
 
 // SaveModel stores a copy of model in local cache
-func (c *Client) SaveModel(ch *model.Model, ref *Reference) error {
+func (c *Client) SaveModel(ch *model.Model, ref *oci.Reference) error {
 	r, err := c.cache.StoreReference(ref, ch)
 	if err != nil {
 		return err
@@ -122,7 +131,7 @@ func (c *Client) SaveModel(ch *model.Model, ref *Reference) error {
 }
 
 // PushModel uploads a model to a registry.
-func (c *Client) PushModel(ref *Reference) error {
+func (c *Client) PushModel(ref *oci.Reference) error {
 	r, err := c.cache.FetchReference(ref)
 	if err != nil {
 		return err
@@ -133,7 +142,7 @@ func (c *Client) PushModel(ref *Reference) error {
 	fmt.Fprintf(c.out, "The push refers to repository [%s]\n", r.Repo)
 	c.printCacheRefSummary(r)
 	layers := []ocispec.Descriptor{*r.ContentLayer}
-	_, err = oras.Push(ctx(c.out, c.debug), c.resolver, r.Name, c.cache.Provider(), layers,
+	_, err = c.orasClient.Push(ctx.Context(c.out, c.debug), c.resolver, r.Name, c.cache.Provider(), layers,
 		oras.WithConfig(*r.Config), oras.WithNameValidation(nil))
 	if err != nil {
 		return err
@@ -144,12 +153,13 @@ func (c *Client) PushModel(ref *Reference) error {
 		s = "s"
 	}
 	fmt.Fprintf(c.out,
-		"%s: pushed to remote (%d layer%s, %s total)\n", r.Tag, numLayers, s, byteCountBinary(r.Size))
+		"%s: pushed to remote (%d layer%s, %s total)\n", r.Tag, numLayers, s,
+		bts.ByteCountBinary(r.Size))
 	return nil
 }
 
 // RemoveModel deletes a locally saved model.
-func (c *Client) RemoveModel(ref *Reference) error {
+func (c *Client) RemoveModel(ref *oci.Reference) error {
 	r, err := c.cache.DeleteReference(ref)
 	if err != nil {
 		return err
@@ -162,7 +172,7 @@ func (c *Client) RemoveModel(ref *Reference) error {
 }
 
 // PullModel downloads a model from a registry.
-func (c *Client) PullModel(ref *Reference) error {
+func (c *Client) PullModel(ref *oci.Reference) error {
 	if ref.Tag == "" {
 		return errors.New("tag explicitly required")
 	}
@@ -171,7 +181,8 @@ func (c *Client) PullModel(ref *Reference) error {
 		return err
 	}
 	fmt.Fprintf(c.out, "%s: Pulling from %s\n", ref.Tag, ref.Repo)
-	manifest, _, err := oras.Pull(ctx(c.out, c.debug), c.resolver, ref.FullName(), c.cache.Ingester(),
+	manifest, _, err := c.orasClient.Pull(ctx.Context(c.out, c.debug),
+		c.resolver, ref.FullName(), c.cache.Ingester(),
 		oras.WithPullEmptyNameAllowed(),
 		oras.WithAllowedMediaTypes(consts.KnownMediaTypes()),
 		oras.WithContentProvideIngester(c.cache.ProvideIngester()))
@@ -199,7 +210,7 @@ func (c *Client) PullModel(ref *Reference) error {
 }
 
 // LoadModel retrieves a model object by reference
-func (c *Client) LoadModel(ref *Reference) (*model.Model, error) {
+func (c *Client) LoadModel(ref *oci.Reference) (*model.Model, error) {
 	r, err := c.cache.FetchReference(ref)
 	if err != nil {
 		return nil, err
@@ -212,9 +223,11 @@ func (c *Client) LoadModel(ref *Reference) (*model.Model, error) {
 }
 
 // printCacheRefSummary prints out model ref summary
-func (c *Client) printCacheRefSummary(r *CacheRefSummary) {
+func (c *Client) printCacheRefSummary(r *cache.CacheRefSummary) {
 	fmt.Fprintf(c.out, "ref:       %s\n", r.Name)
 	fmt.Fprintf(c.out, "digest:    %s\n", r.Digest.Hex())
-	fmt.Fprintf(c.out, "size:      %s\n", byteCountBinary(r.Size))
-	fmt.Fprintf(c.out, "format:    %s\n", r.Model.Metadata.Format)
+	fmt.Fprintf(c.out, "size:      %s\n", bts.ByteCountBinary(r.Size))
+	if r.Model != nil && r.Model.Metadata != nil {
+		fmt.Fprintf(c.out, "format:    %s\n", r.Model.Metadata.Format)
+	}
 }

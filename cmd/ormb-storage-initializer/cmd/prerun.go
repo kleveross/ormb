@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/caicloud/ormb/pkg/oci"
+	"github.com/caicloud/ormb/pkg/oras"
 	"github.com/caicloud/ormb/pkg/ormb"
 )
 
@@ -20,9 +20,9 @@ func preRunE(cmd *cobra.Command, args []string) error {
 	fmt.Printf("Using %s as the root path\n", rootPath)
 
 	ormbClient, err = ormb.New(
-		oci.ClientOptRootPath(rootPath),
-		oci.ClientOptWriter(os.Stdout),
-		oci.ClientOptPlainHTTP(plainHTTPOpt),
+		oras.ClientOptRootPath(rootPath),
+		oras.ClientOptWriter(os.Stdout),
+		oras.ClientOptPlainHTTP(plainHTTPOpt),
 	)
 	return err
 }
