@@ -18,6 +18,21 @@ import (
 )
 
 var _ = Describe("OCI Client", func() {
+	Describe("with real use cases", func() {
+		var c Interface
+		var err error
+		var rootPath string
+
+		BeforeEach(func() {
+			rootPath = "~/.ormb"
+			c, err = NewClient(ClientOptRootPath(rootPath))
+		})
+
+		It("Should create the client successfully", func() {
+			Expect(err).To(BeNil())
+			Expect(c.(*Client).rootPath).To(Equal(rootPath))
+		})
+	})
 	Describe("with all things mocked", func() {
 		var c *Client
 
