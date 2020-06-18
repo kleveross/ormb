@@ -118,7 +118,7 @@ build-local:
 	@for target in $(TARGETS); do                                                      \
 	  go build -v -o $(OUTPUT_DIR)/$${target}                                          \
 	    -ldflags "-s -w -X $(ROOT)/pkg/version.VERSION=$(VERSION)                      \
-		  -X $(ROOT)/pkg/version.COMMIT=$(GITSHA)                                      \
+	      -X $(ROOT)/pkg/version.COMMIT=$(GITSHA)                                      \
 	      -X $(ROOT)/pkg/version.REPOROOT=$(ROOT)"                                     \
 	    $(CMD_DIR)/$${target};                                                         \
 	done
