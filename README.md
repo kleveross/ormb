@@ -1,25 +1,7 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+<p align="center">
+<img src="docs/images/logo.png" height="150">
+</p>
 
-- [ormb](#ormb)
-  - [Installation](#installation)
-    - [Install the pre-compiled binary](#install-the-pre-compiled-binary)
-    - [Compile from source](#compile-from-source)
-  - [Usage](#usage)
-    - [Save the model](#save-the-model)
-    - [Push the model to a remote registry](#push-the-model-to-a-remote-registry)
-    - [Pull the model from a remote registry](#pull-the-model-from-a-remote-registry)
-    - [Export the model to the current directory](#export-the-model-to-the-current-directory)
-  - [Tutorial](#tutorial)
-    - [Training and serving](#training-and-serving)
-    - [Serving with Seldon Core](#serving-with-seldon-core)
-  - [OCI Model Configuration Specification](#oci-model-configuration-specification)
-  - [Community](#community)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-# ormb
 
 [![Build Status](https://travis-ci.com/caicloud/ormb.svg?branch=master)](https://travis-ci.com/caicloud/ormb)
 [![Coverage Status](https://coveralls.io/repos/github/caicloud/ormb/badge.svg?branch=master)](https://coveralls.io/github/caicloud/ormb?branch=master)
