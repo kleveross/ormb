@@ -45,6 +45,10 @@ type Tensor struct {
 	Name  string `json:"name,omitempty" yaml:"name,omitempty"`
 	Size  []int  `json:"size,omitempty" yaml:"size,omitempty"`
 	DType string `json:"dtype,omitempty" yaml:"dtype,omitempty"`
+	// OpType is special for PMML
+	OpType string `json:"optype,omitempty" yaml:"optype,omitempty"`
+	// Values is special for PMML
+	Values []string `json:"values,omitempty" yaml:"values,omitempty"`
 }
 
 type Layer struct {
