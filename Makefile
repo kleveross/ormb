@@ -65,6 +65,7 @@ BUILD_DIR := ./build
 
 # Current version of the project.
 VERSION ?= $(shell git describe --tags --always --dirty)
+GITSHA ?= $(shell git rev-parse --short HEAD)
 
 # Available cpus for compiling, please refer to https://github.com/caicloud/engineering/issues/8186#issuecomment-518656946 for more information.
 CPUS ?= $(shell /bin/bash hack/read_cpus_available.sh)
@@ -117,6 +118,7 @@ build-local:
 	@for target in $(TARGETS); do                                                      \
 	  go build -v -o $(OUTPUT_DIR)/$${target}                                          \
 	    -ldflags "-s -w -X $(ROOT)/pkg/version.VERSION=$(VERSION)                      \
+		  -X $(ROOT)/pkg/version.COMMIT=$(GITSHA)                                      \
 	      -X $(ROOT)/pkg/version.REPOROOT=$(ROOT)"                                     \
 	    $(CMD_DIR)/$${target};                                                         \
 	done
