@@ -41,6 +41,14 @@ Tensors are multi-dimensional arrays with a uniform type.
 
     Size of the tensor.
 
+- **optype** string, OPTIONAL
+
+    OpType of the tensor,  It is only used for PMML.
+
+- **values** object, OPTIONAL
+
+    Values of the tensor,  It is only used for PMML.
+
 ### [GitRepo](https://kubernetes.io/docs/concepts/storage/volumes/#gitrepo)
 
 GitRepo is the Git repository.
