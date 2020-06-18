@@ -1,10 +1,13 @@
 package cache
 
 import (
-	"github.com/caicloud/ormb/pkg/model"
-	"github.com/caicloud/ormb/pkg/oci"
+	"os"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+
+	"github.com/caicloud/ormb/pkg/model"
+	"github.com/caicloud/ormb/pkg/oci"
 )
 
 var _ = Describe("Cache", func() {
@@ -17,7 +20,7 @@ var _ = Describe("Cache", func() {
 			var i Interface
 			rootPath = ".cache"
 
-			i, err = New(CacheOptRoot(rootPath))
+			i, err = New(CacheOptRoot(rootPath), CacheOptDebug(true), CacheOptWriter(os.Stdout))
 			c = i.(*Cache)
 		})
 
@@ -26,20 +29,40 @@ var _ = Describe("Cache", func() {
 			Expect(c.rootDir).To(Equal(rootPath))
 		})
 
-		It("Should store the reference successfully", func() {
-			m := &model.Model{
-				Metadata: &model.Metadata{
-					Format: "SavedModel",
-				},
-			}
-			refStr := "caicloud/test:v1"
-			ref, err := oci.ParseReference(refStr)
-			Expect(err).To(BeNil())
+		Describe("with a cached artifact caicloud/test:v2", func() {
+			var m *model.Model
+			var ref *oci.Reference
 
-			actual, err := c.StoreReference(ref, m)
-			Expect(err).To(BeNil())
-			Expect(actual.Model).To(Equal(m))
-			Expect(actual.Name).To(Equal(refStr))
+			BeforeEach(func() {
+				m = &model.Model{
+					Metadata: &model.Metadata{
+						Format: "SavedModel",
+					},
+					Content: []byte("test12345"),
+				}
+				refStr := "caicloud/test:v1"
+				ref, err = oci.ParseReference(refStr)
+				Expect(err).To(BeNil())
+
+				actual, err := c.StoreReference(ref, m)
+				Expect(err).To(BeNil())
+				Expect(actual.Model).To(Equal(m))
+				Expect(actual.Name).To(Equal(refStr))
+
+				Expect(c.AddManifest(ref, actual.Manifest)).To(BeNil())
+			})
+
+			It("Should list the cached artifact successfully", func() {
+				actual, err := c.ListReferences()
+				Expect(err).To(BeNil())
+				Expect(len(actual)).To(Equal(1))
+			})
+
+			It("Should delete the reference successfully", func() {
+				actual, err := c.DeleteReference(ref)
+				Expect(err).To(BeNil())
+				Expect(actual.Name).To(Equal(ref.FullName()))
+			})
 		})
 	})
 })
