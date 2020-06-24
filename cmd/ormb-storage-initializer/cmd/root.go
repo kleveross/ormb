@@ -84,29 +84,7 @@ var rootCmd = &cobra.Command{
 			return err
 		}
 
-		// Move the files in model directory to the upper directory.
-		// Seldon core will run `--model_base_path=dstDir` directly.
-		originalDir, err := filepath.Abs(
-			filepath.Join(dstDir, consts.ORMBModelDirectory))
-		if err != nil {
-			return err
-		}
-		destinationDir, err := filepath.Abs(dstDir)
-		if err != nil {
-			return err
-		}
-		files, err := ioutil.ReadDir(originalDir)
-		if err != nil {
-			return err
-		}
-		for _, f := range files {
-			oldPath := filepath.Join(originalDir, f.Name())
-			newPath := filepath.Join(destinationDir, f.Name())
-			fmt.Printf("Moving %s to %s\n", oldPath, newPath)
-			if err := os.Rename(oldPath, newPath); err != nil {
-				return err
-			}
-		}
+		// Do not need to call moveToUpperDir since we do not have version directory.
 		return nil
 	},
 }
@@ -128,4 +106,31 @@ func init() {
 	viper.AutomaticEnv()
 
 	logrus.SetLevel(logrus.DebugLevel)
+}
+
+func moveToUpperDir(dstDir string) error {
+	// Move the files in model directory to the upper directory.
+	// Seldon core will run `--model_base_path=dstDir` directly.
+	originalDir, err := filepath.Abs(
+		filepath.Join(dstDir, consts.ORMBModelDirectory))
+	if err != nil {
+		return err
+	}
+	destinationDir, err := filepath.Abs(dstDir)
+	if err != nil {
+		return err
+	}
+	files, err := ioutil.ReadDir(originalDir)
+	if err != nil {
+		return err
+	}
+	for _, f := range files {
+		oldPath := filepath.Join(originalDir, f.Name())
+		newPath := filepath.Join(destinationDir, f.Name())
+		fmt.Printf("Moving %s to %s\n", oldPath, newPath)
+		if err := os.Rename(oldPath, newPath); err != nil {
+			return err
+		}
+	}
+	return nil
 }
