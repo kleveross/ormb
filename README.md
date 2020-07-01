@@ -113,7 +113,7 @@ Please have a look at [docs/tutorial-serving-seldon.md](docs/tutorial-serving-se
 
 ## OCI Model Configuration Specification
 
-Please have a look at [docs/spec.md](docs/spec.md)
+Please have a look at [docs/spec_v1alpha1.md](docs/spec-v1alpha1.md)
 
 ## Community
 
