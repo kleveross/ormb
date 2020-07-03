@@ -4,9 +4,13 @@ builds:
 - id: ormb
   main: ./cmd/ormb/main.go
   binary: ormb
+  env:
+  - CGO_ENABLED=0
 - id: ormb-storage-initializer
   main: ./cmd/ormb-storage-initializer/main.go
   binary: ormb-storage-initializer
+  env:
+  - CGO_ENABLED=0
 archives:
 - replacements:
     darwin: Darwin

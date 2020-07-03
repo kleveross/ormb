@@ -44,6 +44,9 @@ REGISTRY ?= cleveross
 # Container registry for base images.
 BASE_REGISTRY ?= docker.io
 
+# Disable CGO by default.
+CGO_ENABLED ?= 0
+
 #
 # These variables should not need tweaking.
 #
@@ -83,7 +86,7 @@ GOLANGCI_LINT := $(BIN_DIR)/golangci-lint
 # -p: the number of programs that can be run in parallel
 # -race: enable data race detection
 # -count: run each test and benchmark 1 times. Set this flag to disable test cache
-export GOFLAGS ?= -mod=vendor -p=$(CPUS) -race -count=1
+export GOFLAGS ?= -mod=vendor -p=$(CPUS) -count=1
 
 #
 # Define all targets. At least the following commands are required:
@@ -116,7 +119,7 @@ test: generate
 
 build-local:
 	@for target in $(TARGETS); do                                                      \
-	  go build -v -o $(OUTPUT_DIR)/$${target}                                          \
+	  CGO_ENABLED=$(CGO_ENABLED) go build -v -o $(OUTPUT_DIR)/$${target}                                          \
 	    -ldflags "-s -w -X $(ROOT)/pkg/version.VERSION=$(VERSION)                      \
 	      -X $(ROOT)/pkg/version.COMMIT=$(GITSHA)                                      \
 	      -X $(ROOT)/pkg/version.REPOROOT=$(ROOT)"                                     \
@@ -132,6 +135,7 @@ build-linux:
 	  -e GOPATH=/go                                                                    \
 	  -e GOFLAGS="$(GOFLAGS)"                                                          \
 	  -e SHELLOPTS="$(SHELLOPTS)"                                                      \
+	  -e CGO_ENABLED="$(CGO_ENABLED)"                                                  \
 	  $(BASE_REGISTRY)/golang:1.13.9-stretch                                           \
 	    /bin/bash -c 'for target in $(TARGETS); do                                     \
 	      go build -v -o $(OUTPUT_DIR)/$${target}                                      \
