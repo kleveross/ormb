@@ -17,14 +17,17 @@ package cmd
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
 
-	"github.com/caicloud/ormb/pkg/oras"
-	"github.com/caicloud/ormb/pkg/ormb"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+	"github.com/caicloud/ormb/pkg/consts"
+	"github.com/caicloud/ormb/pkg/oras"
+	"github.com/caicloud/ormb/pkg/ormb"
 )
 
 // pullExportCmd represents the pull-and-export command.
@@ -79,7 +82,30 @@ var pullExportCmd = &cobra.Command{
 			return err
 		}
 
-		// Do not need to call moveToUpperDir since we do not have version directory.
+		// Move the files in model directory to the upper directory.
+		// e.g. Move /mnt/models/model to /mnt/models (dstDir).
+		// Seldon core will run `--model_base_path=dstDir` directly.
+		originalDir, err := filepath.Abs(
+			filepath.Join(dstDir, consts.ORMBModelDirectory))
+		if err != nil {
+			return err
+		}
+		destinationDir, err := filepath.Abs(dstDir)
+		if err != nil {
+			return err
+		}
+		files, err := ioutil.ReadDir(originalDir)
+		if err != nil {
+			return err
+		}
+		for _, f := range files {
+			oldPath := filepath.Join(originalDir, f.Name())
+			newPath := filepath.Join(destinationDir, f.Name())
+			fmt.Printf("Moving %s to %s\n", oldPath, newPath)
+			if err := os.Rename(oldPath, newPath); err != nil {
+				return err
+			}
+		}
 		return nil
 	},
 }
