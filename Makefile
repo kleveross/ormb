@@ -44,8 +44,8 @@ REGISTRY ?= cleveross
 # Container registry for base images.
 BASE_REGISTRY ?= docker.io
 
-# Disable CGO by default.
-CGO_ENABLED ?= 0
+# Enable CGO by default.
+CGO_ENABLED ?= 1
 
 #
 # These variables should not need tweaking.
