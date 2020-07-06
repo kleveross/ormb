@@ -4,6 +4,10 @@ ormb can be used to pull models in Seldon Core. First we need to deploy Seldon C
 
 In this tutorial, we use [SavedModel-fashion](../examples/SavedModel-fashion) as an example, to illustrate the feature.
 
+## Demo
+
+[![asciicast](https://asciinema.org/a/345568.svg)](https://asciinema.org/a/345568)
+
 ## Push the model to remote registry
 
 In this tutorial, we use [demo.goharbor.io][] as the remote registry. First you need to register an account in [demo.goharbor.io][]. We use `ormbtest` as username, `ORMBtest12345` as password here.
