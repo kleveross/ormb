@@ -10,6 +10,8 @@ ormb is an open-source model registry to manage machine learning model.
 
 ormb helps you manage your Machine Learning/Deep Learning models. It makes your models easy to create, version, share and publish.
 
+[![asciicast](https://asciinema.org/a/345812.svg)](https://asciinema.org/a/345812)
+
 ## Installation
 
 You can install the pre-compiled binary, or compile from source.
