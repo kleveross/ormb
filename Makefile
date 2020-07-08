@@ -84,7 +84,6 @@ GOLANGCI_LINT := $(BIN_DIR)/golangci-lint
 # Default golang flags used in build and test
 # -mod=vendor: force go to use the vendor files instead of using the `$GOPATH/pkg/mod`
 # -p: the number of programs that can be run in parallel
-# -race: enable data race detection
 # -count: run each test and benchmark 1 times. Set this flag to disable test cache
 export GOFLAGS ?= -mod=vendor -p=$(CPUS) -count=1
 
@@ -114,7 +113,7 @@ generate:
 	@mockgen -source vendor/github.com/containerd/containerd/remotes/resolver.go -destination pkg/oras/mock/mock_resolver.go -package mock
 
 test: generate
-	@go test -coverprofile=coverage.out ./...
+	@go test -race -coverprofile=coverage.out ./...
 	@go tool cover -func coverage.out | tail -n 1 | awk '{ print "Total coverage: " $$3 }'
 
 build-local:
