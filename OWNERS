@@ -1,9 +1,7 @@
 approvers:
   - ddysher
   - gaocegege
+  - simon-cj
   - codeflitting
 reviewers:
-  - ddysher
-  - bbbmj
-  - supereagle
-  - simon-cj
+  - gaocegege
