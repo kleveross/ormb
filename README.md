@@ -47,65 +47,9 @@ Verify it works:
 $ ./bin/ormb --help
 ```
 
-## Usage
-
-### Save the model
-
-```bash
-$ ormb save ./resnet_v2_fp32_savedmodel_NCHW caicloud/resnetv2:v1
-ref:     caicloud/resnetv2:v1
-digest:  f51973c855608ab06d8f5e4333925a635f87f01ff992ffc5f9988f26d1da24e9
-size:    90.6 MiB
-format:  SavedModel
-v1: saved
-```
-
-### Push the model to a remote registry
-
-```bash
-$ ormb push caicloud/resnetv2:v1
-The push refers to repository [caicloud/resnetv2]
-ref:     caicloud/resnetv2:v1
-digest:  f51973c855608ab06d8f5e4333925a635f87f01ff992ffc5f9988f26d1da24e9
-size:    90.6 MiB
-format:  SavedModel
-v1: pushed to remote (1 layer, 90.6 MiB total)
-```
-
-### Pull the model from a remote registry
-
-```bash
-$ ormb pull caicloud/resnetv2:v1 
-v1: Pulling from caicloud/resnetv2
-ref:     caicloud/resnetv2:v1
-digest:  f51973c855608ab06d8f5e4333925a635f87f01ff992ffc5f9988f26d1da24e9
-size:    90.6 MiB
-format:  SavedModel
-Status: Downloaded newer model for caicloud/resnetv2:v1
-```
-
-### Export the model to the current directory
-
-```bash
-$ ormb export caicloud/resnetv2:v1
-ref:     localhost:5000/caicloud/resnetv2:v1
-digest:  f51973c855608ab06d8f5e4333925a635f87f01ff992ffc5f9988f26d1da24e9
-size:    90.6 MiB
-
-$ tree ./resnet_v2_fp32_savedmodel_NCHW
-resnet_v2_fp32_savedmodel_NCHW
-├── 1538687196
-│   ├── saved_model.pb
-│   └── variables
-│       ├── variables.data-00000-of-00001
-│       └── variables.index
-
-2 directories, 3 files
-```
-
 ## Tutorial
 
-### Training and serving
+### Distribute models with ormb and Harbor
 
 Please have a look at [docs/tutorial.md](docs/tutorial.md)
 
