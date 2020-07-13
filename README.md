@@ -49,7 +49,7 @@ $ ./bin/ormb --help
 
 ## Tutorial
 
-### Distribute models with ormb and Harbor
+### Distribute models with ormb and Docker Registry
 
 Please have a look at [docs/tutorial.md](docs/tutorial.md)
 
