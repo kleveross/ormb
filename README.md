@@ -63,6 +63,6 @@ Please have a look at [docs/spec_v1alpha1.md](docs/spec-v1alpha1.md)
 
 ## Community
 
-ormb project is part of Clever, a Cloud Native Machine Learning platform. We are going to open source a community edition soon.
+ormb project is part of Klever, a Cloud Native Machine Learning platform.
 
-The Clever slack workspace is caicloud-clever.slack.com. To join, click this [invitation to our Slack workspace](https://join.slack.com/t/caicloud-clever/shared_invite/zt-efz4rdrm-kcOg0Qvs_B8aIWGdZv9E6g).
+The Klever slack workspace is klever.slack.com. To join, click this [invitation to our Slack workspace](https://join.slack.com/t/kleveross/shared_invite/zt-g0eoiyq9-9OwiI7c__oV79bh_94MyTw).
