@@ -1,8 +1,8 @@
 package oras
 
 import (
-	"github.com/caicloud/ormb/pkg/model"
-	"github.com/caicloud/ormb/pkg/oci"
+	"github.com/kleveross/ormb/pkg/model"
+	"github.com/kleveross/ormb/pkg/oci"
 )
 
 // Interface is the interface of the client.

@@ -17,11 +17,11 @@ import (
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
 	"github.com/pkg/errors"
 
-	"github.com/caicloud/ormb/pkg/consts"
-	"github.com/caicloud/ormb/pkg/model"
-	"github.com/caicloud/ormb/pkg/oci"
-	"github.com/caicloud/ormb/pkg/parser"
-	"github.com/caicloud/ormb/pkg/util/ctx"
+	"github.com/kleveross/ormb/pkg/consts"
+	"github.com/kleveross/ormb/pkg/model"
+	"github.com/kleveross/ormb/pkg/oci"
+	"github.com/kleveross/ormb/pkg/parser"
+	"github.com/kleveross/ormb/pkg/util/ctx"
 )
 
 const (

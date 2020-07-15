@@ -215,13 +215,13 @@ Here is an example model configuration JSON document:
    },
    "training": {
        "git": {
-           "repository": "git@github.com:caicloud/ormb.git",
+           "repository": "git@github.com:kleveross/ormb.git",
            "revision": "22f1d8406d464b0c0874075539c1f2e96c253775"
        }
    },
    "dataset": {
        "git": {
-           "repository": "git@github.com:caicloud/ormb.git",
+           "repository": "git@github.com:kleveross/ormb.git",
            "revision": "22f1d8406d464b0c0874075539c1f2e96c253775"
        }
    }

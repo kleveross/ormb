@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"github.com/caicloud/ormb/pkg/model"
+	"github.com/kleveross/ormb/pkg/model"
 	"gopkg.in/yaml.v2"
 )
 

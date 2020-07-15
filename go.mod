@@ -1,4 +1,4 @@
-module github.com/caicloud/ormb
+module github.com/kleveross/ormb
 
 go 1.12
 

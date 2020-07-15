@@ -1,11 +1,11 @@
 package cache
 
 import (
-	"github.com/caicloud/ormb/pkg/model"
-	"github.com/caicloud/ormb/pkg/oci"
 	"github.com/containerd/containerd/content"
-	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
 	orascontent "github.com/deislabs/oras/pkg/content"
+	"github.com/kleveross/ormb/pkg/model"
+	"github.com/kleveross/ormb/pkg/oci"
+	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
 )
 
 // Interface is the interface of the cache.

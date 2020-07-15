@@ -26,7 +26,7 @@
 #
 
 # This repo's root import path (under GOPATH).
-ROOT := github.com/caicloud/ormb
+ROOT := github.com/kleveross/ormb
 
 # Target binaries. You can build multiple binaries for a single project.
 TARGETS := ormb ormb-storage-initializer

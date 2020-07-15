@@ -3,8 +3,8 @@
 </p>
 
 
-[![Build Status](https://travis-ci.com/caicloud/ormb.svg?branch=master)](https://travis-ci.com/caicloud/ormb)
-[![Coverage Status](https://coveralls.io/repos/github/caicloud/ormb/badge.svg?branch=master)](https://coveralls.io/github/caicloud/ormb?branch=master)
+[![Build Status](https://travis-ci.com/kleveross/ormb.svg?branch=master)](https://travis-ci.com/kleveross/ormb)
+[![Coverage Status](https://coveralls.io/repos/github/kleveross/ormb/badge.svg?branch=master)](https://coveralls.io/github/kleveross/ormb?branch=master)
 
 ormb is an open-source model registry to manage machine learning model. 
 
@@ -18,14 +18,14 @@ You can install the pre-compiled binary, or compile from source.
 
 ### Install the pre-compiled binary
 
-Download the pre-compiled binaries from [the releases](https://github.com/caicloud/ormb/releases) page and copy to the desired location.
+Download the pre-compiled binaries from [the releases](https://github.com/kleveross/ormb/releases) page and copy to the desired location.
 
 ### Compile from source
 
 Clone:
 
 ```
-$ git clone https://github.com/caicloud/ormb
+$ git clone https://github.com/kleveross/ormb
 $ cd ormb
 ```
 

@@ -5,11 +5,11 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	exportermock "github.com/caicloud/ormb/pkg/exporter/mock"
-	"github.com/caicloud/ormb/pkg/model"
-	"github.com/caicloud/ormb/pkg/oci"
-	orasmock "github.com/caicloud/ormb/pkg/oras/mock"
-	savermock "github.com/caicloud/ormb/pkg/saver/mock"
+	exportermock "github.com/kleveross/ormb/pkg/exporter/mock"
+	"github.com/kleveross/ormb/pkg/model"
+	"github.com/kleveross/ormb/pkg/oci"
+	orasmock "github.com/kleveross/ormb/pkg/oras/mock"
+	savermock "github.com/kleveross/ormb/pkg/saver/mock"
 )
 
 var _ = Describe("ormb golang library", func() {
