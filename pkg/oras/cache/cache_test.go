@@ -6,8 +6,8 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"github.com/caicloud/ormb/pkg/model"
-	"github.com/caicloud/ormb/pkg/oci"
+	"github.com/kleveross/ormb/pkg/model"
+	"github.com/kleveross/ormb/pkg/oci"
 )
 
 var _ = Describe("Cache", func() {

@@ -4,8 +4,8 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"github.com/caicloud/ormb/pkg/exporter"
-	"github.com/caicloud/ormb/pkg/saver"
+	"github.com/kleveross/ormb/pkg/exporter"
+	"github.com/kleveross/ormb/pkg/saver"
 )
 
 var _ = Describe("Exporter", func() {

@@ -5,12 +5,12 @@
 package mock
 
 import (
-	model "github.com/caicloud/ormb/pkg/model"
-	oci "github.com/caicloud/ormb/pkg/oci"
-	cache "github.com/caicloud/ormb/pkg/oras/cache"
 	content "github.com/containerd/containerd/content"
 	content0 "github.com/deislabs/oras/pkg/content"
 	gomock "github.com/golang/mock/gomock"
+	model "github.com/kleveross/ormb/pkg/model"
+	oci "github.com/kleveross/ormb/pkg/oci"
+	cache "github.com/kleveross/ormb/pkg/oras/cache"
 	v1 "github.com/opencontainers/image-spec/specs-go/v1"
 	reflect "reflect"
 )

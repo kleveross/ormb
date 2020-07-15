@@ -9,12 +9,12 @@ import (
 	"github.com/opencontainers/go-digest"
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
 
-	"github.com/caicloud/ormb/pkg/model"
-	"github.com/caicloud/ormb/pkg/oci"
-	"github.com/caicloud/ormb/pkg/oras/cache"
-	cachemock "github.com/caicloud/ormb/pkg/oras/cache/mock"
-	orasmock "github.com/caicloud/ormb/pkg/oras/mock"
-	orasclientmock "github.com/caicloud/ormb/pkg/oras/orasclient/mock"
+	"github.com/kleveross/ormb/pkg/model"
+	"github.com/kleveross/ormb/pkg/oci"
+	"github.com/kleveross/ormb/pkg/oras/cache"
+	cachemock "github.com/kleveross/ormb/pkg/oras/cache/mock"
+	orasmock "github.com/kleveross/ormb/pkg/oras/mock"
+	orasclientmock "github.com/kleveross/ormb/pkg/oras/orasclient/mock"
 )
 
 var _ = Describe("OCI Client", func() {

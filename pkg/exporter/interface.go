@@ -1,6 +1,6 @@
 package exporter
 
-import "github.com/caicloud/ormb/pkg/model"
+import "github.com/kleveross/ormb/pkg/model"
 
 // Interface exports the model to the destination.
 type Interface interface {

@@ -6,7 +6,7 @@ import tarfile
 import os
 
 
-REPOS = "caicloud/ormb"
+REPOS = "kleveross/ormb"
 VERSION = "latest"
 BIN_PATH = './ormb/bin'
 

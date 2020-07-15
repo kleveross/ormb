@@ -21,11 +21,11 @@ def read_version():
 setup(
     name="ormb",
     version=read_version(),
-    url="https://github.com/caicloud/ormb",
+    url="https://github.com/kleveross/ormb",
     project_urls={
-        "Documentation": "https://github.com/caicloud/ormb/wikis/home",
-        "Code": "https://github.com/caicloud/ormb",
-        "Issue tracker": "https://github.com/caicloud/ormb/issues",
+        "Documentation": "https://github.com/kleveross/ormb/wikis/home",
+        "Code": "https://github.com/kleveross/ormb",
+        "Issue tracker": "https://github.com/kleveross/ormb/issues",
     },
     maintainer="gaocegege, ZhuYuJin",
     description="ormb warehouse",

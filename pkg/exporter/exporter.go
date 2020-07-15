@@ -9,8 +9,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/caicloud/ormb/pkg/consts"
-	"github.com/caicloud/ormb/pkg/model"
+	"github.com/kleveross/ormb/pkg/consts"
+	"github.com/kleveross/ormb/pkg/model"
 	"gopkg.in/yaml.v2"
 )
 

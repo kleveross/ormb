@@ -20,7 +20,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/caicloud/ormb/pkg/ormb"
+	"github.com/kleveross/ormb/pkg/ormb"
 	"github.com/spf13/cobra"
 
 	homedir "github.com/mitchellh/go-homedir"

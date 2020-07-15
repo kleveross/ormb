@@ -8,8 +8,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/caicloud/ormb/pkg/oras"
-	"github.com/caicloud/ormb/pkg/ormb"
+	"github.com/kleveross/ormb/pkg/oras"
+	"github.com/kleveross/ormb/pkg/ormb"
 )
 
 func preRunE(cmd *cobra.Command, args []string) error {

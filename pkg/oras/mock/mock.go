@@ -5,9 +5,9 @@
 package mock
 
 import (
-	model "github.com/caicloud/ormb/pkg/model"
-	oci "github.com/caicloud/ormb/pkg/oci"
 	gomock "github.com/golang/mock/gomock"
+	model "github.com/kleveross/ormb/pkg/model"
+	oci "github.com/kleveross/ormb/pkg/oci"
 	reflect "reflect"
 )
 

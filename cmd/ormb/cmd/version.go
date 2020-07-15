@@ -16,7 +16,7 @@ limitations under the License.
 package cmd
 
 import (
-	"github.com/caicloud/ormb/pkg/version"
+	"github.com/kleveross/ormb/pkg/version"
 	"github.com/spf13/cobra"
 )
 
