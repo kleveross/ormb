@@ -12,17 +12,15 @@ Docker 很好地解决了传统应用分发的问题，那么在机器学习场�
 
 而在机器学习场景下，情况就有些不同了。当我们需要部署机器学习应用时，一般情况下我们需要一个模型推理服务器（也被称作模型服务器），以及被部署的模型。模型服务器之于机器学习应用，就好比 Tomcat 之于 Java Web 应用。机器学习模型本身只是模型的权重和结构等信息的集合，并不能直接对外提供服务。它需要通过一个服务器，对外提供 RESTful 或者基于 gRPC 的服务。这个服务器就是模型服务器。调用方的请求会首先到达模型服务器，随后模型服务器会利用模型进行前向计算，并且将结果作为响应返回给调用方。
 
-<figure>
-	<img src="./images/intro/workflow.png">
-    <figcaption>模型推理服务器</figcaption>
-</figure>
+<p align="center">
+<img src="./images/intro/workflow.png" height="150">
+</p>
 
 如下图所示，当我们想要在生产环境利用云原生的技术部署模型服务时，通常在开始时，出于简单方便的考虑，会将模型服务器与模型文件打包成一个镜像，同时复用镜像分发的能力来实现对模型的分发。
 
-<figure>
-	<img src="./images/intro/state-of-art.png">
-    <figcaption>云原生的模型服务</figcaption>
-</figure>
+<p align="center">
+<img src="./images/intro/state-of-art.png" height="150">
+</p>
 
 这样的做法存在一些问题：
 
@@ -32,10 +30,9 @@ Docker 很好地解决了传统应用分发的问题，那么在机器学习场�
 
 随着规模的发展，模型服务器（如[Nvidia Triton Inference Server](https://github.com/NVIDIA/triton-inference-server)、[ONNX Runtime](https://github.com/microsoft/onnxruntime) 等）可以被当做是底层的“运行时”，是不变的基础设施。模型服务器可以以 Docker 镜像的方式分发。而模型，可以类比为是在运行时上运行的脚本代码。它可以被模型服务器容器在运行时通过挂载的方式进入容器。这使得我们可以解耦模型服务器和模型本身，基础设施团队可以分发模型服务器镜像，而算法团队只需要分发模型即可。
 
-<figure>
-	<img src="./images/intro/new.png">
-    <figcaption>算法服务器与模型的解耦</figcaption>
-</figure>
+<p align="center">
+<img src="./images/intro/new.png" height="150">
+</p>
 
 ## State of the Art
 
@@ -125,10 +122,9 @@ v1: pushed to remote (1 layer, 162.1 KiB total)
 
 以 Harbor 为例，在 Harbor 镜像仓库中，我们可以看到这一模型的元数据等。
 
-<figure>
-	<img src="./images/intro/harbor.png">
-    <figcaption>在 Harbor Portal 中查看模型</figcaption>
-</figure>
+<p align="center">
+<img src="./images/intro/harbor.png" height="350">
+</p>
 
 随后，我们可以在服务器上将模型下载下来。下载的过程也与推送到镜像仓库的方法类似。
 
@@ -165,10 +161,9 @@ $ tensorflow_model_server --model_base_path=$(pwd)/model --model_name=fashion_mo
 2020-05-27 17:01:57.501354: I tensorflow_serving/model_servers/server.cc:378] Exporting HTTP/REST API at:localhost:8501 ...
 ```
 
-<figure>
-	<img src="./images/intro/infer.png">
-    <figcaption>利用下载的模型进行推理</figcaption>
-</figure>
+<p align="center">
+<img src="./images/intro/infer.png" height="350">
+</p>
 
 或者，我们也可以使用 Seldon Core 将模型服务直接部署在 Kubernetes 集群上，具体可以参见我们[提供的文档](https://github.com/caicloud/ormb/blob/master/docs/tutorial-serving-seldon.md)。
 
@@ -202,10 +197,9 @@ spec:
 
 我们也可以利用 Harbor 提供的 Webhook 功能，实现模型服务的持续部署。通过在 Harbor UI 中注册一个 Webhook，所有对 Harbor 的推送模型请求事件都会被转发到我们定义的 HTTP Endpoint 上。而我们可以在 Webhook 中实现对应的部署逻辑，比如根据新的模型来更新 Seldon 部署模型服务的版本，实现模型服务的持续部署等。
 
-<figure>
-	<img src="./images/intro/webhook.png">
-    <figcaption>利用 Harbor Webhook 实现模型服务的持续部署</figcaption>
-</figure>
+<p align="center">
+<img src="./images/intro/webhook.png" height="350">
+</p>
 
 ## 系统设计
 
@@ -215,10 +209,9 @@ spec:
 
 在介绍设计之前，先让我们来了解一下，当我们下载一个容器镜像时，到底发生了什么。对于符合 OCI 规范的镜像仓库而言，它们都遵循着同样的规范，这一规范就是 [OCI Distribution Specification](https://github.com/opencontainers/distribution-spec/blob/master/spec.md#pulling-an-image)。
 
-<figure>
-	<img src="./images/intro/docker-pull.png">
-    <figcaption>下载容器镜像的过程</figcaption>
-</figure>
+<p align="center">
+<img src="./images/intro/docker-pull.png" height="550">
+</p>
 
 首先，Docker 会先向镜像仓库请求镜像的 Manifest。Manifest 是一个 JSON 文件，其定义包括两个部分，分别是 [Config](https://github.com/opencontainers/image-spec/blob/master/config.md) 和 [Layers](https://github.com/opencontainers/image-spec/blob/master/layer.md)。Config 是一个 JSON 对象，Layers 是一个由 JSON 对象组成的数组。可以看到，Config 与 Layers 中的每一个对象的结构相同，都包括三个字段，分别是 digest、mediaType 和 size。其中 digest 可以理解为是这一对象的 ID。mediaType 表明了这一内容的类型。size 是这一内容的大小。
 
@@ -343,10 +336,9 @@ spec:
 
 因此，从镜像仓库中下载一个模型的过程如图所示：
 
-<figure>
-	<img src="./images/intro/ormb.png">
-    <figcaption>下载机器学习模型的过程</figcaption>
-</figure>
+<p align="center">
+<img src="./images/intro/ormb.png" height="550">
+</p>
 
 在实现中，我们与 Harbor 团队紧密合作，将 Harbor 作为默认采用的镜像仓库，也在积极为 Harbor 在 OCI Artifact 支持的扩展性上做贡献。[ormb][] 可以复用 Harbor 的诸多能力。
 
