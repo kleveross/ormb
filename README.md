@@ -47,6 +47,10 @@ Verify it works:
 $ ./bin/ormb --help
 ```
 
+## Introduction
+
+[ormb 介绍](./docs/intro_zh.md)
+
 ## Tutorial
 
 ### Distribute models with ormb and Docker Registry
