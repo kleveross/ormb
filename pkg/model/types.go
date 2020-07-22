@@ -11,18 +11,32 @@ type Model struct {
 }
 
 type Metadata struct {
-	Author          string            `json:"author,omitempty" yaml:"author,omitempty"`
-	Created         time.Time         `json:"created,omitempty" yaml:"created,omitempty"`
-	Description     string            `json:"description,omitempty" yaml:"description,omitempty"`
-	Tags            []string          `json:"tags,omitempty" yaml:"tags,omitempty"`
-	Labels          map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
-	Format          string            `json:"format,omitempty" yaml:"format,omitempty"`
-	Framework       string            `json:"framework,omitempty" yaml:"framework,omitempty"`
-	Metrics         []Metric          `json:"metrics,omitempty" yaml:"metrics,omitempty"`
-	Hyperparameters []Hyperparameter  `json:"hyperparameters,omitempty" yaml:"hyperparameters,omitempty"`
-	Signature       Signature         `json:"signature,omitempty" yaml:"signature,omitempty"`
-	Training        Training          `json:"training,omitempty" yaml:"training,omitempty"`
-	Dataset         Dataset           `json:"dataset,omitempty" yaml:"dataset,omitempty"`
+	Author            string            `json:"author,omitempty" yaml:"author,omitempty"`
+	Created           time.Time         `json:"created,omitempty" yaml:"created,omitempty"`
+	Description       string            `json:"description,omitempty" yaml:"description,omitempty"`
+	Tags              []string          `json:"tags,omitempty" yaml:"tags,omitempty"`
+	Labels            map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
+	Format            string            `json:"format,omitempty" yaml:"format,omitempty"`
+	Framework         string            `json:"framework,omitempty" yaml:"framework,omitempty"`
+	Metrics           []Metric          `json:"metrics,omitempty" yaml:"metrics,omitempty"`
+	Hyperparameters   []Hyperparameter  `json:"hyperparameters,omitempty" yaml:"hyperparameters,omitempty"`
+	Signature         Signature         `json:"signature,omitempty" yaml:"signature,omitempty"`
+	Training          Training          `json:"training,omitempty" yaml:"training,omitempty"`
+	Dataset           Dataset           `json:"dataset,omitempty" yaml:"dataset,omitempty"`
+	XHarborAttributes XHarborAttributes `json:"xHarborAttributes,omitempty" yaml:"xHarborAttributes,omitempty"`
+}
+
+type XHarborAttributes struct {
+	SchemaVersion int        `json:"schemaVersion" yaml:"schemaVersion"`
+	Icon          string     `json:"icon" yaml:"icon"`
+	Additions     []Addition `json:"additions" yaml:"additions"`
+	SkipKeyList   []string   `json:"skipKeyList,omitempty" yaml:"skipKeyList,omitempty"`
+}
+
+type Addition struct {
+	ContentType string `json:"contentType" yaml:"contentType"`
+	Name        string `json:"name" yaml:"name"`
+	Digest      string `json:"digest" yaml:"digest"`
 }
 
 type Metric struct {
