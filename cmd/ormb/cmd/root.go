@@ -16,18 +16,18 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
-	"os"
 	"path/filepath"
 
-	"github.com/kleveross/ormb/pkg/ormb"
-	"github.com/spf13/cobra"
-
 	homedir "github.com/mitchellh/go-homedir"
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+	"github.com/kleveross/ormb/pkg/ormb"
 )
 
 var cfgFile string
+var logLevel uint32
 
 var ormbClient ormb.Interface
 
@@ -42,13 +42,13 @@ var rootCmd = &cobra.Command{
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		logrus.WithField("error", err).Panicln("Failed to run the  command")
 	}
 }
 
 func init() {
 	viper.SetEnvPrefix("ORMB")
+	cobra.OnInitialize(initLogger)
 	cobra.OnInitialize(initConfig)
 
 	// Here you will define your flags and configuration settings.
@@ -56,10 +56,20 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.ormb/config.yaml)")
+	rootCmd.PersistentFlags().Uint32Var(&logLevel, "log-level", 4, "Log level")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func initLogger() {
+	logrus.SetLevel(logrus.Level(logLevel))
+
+	logrus.SetFormatter(&logrus.TextFormatter{
+		FullTimestamp: true,
+	})
+	logrus.SetReportCaller(false)
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -71,8 +81,7 @@ func initConfig() {
 		// Find home directory.
 		home, err := homedir.Dir()
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			logrus.WithField("error", err).Panicln("Failed to find the home directory")
 		}
 
 		// Search config in home directory with name "config" (without extension).
@@ -87,6 +96,8 @@ func initConfig() {
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+		logrus.WithFields(logrus.Fields{
+			"config": viper.ConfigFileUsed(),
+		}).Debugln("Found the config file")
 	}
 }
