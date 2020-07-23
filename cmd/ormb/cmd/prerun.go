@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
@@ -17,7 +17,10 @@ func preRunE(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("Using %s as the root path\n", rootPath)
+
+	logrus.WithFields(logrus.Fields{
+		"root-path": rootPath,
+	}).Debugln("Create the ormb client with the given root path")
 
 	ormbClient, err = ormb.New(
 		oras.ClientOptRootPath(rootPath),
