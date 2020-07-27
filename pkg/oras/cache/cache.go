@@ -255,8 +255,8 @@ func (cache *Cache) TagReference(ref *oci.Reference, target *oci.Reference) erro
 	}
 	for _, desc := range cache.ociStore.ListReferences() {
 		if desc.Annotations[ocispec.AnnotationRefName] == ref.FullName() {
-			// We cannot use desc directly because of deep copy problem.
-			// But I am not sure why. It should work by design.
+			// We cannot use desc directly because annatations is a map,
+			// it is not copied to the new value desc.
 			new := ocispec.Descriptor{
 				MediaType: desc.MediaType,
 				Digest:    desc.Digest,
