@@ -15,6 +15,7 @@ type Interface interface {
 	DeleteReference(ref *oci.Reference) (*CacheRefSummary, error)
 	ListReferences() ([]*CacheRefSummary, error)
 	AddManifest(ref *oci.Reference, manifest *ocispec.Descriptor) error
+	TagReference(ref *oci.Reference, target *oci.Reference) error
 	Provider() content.Provider
 	Ingester() content.Ingester
 	ProvideIngester() orascontent.ProvideIngester

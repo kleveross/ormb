@@ -248,14 +248,36 @@ func (cache *Cache) ListReferences() ([]*CacheRefSummary, error) {
 	return rr, nil
 }
 
+// TagReference tags the reference to the target.
+func (cache *Cache) TagReference(ref *oci.Reference, target *oci.Reference) error {
+	if err := cache.init(); err != nil {
+		return err
+	}
+	for _, desc := range cache.ociStore.ListReferences() {
+		if desc.Annotations[ocispec.AnnotationRefName] == ref.FullName() {
+			// We cannot use desc directly because of deep copy problem.
+			// But I am not sure why. It should work by design.
+			new := ocispec.Descriptor{
+				MediaType: desc.MediaType,
+				Digest:    desc.Digest,
+				Size:      desc.Size,
+				URLs:      desc.URLs,
+				Platform:  desc.Platform,
+			}
+			cache.ociStore.AddReference(target.FullName(), new)
+			return cache.ociStore.SaveIndex()
+		}
+	}
+	return fmt.Errorf("Failed to find the ref %s", ref.FullName())
+}
+
 // AddManifest provides a manifest to the cache index.json.
 func (cache *Cache) AddManifest(ref *oci.Reference, manifest *ocispec.Descriptor) error {
 	if err := cache.init(); err != nil {
 		return err
 	}
 	cache.ociStore.AddReference(ref.FullName(), *manifest)
-	err := cache.ociStore.SaveIndex()
-	return err
+	return cache.ociStore.SaveIndex()
 }
 
 // Provider provides a valid containerd Provider
