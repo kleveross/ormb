@@ -130,6 +130,15 @@ func (c *Client) SaveModel(ch *model.Model, ref *oci.Reference) error {
 	return nil
 }
 
+// TagModel tags the ref to target.
+func (c *Client) TagModel(ref *oci.Reference, target *oci.Reference) error {
+	if err := c.cache.TagReference(ref, target); err != nil {
+		return err
+	}
+	fmt.Fprintf(c.out, "%s: tagged\n", ref.FullName())
+	return nil
+}
+
 // PushModel uploads a model to a registry.
 func (c *Client) PushModel(ref *oci.Reference) error {
 	r, err := c.cache.FetchReference(ref)

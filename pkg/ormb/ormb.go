@@ -17,6 +17,7 @@ type Interface interface {
 	Pull(refStr string) error
 	Export(refStr, dst string) error
 	Save(src, refStr string) error
+	Tag(refStr, targetStr string) error
 	Remove(refStr string) error
 }
 
@@ -57,6 +58,20 @@ func (o ORMB) Pull(refStr string) error {
 		return err
 	}
 	return o.client.PullModel(ref)
+}
+
+func (o ORMB) Tag(refStr, targetStr string) error {
+	ref, err := oci.ParseReference(refStr)
+	if err != nil {
+		return err
+	}
+
+	target, err := oci.ParseReference(targetStr)
+	if err != nil {
+		return err
+	}
+
+	return o.client.TagModel(ref, target)
 }
 
 func (o ORMB) Export(refStr, dst string) error {

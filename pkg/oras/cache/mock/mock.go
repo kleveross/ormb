@@ -112,6 +112,20 @@ func (mr *MockInterfaceMockRecorder) AddManifest(ref, manifest interface{}) *gom
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddManifest", reflect.TypeOf((*MockInterface)(nil).AddManifest), ref, manifest)
 }
 
+// TagReference mocks base method
+func (m *MockInterface) TagReference(ref, target *oci.Reference) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "TagReference", ref, target)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// TagReference indicates an expected call of TagReference
+func (mr *MockInterfaceMockRecorder) TagReference(ref, target interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "TagReference", reflect.TypeOf((*MockInterface)(nil).TagReference), ref, target)
+}
+
 // Provider mocks base method
 func (m *MockInterface) Provider() content.Provider {
 	m.ctrl.T.Helper()
