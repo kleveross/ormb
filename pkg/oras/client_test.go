@@ -265,5 +265,21 @@ var _ = Describe("OCI Client", func() {
 			).Return(returnedSummary, nil).Times(1)
 			Expect(c.LoadModel(ref)).To(Equal(m), BeNil())
 		})
+
+		It("Should tag the model successfully", func() {
+			refStr := "caicloud/resnet50:v1"
+			ref, err := oci.ParseReference(refStr)
+			Expect(err).To(BeNil())
+
+			targetStr := "caicloud/resnet50:v2"
+			target, err := oci.ParseReference(targetStr)
+			Expect(err).To(BeNil())
+
+			c.cache.(*cachemock.MockInterface).EXPECT().TagReference(
+				gomock.Eq(ref),
+				gomock.Eq(target),
+			).Return(nil).Times(1)
+			Expect(c.TagModel(ref, target)).To(BeNil())
+		})
 	})
 })

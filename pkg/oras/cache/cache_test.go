@@ -20,16 +20,19 @@ var _ = Describe("Cache", func() {
 			var i Interface
 			rootPath = ".cache"
 
+			if err := os.RemoveAll(rootPath); err != nil {
+				Expect(err).To(BeNil())
+			}
 			i, err = New(CacheOptRoot(rootPath), CacheOptDebug(true), CacheOptWriter(os.Stdout))
+			Expect(err).To(BeNil())
 			c = i.(*Cache)
 		})
 
 		It("Should create the cache successfully", func() {
-			Expect(err).To(BeNil())
 			Expect(c.rootDir).To(Equal(rootPath))
 		})
 
-		Describe("with a cached artifact caicloud/test:v2", func() {
+		Describe("with a cached artifact caicloud/test:v1", func() {
 			var m *model.Model
 			var ref *oci.Reference
 
@@ -63,6 +66,13 @@ var _ = Describe("Cache", func() {
 				Expect(err).To(BeNil())
 				Expect(actual.Name).To(Equal(ref.FullName()))
 			})
+
+			It("Should tag the reference successfully", func() {
+				target, err := oci.ParseReference("test:1")
+				Expect(err).To(BeNil())
+				Expect(c.TagReference(ref, target)).To(BeNil())
+			})
 		})
+
 	})
 })
