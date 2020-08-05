@@ -124,5 +124,5 @@ func init() {
 	loginCmd.Flags().StringVarP(&usernameOpt, "username", "u", "", "registry username")
 	loginCmd.Flags().StringVarP(&passwordOpt, "password", "p", "", "registry password or identity token")
 	loginCmd.Flags().BoolVarP(&passwordFromStdinOpt, "password-stdin", "", false, "read password or identity token from stdin")
-	loginCmd.Flags().BoolVarP(&insecureOpt, "insecure", "", false, "allow connections to TLS registry without certs")
+	loginCmd.Flags().BoolVarP(&insecureOpt, "insecure", "", true, "allow connections to TLS registry without certs")
 }

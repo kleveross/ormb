@@ -60,3 +60,10 @@ func ClientOptPlainHTTP(plainHTTP bool) ClientOption {
 		client.plainHTTP = plainHTTP
 	}
 }
+
+// ClientOptInsecure returns a function that sets the insecure setting on client options set
+func ClientOptInsecure(insecure bool) ClientOption {
+	return func(client *Client) {
+		client.insecure = insecure
+	}
+}

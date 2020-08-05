@@ -23,6 +23,7 @@ func preRunE(cmd *cobra.Command, args []string) error {
 		oras.ClientOptRootPath(rootPath),
 		oras.ClientOptWriter(os.Stdout),
 		oras.ClientOptPlainHTTP(plainHTTPOpt),
+		oras.ClientOptInsecure(insecureOpt),
 	)
 	return err
 }
