@@ -15,7 +15,9 @@ limitations under the License.
 */
 package main
 
-import "github.com/kleveross/ormb/cmd/ormb/cmd"
+import (
+	"github.com/kleveross/ormb/cmd/ormb/cmd"
+)
 
 func main() {
 	cmd.Execute()

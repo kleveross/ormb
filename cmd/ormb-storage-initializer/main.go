@@ -15,7 +15,9 @@ limitations under the License.
 */
 package main
 
-import "github.com/kleveross/ormb/cmd/ormb-storage-initializer/cmd"
+import (
+	"github.com/kleveross/ormb/cmd/ormb-storage-initializer/cmd"
+)
 
 func main() {
 	cmd.Execute()
