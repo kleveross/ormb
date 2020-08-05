@@ -38,6 +38,7 @@ type Client struct {
 	orasClient orasclient.Interface
 	rootPath   string
 	plainHTTP  bool
+	insecure   bool
 }
 
 // NewClient returns a new registry client with config
@@ -64,9 +65,8 @@ func NewClient(opts ...ClientOption) (Interface, error) {
 		resolver, err := client.authorizer.Resolver(
 			context.Background(),
 			&http.Client{
-				// TODO(gaocegege): Make it optional.
 				Transport: &http.Transport{
-					TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+					TLSClientConfig: &tls.Config{InsecureSkipVerify: client.insecure},
 				},
 			}, client.plainHTTP)
 		if err != nil {

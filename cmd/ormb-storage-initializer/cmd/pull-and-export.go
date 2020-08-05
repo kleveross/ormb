@@ -68,6 +68,7 @@ var pullExportCmd = &cobra.Command{
 			oras.ClientOptRootPath(rootPath),
 			oras.ClientOptWriter(os.Stdout),
 			oras.ClientOptPlainHTTP(plainHTTPOpt),
+			oras.ClientOptInsecure(insecureOpt),
 		)
 		if err != nil {
 			return err
@@ -112,4 +113,7 @@ var pullExportCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(pullExportCmd)
+
+	pullExportCmd.Flags().BoolVarP(&plainHTTPOpt, "plain-http", "", false, "use plain http and not https")
+	pullExportCmd.Flags().BoolVarP(&insecureOpt, "insecure", "", true, "allow connections to TLS registry without certs")
 }

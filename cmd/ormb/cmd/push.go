@@ -37,4 +37,5 @@ func init() {
 	rootCmd.AddCommand(pushCmd)
 
 	pushCmd.Flags().BoolVarP(&plainHTTPOpt, "plain-http", "", false, "use plain http and not https")
+	pushCmd.Flags().BoolVarP(&insecureOpt, "insecure", "", true, "allow connections to TLS registry without certs")
 }
