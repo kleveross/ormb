@@ -4,9 +4,19 @@ builds:
 - id: ormb
   main: ./cmd/ormb/main.go
   binary: ormb
+  ldflags:
+    - -s -w 
+    - -X github.com/kleveross/ormb/pkg/version.VERSION={{ .Version }} 
+    - -X github.com/kleveross/ormb/pkg/version.COMMIT={{ .Commit }}
+    - -X github.com/kleveross/ormb/pkg/version.REPOROOT={{ .GitURL }}
 - id: ormb-storage-initializer
   main: ./cmd/ormb-storage-initializer/main.go
   binary: ormb-storage-initializer
+  ldflags:
+    - -s -w 
+    - -X github.com/kleveross/ormb/pkg/version.VERSION={{ .Version }} 
+    - -X github.com/kleveross/ormb/pkg/version.COMMIT={{ .Commit }}
+    - -X github.com/kleveross/ormb/pkg/version.REPOROOT={{ .GitURL }}
 archives:
 - replacements:
     darwin: Darwin

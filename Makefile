@@ -118,7 +118,7 @@ test: generate
 
 build-local:
 	@for target in $(TARGETS); do                                                      \
-	  CGO_ENABLED=$(CGO_ENABLED) go build -v -o $(OUTPUT_DIR)/$${target}                                          \
+	  CGO_ENABLED=$(CGO_ENABLED) go build -v -o $(OUTPUT_DIR)/$${target}               \
 	    -ldflags "-s -w -X $(ROOT)/pkg/version.VERSION=$(VERSION)                      \
 	      -X $(ROOT)/pkg/version.COMMIT=$(GITSHA)                                      \
 	      -X $(ROOT)/pkg/version.REPOROOT=$(ROOT)"                                     \
@@ -139,6 +139,7 @@ build-linux:
 	    /bin/bash -c 'for target in $(TARGETS); do                                     \
 	      go build -v -o $(OUTPUT_DIR)/$${target}                                      \
 	        -ldflags "-s -w -X $(ROOT)/pkg/version.VERSION=$(VERSION)                  \
+	          -X $(ROOT)/pkg/version.COMMIT=$(GITSHA)                                  \
 	          -X $(ROOT)/pkg/version.REPOROOT=$(ROOT)"                                 \
 	        $(CMD_DIR)/$${target};                                                     \
 	    done'
