@@ -111,6 +111,7 @@ generate:
 	@mockgen -source pkg/exporter/interface.go -destination pkg/exporter/mock/mock.go -package mock
 	@mockgen -source vendor/github.com/deislabs/oras/pkg/auth/client.go -destination pkg/oras/mock/mock_auth.go -package mock
 	@mockgen -source vendor/github.com/containerd/containerd/remotes/resolver.go -destination pkg/oras/mock/mock_resolver.go -package mock
+	@mockgen -source pkg/model/format.go -destination pkg/model/mock/mock_format.go -package mock
 
 test: generate
 	@go test -race -coverprofile=coverage.out ./...
