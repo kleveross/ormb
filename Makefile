@@ -35,11 +35,11 @@ TARGETS := ormb ormb-storage-initializer
 # The final built images are:
 #   $[REGISTRY]/$[IMAGE_PREFIX]$[TARGET]$[IMAGE_SUFFIX]:$[VERSION]
 # $[REGISTRY] is an item from $[REGISTRIES], $[TARGET] is an item from $[TARGETS].
-IMAGE_PREFIX ?= $(strip clever-)
+IMAGE_PREFIX ?= $(strip klever-)
 IMAGE_SUFFIX ?= $(strip )
 
 # Container registries.
-REGISTRY ?= cleveross
+REGISTRY ?= kleveross
 
 # Container registry for base images.
 BASE_REGISTRY ?= docker.io
