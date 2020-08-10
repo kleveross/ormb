@@ -18,4 +18,5 @@ package cmd
 var (
 	usernameOpt, passwordOpt                        string
 	passwordFromStdinOpt, insecureOpt, plainHTTPOpt bool
+	reLayoutOpt                                     bool
 )
