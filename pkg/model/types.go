@@ -6,6 +6,7 @@ type Model struct {
 	// Metadata is the contents of the Chartfile.
 	Metadata *Metadata `json:"metadata,omitempty"`
 	Path     string    `json:"path,omitempty"`
+	Icon     []byte    `json:"omitempty"`
 	Content  []byte    `json:"content,omitempty"`
 	Config   []byte    `json:"config,omitempty"`
 }

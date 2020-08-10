@@ -133,6 +133,7 @@ func (c *Client) SaveModel(ch *model.Model, ref *oci.Reference) error {
 // PushModel uploads a model to a registry.
 func (c *Client) PushModel(ref *oci.Reference) error {
 	r, err := c.cache.FetchReference(ref)
+	fmt.Printf("%v", r)
 	if err != nil {
 		return err
 	}
@@ -141,7 +142,8 @@ func (c *Client) PushModel(ref *oci.Reference) error {
 	}
 	fmt.Fprintf(c.out, "The push refers to repository [%s]\n", r.Repo)
 	c.printCacheRefSummary(r)
-	layers := []ocispec.Descriptor{*r.ContentLayer}
+	layers := []ocispec.Descriptor{*r.ContentLayer, *r.IconLayer}
+	fmt.Println(layers)
 	_, err = c.orasClient.Push(ctx.Context(c.out, c.debug),
 		c.resolver, r.Name, c.cache.Provider(), layers,
 		oras.WithConfig(*r.Config), oras.WithNameValidation(nil))

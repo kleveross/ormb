@@ -12,7 +12,7 @@ import (
 	"github.com/containerd/containerd/content"
 	"github.com/containerd/containerd/errdefs"
 	orascontent "github.com/deislabs/oras/pkg/content"
-	digest "github.com/opencontainers/go-digest"
+	"github.com/opencontainers/go-digest"
 	"github.com/opencontainers/image-spec/specs-go"
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
 	"github.com/pkg/errors"
@@ -53,6 +53,7 @@ type CacheRefSummary struct {
 	Manifest     *ocispec.Descriptor
 	Config       *ocispec.Descriptor
 	ContentLayer *ocispec.Descriptor
+	IconLayer    *ocispec.Descriptor
 	Size         int64
 	Digest       digest.Digest
 	CreatedAt    time.Time
@@ -104,17 +105,23 @@ func (cache *Cache) FetchReference(ref *oci.Reference) (*CacheRefSummary, error)
 			// TODO(gaocegege): Fetch the config.
 			r.Config = &manifest.Config
 			numLayers := len(manifest.Layers)
-			if numLayers != 1 {
+			if numLayers != 2 {
 				return &r, errors.New(
 					fmt.Sprintf("manifest does not contain exactly 1 layer (total: %d)", numLayers))
 			}
 
 			// Fetch the content.
 			var contentLayer *ocispec.Descriptor
+			var iconLayer *ocispec.Descriptor
+
+			fmt.Println(manifest.Layers)
 			for _, layer := range manifest.Layers {
+				tmpLayer := layer
 				switch layer.MediaType {
 				case consts.MediaTypeModelContentLayer:
-					contentLayer = &layer
+					contentLayer = &tmpLayer
+				case "image/png":
+					iconLayer = &tmpLayer
 				}
 			}
 			if contentLayer == nil {
@@ -130,13 +137,26 @@ func (cache *Cache) FetchReference(ref *oci.Reference) (*CacheRefSummary, error)
 						consts.MediaTypeModelContentLayer))
 			}
 			r.ContentLayer = contentLayer
+			r.IconLayer = iconLayer
 			info, err := cache.ociStore.Info(ctx.Context(cache.out, cache.debug), contentLayer.Digest)
 			if err != nil {
 				return &r, err
 			}
-			r.Size = info.Size
+
+			iconInfo, err := cache.ociStore.Info(ctx.Context(cache.out, cache.debug), iconLayer.Digest)
+			if err != nil {
+				return &r, err
+			}
+
+			r.Size = info.Size + iconInfo.Size
 			r.Digest = info.Digest
 			r.CreatedAt = info.CreatedAt
+
+			iconBytes, err := cache.fetchBlob(iconLayer)
+			if err != nil {
+				return &r, err
+			}
+
 			contentBytes, err := cache.fetchBlob(contentLayer)
 			if err != nil {
 				return &r, err
@@ -152,6 +172,7 @@ func (cache *Cache) FetchReference(ref *oci.Reference) (*CacheRefSummary, error)
 
 			// TODO(gaocegege): Optimize the memory usage.
 			r.Model = &model.Model{
+				Icon:     iconBytes,
 				Content:  contentBytes,
 				Config:   configBytes,
 				Metadata: metadata,
@@ -183,10 +204,17 @@ func (cache *Cache) StoreReference(ref *oci.Reference, m *model.Model) (*CacheRe
 	r.Config = config
 
 	// Save the model content from the model.Model.
+	iconLayer, _, err := cache.saveModelIconLayer(m)
+	if err != nil {
+		return &r, err
+	}
+
+	// Save the model content from the model.Model.
 	contentLayer, _, err := cache.saveModelContentLayer(m)
 	if err != nil {
 		return &r, err
 	}
+
 	r.ContentLayer = contentLayer
 	info, err := cache.ociStore.Info(ctx.Context(cache.out, cache.debug), contentLayer.Digest)
 	if err != nil {
@@ -198,7 +226,7 @@ func (cache *Cache) StoreReference(ref *oci.Reference, m *model.Model) (*CacheRe
 
 	// Save the manifest for the given layers and config.
 	// We do not save in index.json here, just save in blobs.
-	manifest, _, err := cache.saveModelManifest(config, contentLayer)
+	manifest, _, err := cache.saveModelManifest(config, iconLayer, contentLayer)
 	if err != nil {
 		return &r, err
 	}
@@ -338,6 +366,22 @@ func (cache *Cache) saveModelConfig(m *model.Model) (*ocispec.Descriptor, bool, 
 }
 
 // saveModelContentLayer stores the model as tarball blob and returns a descriptor
+func (cache *Cache) saveModelIconLayer(m *model.Model) (*ocispec.Descriptor, bool, error) {
+	destDir := filepath.Join(cache.rootDir, ".build")
+	os.MkdirAll(destDir, 0755)
+	// TODO: Save models instead of letting users do it.
+
+	contentExists, err := cache.storeBlob(m.Icon)
+	if err != nil {
+		return nil, contentExists, err
+	}
+	descriptor := cache.memoryStore.Add("", "image/png", m.Icon)
+	annotations := map[string]string{"io.goharbor.artifact.v1alpha1.icon": ""}
+	descriptor.Annotations = annotations
+	return &descriptor, contentExists, nil
+}
+
+// saveModelContentLayer stores the model as tarball blob and returns a descriptor
 func (cache *Cache) saveModelContentLayer(m *model.Model) (*ocispec.Descriptor, bool, error) {
 	destDir := filepath.Join(cache.rootDir, ".build")
 	os.MkdirAll(destDir, 0755)
@@ -352,11 +396,12 @@ func (cache *Cache) saveModelContentLayer(m *model.Model) (*ocispec.Descriptor, 
 }
 
 // saveModelManifest stores the image manifest as json blob and returns a descriptor
-func (cache *Cache) saveModelManifest(config *ocispec.Descriptor, contentLayer *ocispec.Descriptor) (*ocispec.Descriptor, bool, error) {
+func (cache *Cache) saveModelManifest(config *ocispec.Descriptor, iconLayer, contentLayer *ocispec.Descriptor) (*ocispec.Descriptor, bool, error) {
 	manifest := ocispec.Manifest{
-		Versioned: specs.Versioned{SchemaVersion: 2},
-		Config:    *config,
-		Layers:    []ocispec.Descriptor{*contentLayer},
+		Versioned:   specs.Versioned{SchemaVersion: 2},
+		Config:      *config,
+		Layers:      []ocispec.Descriptor{*iconLayer, *contentLayer},
+		Annotations: map[string]string{"io.goharbor.artifact.v1alpha1.skip-list": "format"},
 	}
 	manifestBytes, err := json.Marshal(manifest)
 	if err != nil {
