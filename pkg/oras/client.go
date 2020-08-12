@@ -132,6 +132,9 @@ func (c *Client) SaveModel(ch *model.Model, ref *oci.Reference) error {
 
 // TagModel tags the ref to target.
 func (c *Client) TagModel(ref *oci.Reference, target *oci.Reference) error {
+	if ref.FullName() == target.FullName() {
+		return nil
+	}
 	if err := c.cache.TagReference(ref, target); err != nil {
 		return err
 	}
