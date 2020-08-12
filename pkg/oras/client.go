@@ -184,8 +184,7 @@ func (c *Client) RemoveModel(ref *oci.Reference) error {
 // PullModel downloads a model from a registry.
 func (c *Client) PullModel(ref *oci.Reference) error {
 	if ref.Tag == "" {
-		fmt.Fprintf(c.out, "Using default tag: latest\n")
-		ref.Tag = "latest"
+		return errors.New("tag explicitly required")
 	}
 	existing, err := c.cache.FetchReference(ref)
 	if err != nil {
