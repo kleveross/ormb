@@ -50,6 +50,7 @@ func ParseReference(s string) (*Reference, error) {
 		return nil, errTooManyColons
 	}
 
+	ref.mutate()
 	// ensure the reference is valid
 	err := ref.validate()
 	if err != nil {
@@ -65,6 +66,13 @@ func (ref *Reference) FullName() string {
 		return ref.Repo
 	}
 	return fmt.Sprintf("%s:%s", ref.Repo, ref.Tag)
+}
+
+// mutate assigns default tag when it is empty
+func (ref *Reference) mutate() {
+	if ref.Tag == "" {
+		ref.Tag = "latest"
+	}
 }
 
 // validate makes sure the ref meets our criteria
