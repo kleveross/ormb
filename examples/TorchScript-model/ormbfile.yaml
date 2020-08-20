@@ -1,2 +1,17 @@
 author: "chenjun <chenjun@caicloud.io>"
 format: TorchScript
+signature:
+  inputs:
+  - name: input__0
+    size:
+    - 1
+    - 3
+    - 224
+    - 224
+    dtype: float32
+  outputs:
+  - name: input__9
+    size:
+    - 1
+    - 1000
+    dtype: float32

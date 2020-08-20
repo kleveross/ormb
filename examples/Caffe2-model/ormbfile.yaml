@@ -1,2 +1,17 @@
 author: "chenjun <chenjun@caicloud.io>"
 format: NetDef
+signature:
+  inputs:
+  - name: data
+    size:
+    - 1
+    - 3
+    - 224
+    - 224
+    dtype: float32
+  outputs:
+  - name: softmax
+    size:
+    - 1
+    - 1000
+    dtype: float32
