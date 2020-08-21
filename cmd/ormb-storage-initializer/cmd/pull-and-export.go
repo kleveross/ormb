@@ -17,18 +17,13 @@ package cmd
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
-	"path"
 	"path/filepath"
 	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"gopkg.in/yaml.v2"
 
-	"github.com/kleveross/ormb/pkg/consts"
-	"github.com/kleveross/ormb/pkg/model"
 	"github.com/kleveross/ormb/pkg/oras"
 	"github.com/kleveross/ormb/pkg/ormb"
 )
@@ -86,73 +81,13 @@ var pullExportCmd = &cobra.Command{
 			return err
 		}
 
-		// For model registry, can not move any exported data, but for model
-		// serving, it must relayout model file so that it will work.
-		if !reLayoutOpt {
-			return nil
-		}
-
-		if err := relayoutModel(dstDir); err != nil {
-			return err
-		}
-
 		return nil
 	},
-}
-
-func relayoutModel(modelDir string) error {
-	// Move the files in model directory to the upper directory.
-	// e.g. Move /mnt/models/model to /mnt/models (dstDir).
-	// but for tensorflow serving, MUST move /mnt/models/model to /mnt/models/1 (dstDir).
-	// Seldon core will run `--model_base_path=dstDir` directly.
-	originalDir, err := filepath.Abs(
-		filepath.Join(modelDir, consts.ORMBModelDirectory))
-	if err != nil {
-		return err
-	}
-	destinationDir, err := filepath.Abs(modelDir)
-	if err != nil {
-		return err
-	}
-
-	// For TensorFlow serving, MUST move /mnt/models/model to /mnt/models/1 (dstDir).
-	ormbfileBytes, err := ioutil.ReadFile(path.Join(modelDir, "ormbfile.yaml"))
-	if err != nil {
-		return err
-	}
-	var metadata model.Metadata
-	err = yaml.Unmarshal(ormbfileBytes, &metadata)
-	if err != nil {
-		return err
-	}
-	if metadata.Format == string(model.FormatSavedModel) {
-		if err := os.Rename(originalDir, path.Join(modelDir, "1")); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	// For other format model.
-	files, err := ioutil.ReadDir(originalDir)
-	if err != nil {
-		return err
-	}
-	for _, f := range files {
-		oldPath := filepath.Join(originalDir, f.Name())
-		newPath := filepath.Join(destinationDir, f.Name())
-		fmt.Printf("Moving %s to %s\n", oldPath, newPath)
-		if err := os.Rename(oldPath, newPath); err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 func init() {
 	rootCmd.AddCommand(pullExportCmd)
 
-	pullExportCmd.Flags().BoolVarP(&reLayoutOpt, "relayout", "", true, "relayout data for model serving")
 	pullExportCmd.Flags().BoolVarP(&plainHTTPOpt, "plain-http", "", true, "use plain http and not https")
 	pullExportCmd.Flags().BoolVarP(&insecureOpt, "insecure", "", true, "allow connections to TLS registry without certs")
 }
