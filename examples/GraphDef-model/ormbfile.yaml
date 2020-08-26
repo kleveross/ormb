@@ -1,2 +1,32 @@
 author: "chenjun <chenjun@caicloud.io>"
 format: GraphDef
+framework: TensorFlow
+signature:
+  inputs:
+    - name: input_1
+      dtype: float32
+      size:
+      - -1
+      - 224
+      - 224
+      - 3
+  outputs:
+    - name: Logits/Softmax
+      dtype: float32
+      size:
+        - -1
+        - 1000
+  layers:
+    - name: Placeholder
+    - name: Const
+    - name: Pad
+    - name: Identity
+    - name: Conv2D
+    - name: FusedBatchNorm
+    - name: Relu6
+    - name: DepthwiseConv2dNative
+    - name: Add
+    - name: Mean
+    - name: MatMul
+    - name: BiasAdd
+    - name: Softmax
