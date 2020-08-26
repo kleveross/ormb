@@ -34,13 +34,6 @@ func (f Format) ValidateDirectory(rootPath string) error {
 	if err != nil {
 		return err
 	}
-	if len(fileList) != 1 || !fileList[0].IsDir() {
-		return fmt.Errorf("the model directory structure is error")
-	}
-	fileList, err = ioutil.ReadDir(path.Join(modelFilePath, fileList[0].Name()))
-	if err != nil {
-		return err
-	}
 
 	switch f {
 	case FormatSavedModel:

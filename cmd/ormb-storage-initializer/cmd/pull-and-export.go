@@ -18,12 +18,14 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
+	"github.com/kleveross/ormb/pkg/consts"
 	"github.com/kleveross/ormb/pkg/oras"
 	"github.com/kleveross/ormb/pkg/ormb"
 )
@@ -81,13 +83,41 @@ var pullExportCmd = &cobra.Command{
 			return err
 		}
 
+		// For model serving, need relayout option.
+		if !reLayoutOpt {
+			return nil
+		}
+
+		if err := relayoutModel(dstDir); err != nil {
+			return err
+		}
+
 		return nil
 	},
+}
+
+func relayoutModel(modelDir string) error {
+	// Rename the `model` directory as `1`.
+	// e.g. move /mnt/models/model to /mnt/models/1 (dstDir).
+	// so that, the trtserver will serving, the refenence as
+	// https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/model_repository.html#section-onnx-models.
+	originalDir, err := filepath.Abs(
+		filepath.Join(modelDir, consts.ORMBModelDirectory))
+	if err != nil {
+		return err
+	}
+
+	if err := os.Rename(originalDir, path.Join(modelDir, "1")); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func init() {
 	rootCmd.AddCommand(pullExportCmd)
 
+	pullExportCmd.Flags().BoolVarP(&reLayoutOpt, "relayout", "", true, "relayout data for model serving")
 	pullExportCmd.Flags().BoolVarP(&plainHTTPOpt, "plain-http", "", true, "use plain http and not https")
 	pullExportCmd.Flags().BoolVarP(&insecureOpt, "insecure", "", true, "allow connections to TLS registry without certs")
 }
