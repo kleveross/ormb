@@ -27,7 +27,7 @@ type Metadata struct {
 	Signature          *Signature       `json:"signature,omitempty" yaml:"signature,omitempty"`
 	Training           *Training        `json:"training,omitempty" yaml:"training,omitempty"`
 	Dataset            *Dataset         `json:"dataset,omitempty" yaml:"dataset,omitempty"`
-	DirectoryStureture []string         `json:"directoryStructure,omitempty" yaml:"directoryStructure,omitempty"`
+	DirectoryStructure []string         `json:"directoryStructure,omitempty" yaml:"directoryStructure,omitempty"`
 }
 
 // Metric is the type for training metric (e.g. acc).
