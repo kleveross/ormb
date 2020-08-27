@@ -54,7 +54,7 @@ func (d Saver) Save(path string) (*model.Model, error) {
 		return nil, err
 	}
 	// Set directoryStructure for the model metadata.
-	metadata.DirectoryStureture = directoryStructure
+	metadata.DirectoryStructure = directoryStructure
 
 	m := &model.Model{
 		Metadata: metadata,
