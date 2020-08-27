@@ -5,6 +5,7 @@ const (
 	MediaTypeModelContentLayer = "application/tar+gzip"
 	// MediaTypeModelConfig is the media type of the model config.
 	MediaTypeModelConfig = "application/vnd.caicloud.model.config.v1alpha1+json"
+	MediaTypeLogoLayer = "image/png"
 
 	// ORMBfileName is the filename of the config file.
 	ORMBfileName = "ormbfile.yaml"
@@ -18,5 +19,6 @@ func KnownMediaTypes() []string {
 	return []string{
 		MediaTypeModelConfig,
 		MediaTypeModelContentLayer,
+		MediaTypeLogoLayer,
 	}
 }
