@@ -11,29 +11,32 @@ type Model struct {
 }
 
 type Metadata struct {
-	Author          string            `json:"author,omitempty" yaml:"author,omitempty"`
-	Created         time.Time         `json:"created,omitempty" yaml:"created,omitempty"`
-	Description     string            `json:"description,omitempty" yaml:"description,omitempty"`
-	Tags            []string          `json:"tags,omitempty" yaml:"tags,omitempty"`
-	Labels          map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
-	Format          string            `json:"format,omitempty" yaml:"format,omitempty"`
-	// GPUType is for TensorRT format only, it must be set when extract signature or serve 
+	Author      string            `json:"author,omitempty" yaml:"author,omitempty"`
+	Created     time.Time         `json:"created,omitempty" yaml:"created,omitempty"`
+	Description string            `json:"description,omitempty" yaml:"description,omitempty"`
+	Tags        []string          `json:"tags,omitempty" yaml:"tags,omitempty"`
+	Labels      map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
+	Format      string            `json:"format,omitempty" yaml:"format,omitempty"`
+	// GPUType is for TensorRT format only, it must be set when extract signature or serve
 	// as a online service, otherwise， it can not extract or serve as a service.
 	// for other model format, you can set empty string or not set.
-	GPUType         string            `json:"gpuType,omitempty" yaml:"gpuType,omitempty"`
-	Framework       string            `json:"framework,omitempty" yaml:"framework,omitempty"`
-	Metrics         []Metric          `json:"metrics,omitempty" yaml:"metrics,omitempty"`
-	Hyperparameters []Hyperparameter  `json:"hyperparameters,omitempty" yaml:"hyperparameters,omitempty"`
-	Signature       Signature         `json:"signature,omitempty" yaml:"signature,omitempty"`
-	Training        Training          `json:"training,omitempty" yaml:"training,omitempty"`
-	Dataset         Dataset           `json:"dataset,omitempty" yaml:"dataset,omitempty"`
+	GPUType            string           `json:"gpuType,omitempty" yaml:"gpuType,omitempty"`
+	Framework          string           `json:"framework,omitempty" yaml:"framework,omitempty"`
+	Metrics            []Metric         `json:"metrics,omitempty" yaml:"metrics,omitempty"`
+	Hyperparameters    []Hyperparameter `json:"hyperparameters,omitempty" yaml:"hyperparameters,omitempty"`
+	Signature          *Signature       `json:"signature,omitempty" yaml:"signature,omitempty"`
+	Training           *Training        `json:"training,omitempty" yaml:"training,omitempty"`
+	Dataset            *Dataset         `json:"dataset,omitempty" yaml:"dataset,omitempty"`
+	DirectoryStructure []string         `json:"directoryStructure,omitempty" yaml:"directoryStructure,omitempty"`
 }
 
+// Metric is the type for training metric (e.g. acc).
 type Metric struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
 }
 
+// Hyperparameter is the type for training hyperparameter (e.g. learning rate).
 type Hyperparameter struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
