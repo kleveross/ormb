@@ -6,9 +6,11 @@
 [![Build Status](https://travis-ci.com/kleveross/ormb.svg?branch=master)](https://travis-ci.com/kleveross/ormb)
 [![Coverage Status](https://coveralls.io/repos/github/kleveross/ormb/badge.svg?branch=master)](https://coveralls.io/github/kleveross/ormb?branch=master)
 
-ormb is an open-source model registry to manage machine learning model. 
+English | [中文](./README_zh.md)
 
-ormb helps you manage your Machine Learning/Deep Learning models. It makes your models easy to create, version, share and publish.
+`ormb` is an open-source model registry to manage machine learning model. 
+
+`ormb` helps you manage your Machine Learning/Deep Learning models. It makes your models easy to create, version, share and publish.
 
 [![asciicast](https://asciinema.org/a/345812.svg)](https://asciinema.org/a/345812)
 
