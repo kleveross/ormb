@@ -36,7 +36,8 @@ require (
 	github.com/yvasiyarov/go-metrics v0.0.0-20150112132944-c25f46c4b940 // indirect
 	github.com/yvasiyarov/gorelic v0.0.7 // indirect
 	github.com/yvasiyarov/newrelic_platform_go v0.0.0-20160601141957-9c099fbc30e9 // indirect
-	golang.org/x/tools v0.0.0-20200806022845-90696ccdc692 // indirect
+	golang.org/x/net v0.0.0-20200625001655-4c5254603344 // indirect
+	golang.org/x/sync v0.0.0-20200625203802-6e8e738ad208 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	gopkg.in/yaml.v2 v2.3.0
 	rsc.io/letsencrypt v0.0.3 // indirect

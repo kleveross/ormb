@@ -36,7 +36,7 @@ changelog:
     - '^test:'
 release:
   github:
-    owner: caicloud
+    owner: kleveross
     name: ormb
 # dockers:
 #   - goos: linux
