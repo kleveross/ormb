@@ -36,7 +36,7 @@ jobs:
       - name: before_install
         run: |
           # get coveralls.io support
-          go get github.com/mattn/goveralls
+          go get github.com/kleveross/goveralls
       - name: install
         run: |
           make build
