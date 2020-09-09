@@ -39,9 +39,10 @@ jobs:
           go get github.com/kleveross/goveralls
       - name: install
         run: |
+          cd src/github.com/kleveross/ormb
+          go env GOROOT
           make build
       - name: script
         run: |
-          GO_COVER_PROFILE=$(mktemp -u)
-          go test ./pkg/... -race -covermode atomic -coverprofile $GO_COVER_PROFILE
-          goveralls -service=travis-ci -coverprofile $GO_COVER_PROFILE
+          cd src/github.com/kleveross/ormb
+          go test -mod=vendor ./pkg/... -race -covermode atomic -coverprofile profile.cov

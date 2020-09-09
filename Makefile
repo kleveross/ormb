@@ -78,7 +78,8 @@ DOCKER_LABELS ?= git-describe="$(shell date -u +v%Y%m%d)-$(shell git describe --
 
 # Golang standard bin directory.
 GOPATH ?= $(shell go env GOPATH)
-BIN_DIR := $(GOPATH)/bin
+GOROOT ?= $(shell go env GOROOT)
+BIN_DIR := $(GOROOT)/bin
 GOLANGCI_LINT := $(BIN_DIR)/golangci-lint
 
 # Default golang flags used in build and test
