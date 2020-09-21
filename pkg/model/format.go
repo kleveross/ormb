@@ -21,6 +21,8 @@ const (
 	FormatTorchScript Format = "TorchScript"
 	FormatGraphDef    Format = "GraphDef"
 	FormatTensorRT    Format = "TensorRT"
+	FormatSKLearn     Format = "SKLearn"
+	FormatXGBoost     Format = "XGBoost"
 	FormatOthers      Format = "Others"
 )
 
@@ -56,6 +58,10 @@ func (f Format) ValidateDirectory(rootPath string) error {
 		err = f.validateForGraphDef(modelFilePath, fileList)
 	case FormatTensorRT:
 		err = f.validateForTensorRT(modelFilePath, fileList)
+	case FormatSKLearn:
+		err = f.validateForSKLearn(modelFilePath, fileList)
+	case FormatXGBoost:
+		err = f.validateForXGBoost(modelFilePath, fileList)
 	}
 	if err != nil {
 		return err
@@ -217,6 +223,32 @@ func (f Format) validateForTensorRT(modelPath string, files []os.FileInfo) error
 	}
 	if !tensorrtFileFlag {
 		return fmt.Errorf("there are no *.plan file in %v directory", modelPath)
+	}
+	return nil
+}
+
+func (f Format) validateForSKLearn(modelPath string, files []os.FileInfo) error {
+	var sklearnFileFlag bool
+	for _, file := range files {
+		if path.Ext(file.Name()) == ".joblib" {
+			sklearnFileFlag = true
+		}
+	}
+	if !sklearnFileFlag {
+		return fmt.Errorf("there are no *.joblib file in %v directory", modelPath)
+	}
+	return nil
+}
+
+func (f Format) validateForXGBoost(modelPath string, files []os.FileInfo) error {
+	var xgboostFileFlag bool
+	for _, file := range files {
+		if path.Ext(file.Name()) == ".xgboost" {
+			xgboostFileFlag = true
+		}
+	}
+	if !xgboostFileFlag {
+		return fmt.Errorf("there are no *.xgboost file in %v directory", modelPath)
 	}
 	return nil
 }

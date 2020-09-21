@@ -67,4 +67,16 @@ var _ = Describe("Format", func() {
 		err := savedmodelFormat.ValidateDirectory("../../examples/TensorRT-model")
 		Expect(err).To(BeNil())
 	})
+
+	It("Should validate SKLearn format successfully", func() {
+		sklearnFormat := model.FormatSKLearn
+		err := sklearnFormat.ValidateDirectory("../../examples/SKLearn-model")
+		Expect(err).To(BeNil())
+	})
+
+	It("Should validate XGBoost format successfully", func() {
+		xgboostFormat := model.FormatXGBoost
+		err := xgboostFormat.ValidateDirectory("../../examples/XGBoost-model")
+		Expect(err).To(BeNil())
+	})
 })
