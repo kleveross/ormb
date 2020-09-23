@@ -39,7 +39,7 @@ IMAGE_PREFIX ?= $(strip klever-)
 IMAGE_SUFFIX ?= $(strip )
 
 # Container registries.
-REGISTRY ?= kleveross
+REGISTRY ?= ghcr.io/kleveross
 
 # Container registry for base images.
 BASE_REGISTRY ?= docker.io
