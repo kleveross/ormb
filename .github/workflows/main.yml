@@ -46,3 +46,10 @@ jobs:
         run: |
           cd src/github.com/kleveross/ormb
           go test -mod=vendor ./pkg/... -race -covermode atomic -coverprofile profile.cov
+      - name: send coverage
+        uses: shogo82148/actions-goveralls@v1
+        with:
+          path-to-profile: profile.cov
+          working-directory: src/github.com/kleveross/ormb
+          flag-name: unit-test
+          parallel: true
