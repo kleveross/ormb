@@ -32,6 +32,7 @@ jobs:
           pwd
           go env
           echo "::set-env name=GOPATH::$(go env GOPATH):$GITHUB_WORKSPACE"
+          echo "echo ::set-env name=RELEASE_VERSION::${GITHUB_REF#refs/*/}"
           echo "::add-path::$(go env GOPATH)/bin"
       - name: before_install
         run: |
