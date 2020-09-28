@@ -28,6 +28,7 @@ jobs:
           pwd
           go env
           echo "::set-env name=GOPATH::$(go env GOPATH):$GITHUB_WORKSPACE"
+          echo "echo ::set-env name=RELEASE_VERSION::${GITHUB_REF#refs/*/}"
           echo "::add-path::$(go env GOPATH)/bin"
       - name: before_install
         run: |
@@ -41,12 +42,11 @@ jobs:
       - name: docker-build
         run: |
           cd src/github.com/kleveross/ormb
-          docker build -t ghcr.io/kleveross/klever-ormb:${{ github.ref }} -f build/ormb/Dockerfile .
-          docker build -t ghcr.io/kleveross/klever-ormb-storage-initializer:${{ github.ref }} -f build/ormb-storage-initializer/Dockerfile .
+          docker build -t ghcr.io/kleveross/klever-ormb:$RELEASE_VERSION -f build/ormb/Dockerfile .
+          docker build -t ghcr.io/kleveross/klever-ormb-storage-initializer:$RELEASE_VERSION -f build/ormb-storage-initializer/Dockerfile .
       - name: Login to GitHub Container Registry
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
       - name: docker-push
         run: |
-          docker push ghcr.io/kleveross/klever-ormb:${{ github.ref }}
-          docker push ghcr.io/kleveross/klever-ormb-storage-initializer:${{ github.ref }}
-          
+          docker push ghcr.io/kleveross/klever-ormb:$RELEASE_VERSION
+          docker push ghcr.io/kleveross/klever-ormb-storage-initializer:$RELEASE_VERSION
