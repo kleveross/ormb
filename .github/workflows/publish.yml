@@ -42,11 +42,11 @@ jobs:
       - name: docker-build
         run: |
           cd src/github.com/kleveross/ormb
-          docker build -t ghcr.io/kleveross/klever-ormb:$RELEASE_VERSION -f build/ormb/Dockerfile .
-          docker build -t ghcr.io/kleveross/klever-ormb-storage-initializer:$RELEASE_VERSION -f build/ormb-storage-initializer/Dockerfile .
+          docker build -t docker.pkg.github.com/kleveross/ormb/klever-ormb:$RELEASE_VERSION -f build/ormb/Dockerfile .
+          docker build -t docker.pkg.github.com/kleveross/ormb/klever-ormb-storage-initializer:$RELEASE_VERSION -f build/ormb-storage-initializer/Dockerfile .
       - name: Login to GitHub Container Registry
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
       - name: docker-push
         run: |
-          docker push ghcr.io/kleveross/klever-ormb:$RELEASE_VERSION
-          docker push ghcr.io/kleveross/klever-ormb-storage-initializer:$RELEASE_VERSION
+          docker push docker.pkg.github.com/kleveross/ormb/klever-ormb:$RELEASE_VERSION
+          docker push docker.pkg.github.com/kleveross/ormb/klever-ormb-storage-initializer:$RELEASE_VERSION
