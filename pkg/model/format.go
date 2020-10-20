@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -23,6 +24,7 @@ const (
 	FormatTensorRT    Format = "TensorRT"
 	FormatSKLearn     Format = "SKLearn"
 	FormatXGBoost     Format = "XGBoost"
+	FormatMLflow      Format = "MLflow"
 	FormatOthers      Format = "Others"
 )
 
@@ -62,7 +64,12 @@ func (f Format) ValidateDirectory(rootPath string) error {
 		err = f.validateForSKLearn(modelFilePath, fileList)
 	case FormatXGBoost:
 		err = f.validateForXGBoost(modelFilePath, fileList)
+	case FormatMLflow:
+		err = f.validateForMLflow(modelFilePath, fileList)
+	default:
+		err = errors.New("unrecognized model format, please check the ormbfile.yaml")
 	}
+
 	if err != nil {
 		return err
 	}
@@ -249,6 +256,20 @@ func (f Format) validateForXGBoost(modelPath string, files []os.FileInfo) error 
 	}
 	if !xgboostFileFlag {
 		return fmt.Errorf("there are no *.xgboost file in %v directory", modelPath)
+	}
+	return nil
+}
+
+func (f Format) validateForMLflow(modelPath string, files []os.FileInfo) error {
+	var isMLflowFile bool
+	for _, file := range files {
+		if file.Name() == "MLmodel" {
+			// assuming that user would not fool the tool
+			isMLflowFile = true
+		}
+	}
+	if !isMLflowFile {
+		return fmt.Errorf("there are no MLmodel file in %v, directory", modelPath)
 	}
 	return nil
 }
