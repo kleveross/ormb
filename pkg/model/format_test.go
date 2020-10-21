@@ -88,7 +88,7 @@ var _ = Describe("Format", func() {
 
 	It("Should validate fail for corruptted format", func() {
 		others := model.FormatOthers
-		err := others.ValidateDirectory("../../examples/Corrupt")
+		err := others.ValidateDirectory("../../test/Corrupt")
 		Expect(err).Should(HaveOccurred())
 	})
 })
