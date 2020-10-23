@@ -79,4 +79,16 @@ var _ = Describe("Format", func() {
 		err := xgboostFormat.ValidateDirectory("../../examples/XGBoost-model")
 		Expect(err).To(BeNil())
 	})
+
+	It("Should validate MLmodel format successfully", func() {
+		mlmodelFormat := model.FormatMLflow
+		err := mlmodelFormat.ValidateDirectory("../../examples/MLflow-model")
+		Expect(err).To(BeNil())
+	})
+
+	It("Should validate fail for corruptted format", func() {
+		others := model.FormatOthers
+		err := others.ValidateDirectory("../../test/Corrupt")
+		Expect(err).Should(HaveOccurred())
+	})
 })

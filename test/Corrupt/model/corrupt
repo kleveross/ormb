@@ -1,0 +1,8 @@
+#!/usr/bin/env -S scheme --script
+
+(define ode-to-a-nightingale "\'Tis not through envy of thy happy lot, but being too happy in thine happiness.")
+
+(define (main)
+  (display ode-to-a-nightingale))
+
+(main)
