@@ -45,10 +45,8 @@ var pullExportCmd = &cobra.Command{
 		dstDir := args[1]
 
 		// Get username and password from environment
-		// Here AWS_SECRET_ACCESS_KEY and AWS_ACCESS_KEY_ID are used
-		// because Seldon Core does not support renaming the environment variable name.
-		username := viper.GetString("AWS_ACCESS_KEY_ID")
-		pwd := viper.GetString("AWS_SECRET_ACCESS_KEY")
+		username := viper.GetString("ORMB_USERNAME")
+		pwd := viper.GetString("ORMB_PASSWORD")
 		// Get the host from the URL.
 		strs := strings.Split(modelURI, "/")
 		if len(strs) == 0 {
