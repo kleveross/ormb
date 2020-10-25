@@ -17,6 +17,7 @@ package cmd
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -26,8 +27,10 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/kleveross/ormb/pkg/consts"
+	"github.com/kleveross/ormb/pkg/model"
 	"github.com/kleveross/ormb/pkg/oras"
 	"github.com/kleveross/ormb/pkg/ormb"
+	"github.com/kleveross/ormb/pkg/parser"
 )
 
 // pullExportCmd represents the pull-and-export command.
@@ -88,12 +91,70 @@ var pullExportCmd = &cobra.Command{
 			return nil
 		}
 
-		if err := relayoutModel(dstDir); err != nil {
+		var relayoutFunc func(string) error
+
+		isMLflow, err := checkForMLflow(dstDir)
+		if err != nil {
+			return err
+		}
+
+		if isMLflow {
+			relayoutFunc = relayoutForMLflowModel
+		} else {
+			relayoutFunc = relayoutModel
+		}
+
+		if err := relayoutFunc(dstDir); err != nil {
 			return err
 		}
 
 		return nil
 	},
+}
+
+func checkForMLflow(modelDir string) (bool, error) {
+	path, err := filepath.Abs(modelDir)
+	if err != nil {
+		return false, err
+	}
+
+	dat, err := ioutil.ReadFile(filepath.Join(path, consts.ORMBfileName))
+	if err != nil {
+		return false, err
+	}
+
+	metadata := &model.Metadata{}
+	ormbParser := parser.NewDefaultParser()
+	if metadata, err = ormbParser.Parse(dat); err != nil {
+		return false, err
+	}
+
+	format := model.Format(metadata.Format)
+	return format == model.FormatMLflow, nil
+}
+
+func relayoutForMLflowModel(modelDir string) error {
+	// Relayout for pre-packaged MLflow server to serve
+	// i.e. move /mnt/models/model/* to /mnt/models/* (dstDir).
+	// so that, the pre-packaged MLflow server will serving, the refenence as
+	// https://github.com/SeldonIO/seldon-core/blob/v1.1.0/operator/controllers/model_initializer_injector.go#L214
+	originalDir, err := filepath.Abs(filepath.Join(modelDir, consts.ORMBModelDirectory))
+	if err != nil {
+		return err
+	}
+
+	files, err := ioutil.ReadDir(originalDir)
+	if err != nil {
+		return err
+	}
+
+	for _, file := range files {
+		if err := os.Rename(path.Join(originalDir, file.Name()), path.Join(modelDir, file.Name())); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func relayoutModel(modelDir string) error {
