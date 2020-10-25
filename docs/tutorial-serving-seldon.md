@@ -58,7 +58,7 @@ Then we can get the model in the Harbor UI.
 
 ### Helm Chart
 
-We need to deploy Seldon Core on Kubernetes. 
+We need to deploy Seldon Core on Kubernetes.
 
 If you are using Helm Chart to deploy Seldon Core, there are some changes need to be done in [helm-charts/seldon-core-operator/values.yaml#L80](https://github.com/SeldonIO/seldon-core/blob/00c691d0f947f5fe21fb408dd613a669d87062fc/helm-charts/seldon-core-operator/values.yaml#L80) and [helm-charts/seldon-core-operator/values.yaml#L137](https://github.com/SeldonIO/seldon-core/blob/00c691d0f947f5fe21fb408dd613a669d87062fc/helm-charts/seldon-core-operator/values.yaml#L137)
 
@@ -77,8 +77,8 @@ storageInitializer:
   s3:
 -    s3AccessKeyIDName: awsAccessKeyID
 -    s3SecretAccessKeyName: awsSecretAccessKey
-+    s3AccessKeyIDName: ormbUsername
-+    s3SecretAccessKeyName: ormbPassword
++    s3AccessKeyIDName: ORMB_USERNAME
++    s3SecretAccessKeyName: ORMB_PASSWORD
 ```
 
 ### Local Development
@@ -94,8 +94,8 @@ If you are using the guide in [Seldon Core Development Documentation](https://do
        "s3" : {
 -           "s3AccessKeyIDName": "awsAccessKeyID",
 -           "s3SecretAccessKeyName": "awsSecretAccessKey"
-+           "s3AccessKeyIDName": "ormbUsername",
-+           "s3SecretAccessKeyName": "ormbPassword"
++           "s3AccessKeyIDName": "ORMB_USERNAME",
++           "s3SecretAccessKeyName": "ORMB_PASSWORD"
        }
     }
 ...
@@ -146,9 +146,9 @@ metadata:
 type: Opaque
 data:
   # base64 formatted username `ormbtest`
-  ormbUsername: b3JtYnRlc3Q=
+  ORMB_USERNAME: b3JtYnRlc3Q=
   # base64 formatted password `ORMBtest12345`
-  ormbPassword: T1JNQnRlc3QxMjM0NQ==
+  ORMB_PASSWORD: T1JNQnRlc3QxMjM0NQ==
 ---
 apiVersion: v1
 kind: ServiceAccount
