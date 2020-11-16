@@ -18,6 +18,16 @@ func preRunE(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
+	switch cmd.Name() {
+	case "export", "pull", "push", "remove":
+		args[0] = convertRef(args[0])
+	case "save":
+		args[1] = convertRef(args[1])
+	case "tag":
+		args[0] = convertRef(args[0])
+		args[1] = convertRef(args[1])
+	}
+
 	logrus.WithFields(logrus.Fields{
 		"root-path": rootPath,
 	}).Debugln("Create the ormb client with the given root path")
