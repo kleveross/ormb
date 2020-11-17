@@ -1,6 +1,7 @@
 package ormb
 
 import (
+	"os"
 	"path/filepath"
 
 	"github.com/kleveross/ormb/pkg/exporter"
@@ -76,6 +77,11 @@ func (o ORMB) Tag(refStr, targetStr string) error {
 
 func (o ORMB) Export(refStr, dst string) error {
 	path, err := filepath.Abs(dst)
+	if err != nil {
+		return err
+	}
+
+	err = os.MkdirAll(path, os.ModePerm)
 	if err != nil {
 		return err
 	}
