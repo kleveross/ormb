@@ -1,6 +1,8 @@
 package ormb
 
 import (
+	"path/filepath"
+
 	"github.com/golang/mock/gomock"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -63,7 +65,11 @@ var _ = Describe("ormb golang library", func() {
 	})
 
 	It("Should save the model successfully", func() {
-		src := "/test"
+		src := "test"
+		path, err := filepath.Abs(src)
+		Expect(err).To(BeNil())
+
+		src = path
 		refStr := "caicloud/resnet50:v1"
 		ch := &model.Model{
 			Path: src,
@@ -82,7 +88,11 @@ var _ = Describe("ormb golang library", func() {
 	})
 
 	It("Should export the model successfully", func() {
-		dst := "/test"
+		dst := "test"
+		path, err := filepath.Abs(dst)
+		Expect(err).To(BeNil())
+
+		dst = path
 		refStr := "caicloud/resnet50:v1"
 		ch := &model.Model{
 			Path: dst,
