@@ -27,9 +27,9 @@ jobs:
           cd src/github.com/kleveross/ormb
           pwd
           go env
-          echo "::set-env name=GOPATH::$(go env GOPATH):$GITHUB_WORKSPACE"
-          echo "::set-env name=RELEASE_VERSION::$(git describe --tags)"
-          echo "::add-path::$(go env GOPATH)/bin"
+          echo "GOPATH=$(go env GOPATH):$GITHUB_WORKSPACE" >> $GITHUB_ENV
+          echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
       - name: before_install
         run: |
           # get coveralls.io support
