@@ -45,7 +45,7 @@ type Hyperparameter struct {
 type Signature struct {
 	Inputs  []Tensor `json:"inputs,omitempty" yaml:"inputs,omitempty"`
 	Outputs []Tensor `json:"outputs,omitempty" yaml:"outputs,omitempty"`
-	Layers  []Layer  `json:"layers,omitempty" yaml:"layers,omitempty"`
+	Layers  map[string]int  `json:"layers,omitempty" yaml:"layers,omitempty"`
 }
 
 type Tensor struct {
@@ -53,13 +53,9 @@ type Tensor struct {
 	Size  []int  `json:"size,omitempty" yaml:"size,omitempty"`
 	DType string `json:"dtype,omitempty" yaml:"dtype,omitempty"`
 	// OpType is special for PMML
-	OpType string `json:"optype,omitempty" yaml:"optype,omitempty"`
+	OpType string `json:"opType,omitempty" yaml:"opType,omitempty"`
 	// Values is special for PMML
 	Values []string `json:"values,omitempty" yaml:"values,omitempty"`
-}
-
-type Layer struct {
-	Name string `json:"name,omitempty" yaml:"name,omitempty"`
 }
 
 type Training struct {
