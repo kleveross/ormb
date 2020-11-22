@@ -23,7 +23,7 @@ type Metadata struct {
 	GPUType            string           `json:"gpuType,omitempty" yaml:"gpuType,omitempty"`
 	Framework          string           `json:"framework,omitempty" yaml:"framework,omitempty"`
 	Metrics            []Metric         `json:"metrics,omitempty" yaml:"metrics,omitempty"`
-	Hyperparameters    []Hyperparameter `json:"hyperparameters,omitempty" yaml:"hyperparameters,omitempty"`
+	HyperParameters    []HyperParameter `json:"hyperParameters,omitempty" yaml:"hyperParameters,omitempty"`
 	Signature          *Signature       `json:"signature,omitempty" yaml:"signature,omitempty"`
 	Training           *Training        `json:"training,omitempty" yaml:"training,omitempty"`
 	Dataset            *Dataset         `json:"dataset,omitempty" yaml:"dataset,omitempty"`
@@ -37,7 +37,7 @@ type Metric struct {
 }
 
 // Hyperparameter is the type for training hyperparameter (e.g. learning rate).
-type Hyperparameter struct {
+type HyperParameter struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
 }
@@ -51,7 +51,7 @@ type Signature struct {
 type Tensor struct {
 	Name  string `json:"name,omitempty" yaml:"name,omitempty"`
 	Size  []int  `json:"size,omitempty" yaml:"size,omitempty"`
-	DType string `json:"dtype,omitempty" yaml:"dtype,omitempty"`
+	DType string `json:"dType,omitempty" yaml:"dType,omitempty"`
 	// OpType is special for PMML
 	OpType string `json:"opType,omitempty" yaml:"opType,omitempty"`
 	// Values is special for PMML
