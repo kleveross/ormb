@@ -33,7 +33,7 @@ Tensors are multi-dimensional arrays with a uniform type.
 
     Description of the tensor.
 
-- **dtype** string, OPTIONAL
+- **dType** string, OPTIONAL
 
     DType of the tensor.
 
@@ -41,7 +41,7 @@ Tensors are multi-dimensional arrays with a uniform type.
 
     Size of the tensor.
 
-- **optype** string, OPTIONAL
+- **opType** string, OPTIONAL
 
     OpType of the tensor,  It is only used for PMML.
 
@@ -113,9 +113,9 @@ Note: Any OPTIONAL field MAY also be set to null, which is equivalent to being a
         
         Value of the metric
 
-- **hyperparameters** object, OPTIONAL
+- **hyperParameters** object, OPTIONAL
 
-    Hyperparameters of the model
+    HyperParameters of the model
 
     - **name** string, REQUIRED
 
@@ -179,7 +179,7 @@ Here is an example model configuration JSON document:
            "value": "0.9"
        }
    ],
-   "hyperparameters": [
+   "hyperParameters": [
        {
            "name": "batch_size",
            "value": "32"
@@ -194,7 +194,7 @@ Here is an example model configuration JSON document:
                    224,
                    3
                ],
-               "dtype": "float64",
+               "dType": "float64",
            }
        ],
        "outputs": [
@@ -204,14 +204,12 @@ Here is an example model configuration JSON document:
                    1,
                    1000
                ],
-               "dtype": "float64",
+               "dType": "float64",
            }
        ],
-       "layers": [
-           {
-               "name": "conv"
-           }
-       ]
+       "layers": {
+               "conv" : 1
+       }
    },
    "training": {
        "git": {

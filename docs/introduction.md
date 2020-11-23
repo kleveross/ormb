@@ -289,7 +289,7 @@ When it comes to the specific supporting for model, we define our own [config](h
            "value": "0.928"
        }
    ],
-   "hyperparameters": [
+   "hyperParameters": [
        {
            "name": "batch_size",
            "value": "32"
@@ -304,7 +304,7 @@ When it comes to the specific supporting for model, we define our own [config](h
                    224,
                    3
                ],
-               "dtype": "float64",
+               "dType": "float64",
            }
        ],
        "outputs": [
@@ -314,14 +314,12 @@ When it comes to the specific supporting for model, we define our own [config](h
                    1,
                    1001
                ],
-               "dtype": "float64",
+               "dType": "float64",
            }
        ],
-       "layers": [
-           {
-               "name": "conv"
-           }
-       ]
+       "layers": {
+               "conv": 1
+        }
    },
    "training": {
        "git": {
