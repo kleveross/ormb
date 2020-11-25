@@ -44,9 +44,9 @@ var _ = Describe("Format", func() {
 		Expect(err).To(BeNil())
 	})
 
-	It("Should validate MXNETParams format successfully", func() {
-		savedmodelFormat := model.FormatMXNETParams
-		err := savedmodelFormat.ValidateDirectory("../../examples/MXNETParams-model")
+	It("Should validate MXNetParams format successfully", func() {
+		savedmodelFormat := model.FormatMXNetParams
+		err := savedmodelFormat.ValidateDirectory("../../examples/MXNetParams-model")
 		Expect(err).To(BeNil())
 	})
 

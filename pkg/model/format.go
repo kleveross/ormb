@@ -19,7 +19,7 @@ const (
 	FormatPMML        Format = "PMML"
 	FormatCaffeModel  Format = "CaffeModel"
 	FormatNetDef      Format = "NetDef"
-	FormatMXNETParams Format = "MXNETParams"
+	FormatMXNetParams Format = "MXNetParams"
 	FormatTorchScript Format = "TorchScript"
 	FormatGraphDef    Format = "GraphDef"
 	FormatTensorRT    Format = "TensorRT"
@@ -53,8 +53,8 @@ func (f Format) ValidateDirectory(rootPath string) error {
 		err = f.validateForCaffeModel(modelFilePath, fileList)
 	case FormatNetDef:
 		err = f.validateForNetDef(modelFilePath, fileList)
-	case FormatMXNETParams:
-		err = f.validateForMXNETParams(modelFilePath, fileList)
+	case FormatMXNetParams:
+		err = f.validateForMXNetParams(modelFilePath, fileList)
 	case FormatTorchScript:
 		err = f.validateForTorchScript(modelFilePath, fileList)
 	case FormatGraphDef:
@@ -182,7 +182,7 @@ func (f Format) validateForNetDef(modelPath string, files []os.FileInfo) error {
 	return nil
 }
 
-func (f Format) validateForMXNETParams(modelPath string, files []os.FileInfo) error {
+func (f Format) validateForMXNetParams(modelPath string, files []os.FileInfo) error {
 	var jsonFileNum int32
 	var paramsFileNum int32
 	for _, file := range files {
