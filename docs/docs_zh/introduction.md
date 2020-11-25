@@ -308,7 +308,7 @@ spec:
                    1,
                    1001
                ],
-               "dtype": "float64",
+               "dType": "float64",
            }
        ],
        "layers": {

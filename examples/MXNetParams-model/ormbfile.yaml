@@ -8,5 +8,5 @@ signature:
     - 3
     - 224
     - 224
-    dtype: float32
+    dType: float32
 

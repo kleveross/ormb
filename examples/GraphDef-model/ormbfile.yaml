@@ -4,7 +4,7 @@ framework: TensorFlow
 signature:
   inputs:
     - name: input_1
-      dtype: float32
+      dType: float32
       size:
       - -1
       - 224
@@ -12,7 +12,7 @@ signature:
       - 3
   outputs:
     - name: Logits/Softmax
-      dtype: float32
+      dType: float32
       size:
         - -1
         - 1000
