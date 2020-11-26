@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"strings"
 )
 
 // Format is the definition of model format.
@@ -178,7 +179,7 @@ func (f Format) validateForMXNETParams(modelPath string, files []os.FileInfo) er
 	var jsonFileFlag bool
 	var paramsFileFlag bool
 	for _, file := range files {
-		if path.Ext(file.Name()) == "symbol.json" {
+		if strings.HasSuffix(file.Name(), "symbol.json") {
 			jsonFileFlag = true
 		}
 		if path.Ext(file.Name()) == ".params" {
