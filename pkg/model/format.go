@@ -210,13 +210,13 @@ func (f Format) validateForTorchScript(modelPath string, files []os.FileInfo) er
 func (f Format) validateForGraphDef(modelPath string, files []os.FileInfo) error {
 	var pbFileFlag bool
 	for _, file := range files {
-		if path.Ext(file.Name()) == ".pb" {
+		if path.Ext(file.Name()) == ".graphdef" {
 			pbFileFlag = true
 			break
 		}
 	}
 	if !pbFileFlag {
-		return fmt.Errorf("there are no *.pb file in %v directory", modelPath)
+		return fmt.Errorf("there are no *.graphdef file in %v directory", modelPath)
 	}
 	return nil
 }
