@@ -81,7 +81,7 @@ func (f Format) validateForSavedModel(modelPath string, files []os.FileInfo) err
 	var pbFileFlag bool
 	var variablesDirFlag bool
 	for _, file := range files {
-		if path.Ext(file.Name()) == ".pb" {
+		if file.Name() == "saved_model.pb" {
 			pbFileFlag = true
 		}
 		if file.IsDir() && file.Name() == "variables" {
@@ -89,7 +89,7 @@ func (f Format) validateForSavedModel(modelPath string, files []os.FileInfo) err
 		}
 	}
 	if !pbFileFlag {
-		return fmt.Errorf("there are no *.pb file in %v directory", modelPath)
+		return fmt.Errorf("there are no saved_model.pb file in %v directory", modelPath)
 	}
 	if !variablesDirFlag {
 		return fmt.Errorf("there are no variables dir in %v directory", modelPath)
@@ -178,7 +178,7 @@ func (f Format) validateForMXNETParams(modelPath string, files []os.FileInfo) er
 	var jsonFileFlag bool
 	var paramsFileFlag bool
 	for _, file := range files {
-		if path.Ext(file.Name()) == ".json" {
+		if path.Ext(file.Name()) == "symbol.json" {
 			jsonFileFlag = true
 		}
 		if path.Ext(file.Name()) == ".params" {
@@ -186,7 +186,7 @@ func (f Format) validateForMXNETParams(modelPath string, files []os.FileInfo) er
 		}
 	}
 	if !jsonFileFlag {
-		return fmt.Errorf("there are no *.json file in %v directory", modelPath)
+		return fmt.Errorf("there are no *symbol.json file in %v directory", modelPath)
 	}
 	if !paramsFileFlag {
 		return fmt.Errorf("there are no *.params file in %v directory", modelPath)
@@ -224,12 +224,12 @@ func (f Format) validateForGraphDef(modelPath string, files []os.FileInfo) error
 func (f Format) validateForTensorRT(modelPath string, files []os.FileInfo) error {
 	var tensorrtFileFlag bool
 	for _, file := range files {
-		if path.Ext(file.Name()) == ".plan" {
+		if path.Ext(file.Name()) == ".plan" || path.Ext(file.Name()) == ".engine" {
 			tensorrtFileFlag = true
 		}
 	}
 	if !tensorrtFileFlag {
-		return fmt.Errorf("there are no *.plan file in %v directory", modelPath)
+		return fmt.Errorf("there are no *.plan or *.engine file in %v directory", modelPath)
 	}
 	return nil
 }
