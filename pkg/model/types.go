@@ -23,7 +23,7 @@ type Metadata struct {
 	GPUType            string           `json:"gpuType,omitempty" yaml:"gpuType,omitempty"`
 	Framework          string           `json:"framework,omitempty" yaml:"framework,omitempty"`
 	Metrics            []Metric         `json:"metrics,omitempty" yaml:"metrics,omitempty"`
-	Hyperparameters    []Hyperparameter `json:"hyperparameters,omitempty" yaml:"hyperparameters,omitempty"`
+	HyperParameters    []HyperParameter `json:"hyperParameters,omitempty" yaml:"hyperParameters,omitempty"`
 	Signature          *Signature       `json:"signature,omitempty" yaml:"signature,omitempty"`
 	Training           *Training        `json:"training,omitempty" yaml:"training,omitempty"`
 	Dataset            *Dataset         `json:"dataset,omitempty" yaml:"dataset,omitempty"`
@@ -37,7 +37,7 @@ type Metric struct {
 }
 
 // Hyperparameter is the type for training hyperparameter (e.g. learning rate).
-type Hyperparameter struct {
+type HyperParameter struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
 }
@@ -45,21 +45,17 @@ type Hyperparameter struct {
 type Signature struct {
 	Inputs  []Tensor `json:"inputs,omitempty" yaml:"inputs,omitempty"`
 	Outputs []Tensor `json:"outputs,omitempty" yaml:"outputs,omitempty"`
-	Layers  []Layer  `json:"layers,omitempty" yaml:"layers,omitempty"`
+	Layers  map[string]int  `json:"layers,omitempty" yaml:"layers,omitempty"`
 }
 
 type Tensor struct {
 	Name  string `json:"name,omitempty" yaml:"name,omitempty"`
 	Size  []int  `json:"size,omitempty" yaml:"size,omitempty"`
-	DType string `json:"dtype,omitempty" yaml:"dtype,omitempty"`
+	DType string `json:"dType,omitempty" yaml:"dType,omitempty"`
 	// OpType is special for PMML
-	OpType string `json:"optype,omitempty" yaml:"optype,omitempty"`
+	OpType string `json:"opType,omitempty" yaml:"opType,omitempty"`
 	// Values is special for PMML
 	Values []string `json:"values,omitempty" yaml:"values,omitempty"`
-}
-
-type Layer struct {
-	Name string `json:"name,omitempty" yaml:"name,omitempty"`
 }
 
 type Training struct {

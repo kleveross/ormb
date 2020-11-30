@@ -8,10 +8,10 @@ signature:
     - 3
     - 224
     - 224
-    dtype: float32
+    dType: float32
   outputs:
   - name: input__9
     size:
     - 1
     - 1000
-    dtype: float32
+    dType: float32
