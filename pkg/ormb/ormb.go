@@ -14,8 +14,8 @@ import (
 // models with a remote registry.
 type Interface interface {
 	Login(hostname, username, password string, insecureOpt bool) error
-	Push(refStr string) error
-	Pull(refStr string) error
+	Push(refStr string, plainHTTP bool) error
+	Pull(refStr string, plainHTTP bool) error
 	Export(refStr, dst string) error
 	Save(src, refStr string) error
 	Tag(refStr, targetStr string) error
@@ -45,7 +45,9 @@ func (o ORMB) Login(hostname, username, password string, insecureOpt bool) error
 	return o.client.Login(hostname, username, password, insecureOpt)
 }
 
-func (o ORMB) Push(refStr string) error {
+func (o ORMB) Push(refStr string, plainHTTP bool) error {
+	o.client.AddOption(oras.ClientOptPlainHTTP(plainHTTP))
+
 	ref, err := oci.ParseReference(refStr)
 	if err != nil {
 		return err
@@ -53,7 +55,9 @@ func (o ORMB) Push(refStr string) error {
 	return o.client.PushModel(ref)
 }
 
-func (o ORMB) Pull(refStr string) error {
+func (o ORMB) Pull(refStr string, plainHTTP bool) error {
+	o.client.AddOption(oras.ClientOptPlainHTTP(plainHTTP))
+
 	ref, err := oci.ParseReference(refStr)
 	if err != nil {
 		return err

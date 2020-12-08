@@ -90,6 +90,13 @@ func NewClient(opts ...ClientOption) (Interface, error) {
 	return client, nil
 }
 
+// AddOption add opt to Client.
+func (c *Client) AddOption(opts ...ClientOption) {
+	for _, opt := range opts {
+		opt(c)
+	}
+}
+
 // Login logs into a registry
 func (c *Client) Login(hostname string, username string, password string, insecure bool) error {
 	if insecure {
