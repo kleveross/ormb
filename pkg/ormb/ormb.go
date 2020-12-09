@@ -41,12 +41,16 @@ func New(opts ...oras.ClientOption) (Interface, error) {
 	}, nil
 }
 
+func (o ORMB) SetPlainHTTP(plainHTTP bool) {
+	o.client.SetPlainHTTP(plainHTTP)
+}
+
 func (o ORMB) Login(hostname, username, password string, insecureOpt bool) error {
 	return o.client.Login(hostname, username, password, insecureOpt)
 }
 
 func (o ORMB) Push(refStr string, plainHTTP bool) error {
-	o.client.AddOption(oras.ClientOptPlainHTTP(plainHTTP))
+	o.client.SetPlainHTTP(plainHTTP)
 
 	ref, err := oci.ParseReference(refStr)
 	if err != nil {
@@ -56,7 +60,7 @@ func (o ORMB) Push(refStr string, plainHTTP bool) error {
 }
 
 func (o ORMB) Pull(refStr string, plainHTTP bool) error {
-	o.client.AddOption(oras.ClientOptPlainHTTP(plainHTTP))
+	o.client.SetPlainHTTP(plainHTTP)
 
 	ref, err := oci.ParseReference(refStr)
 	if err != nil {
