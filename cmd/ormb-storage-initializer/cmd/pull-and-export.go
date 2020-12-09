@@ -76,7 +76,7 @@ var pullExportCmd = &cobra.Command{
 		}
 
 		// Pull the model from the remote registry.
-		if err := ormbClient.Pull(modelURI); err != nil {
+		if err := ormbClient.Pull(modelURI, false); err != nil {
 			return err
 		}
 		// Export it to the specified directory.

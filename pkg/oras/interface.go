@@ -7,6 +7,8 @@ import (
 
 // Interface is the interface of the client.
 type Interface interface {
+	AddOption(opts ...ClientOption)
+
 	Login(hostname string, username string, password string, insecure bool) error
 	Logout(hostname string) error
 	SaveModel(ch *model.Model, ref *oci.Reference) error
