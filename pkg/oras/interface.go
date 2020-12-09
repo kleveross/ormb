@@ -7,7 +7,7 @@ import (
 
 // Interface is the interface of the client.
 type Interface interface {
-	AddOption(opts ...ClientOption)
+	SetPlainHTTP(plainHTTP bool)
 
 	Login(hostname string, username string, password string, insecure bool) error
 	Logout(hostname string) error

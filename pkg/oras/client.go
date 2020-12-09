@@ -90,11 +90,9 @@ func NewClient(opts ...ClientOption) (Interface, error) {
 	return client, nil
 }
 
-// AddOption add opt to Client.
-func (c *Client) AddOption(opts ...ClientOption) {
-	for _, opt := range opts {
-		opt(c)
-	}
+// SetPlainHTTP set plainHTTP opt.
+func (c *Client) SetPlainHTTP(plainHTTP bool) {
+	c.plainHTTP = plainHTTP
 }
 
 // Login logs into a registry
