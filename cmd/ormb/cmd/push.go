@@ -29,7 +29,7 @@ Must first run "ormb save" or "ormb pull".`,
 	PreRunE: preRunE,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// TODO(gaocegege): Validate.
-		return ormbClient.Push(args[0], plainHTTPOpt)
+		return ormbClient.Push(args[0])
 	},
 }
 
