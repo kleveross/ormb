@@ -16,17 +16,3 @@ signature:
       size:
         - -1
         - 1000
-  layers:
-    - name: Placeholder
-    - name: Const
-    - name: Pad
-    - name: Identity
-    - name: Conv2D
-    - name: FusedBatchNorm
-    - name: Relu6
-    - name: DepthwiseConv2dNative
-    - name: Add
-    - name: Mean
-    - name: MatMul
-    - name: BiasAdd
-    - name: Softmax
