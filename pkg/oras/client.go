@@ -90,11 +90,6 @@ func NewClient(opts ...ClientOption) (Interface, error) {
 	return client, nil
 }
 
-// SetPlainHTTP set plainHTTP opt.
-func (c *Client) SetPlainHTTP(plainHTTP bool) {
-	c.plainHTTP = plainHTTP
-}
-
 // Login logs into a registry
 func (c *Client) Login(hostname string, username string, password string, insecure bool) error {
 	if insecure {

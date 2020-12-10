@@ -30,7 +30,7 @@ This will store the model in the local registry cache to be used later.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// TODO(gaocegege): Validate.
 
-		return ormbClient.Pull(args[0], plainHTTPOpt)
+		return ormbClient.Pull(args[0])
 	},
 }
 

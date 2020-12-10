@@ -34,18 +34,6 @@ func (m *MockInterface) EXPECT() *MockInterfaceMockRecorder {
 	return m.recorder
 }
 
-// SetPlainHTTP mocks base method
-func (m *MockInterface) SetPlainHTTP(plainHTTP bool) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetPlainHTTP", plainHTTP)
-}
-
-// SetPlainHTTP indicates an expected call of SetPlainHTTP
-func (mr *MockInterfaceMockRecorder) SetPlainHTTP(plainHTTP interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetPlainHTTP", reflect.TypeOf((*MockInterface)(nil).SetPlainHTTP), plainHTTP)
-}
-
 // Login mocks base method
 func (m *MockInterface) Login(hostname, username, password string, insecure bool) error {
 	m.ctrl.T.Helper()

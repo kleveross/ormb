@@ -50,10 +50,7 @@ var _ = Describe("ormb golang library", func() {
 		ociORMB.client.(*orasmock.MockInterface).EXPECT().PushModel(
 			gomock.Eq(ref),
 		).Return(nil).Times(1)
-		ociORMB.client.(*orasmock.MockInterface).EXPECT().SetPlainHTTP(
-			true,
-		).Times(1)
-		Expect(ociORMB.Push(refStr, true)).To(BeNil())
+		Expect(ociORMB.Push(refStr)).To(BeNil())
 	})
 
 	It("Should pull the model successfully", func() {
@@ -64,10 +61,7 @@ var _ = Describe("ormb golang library", func() {
 		ociORMB.client.(*orasmock.MockInterface).EXPECT().PullModel(
 			gomock.Eq(ref),
 		).Return(nil).Times(1)
-		ociORMB.client.(*orasmock.MockInterface).EXPECT().SetPlainHTTP(
-			true,
-		).Times(1)
-		Expect(ociORMB.Pull(refStr, true)).To(BeNil())
+		Expect(ociORMB.Pull(refStr)).To(BeNil())
 	})
 
 	It("Should save the model successfully", func() {
