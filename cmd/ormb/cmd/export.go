@@ -32,6 +32,9 @@ the model, in a format that developers can modify
 and check into source control if desired.`,
 	PreRunE: preRunE,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		if len(args) > 1 {
+			destination = args[1]
+		}
 		return ormbClient.Export(args[0], destination)
 	},
 }
