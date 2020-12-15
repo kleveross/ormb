@@ -67,6 +67,8 @@ func (f Format) ValidateDirectory(rootPath string) error {
 		err = f.validateForXGBoost(modelFilePath, fileList)
 	case FormatMLflow:
 		err = f.validateForMLflow(modelFilePath, fileList)
+	case FormatOthers:
+		return nil
 	default:
 		err = errors.New("unrecognized model format, please check the ormbfile.yaml")
 	}
