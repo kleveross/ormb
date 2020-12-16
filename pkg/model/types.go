@@ -31,7 +31,7 @@ type Metadata struct {
 }
 
 // MetricList is the type for list of metric
-type MetricList = []Metric
+type MetricList []Metric
 
 // Metric is the type for training metric (e.g. acc).
 type Metric struct {
