@@ -283,12 +283,14 @@ When it comes to the specific supporting for model, we define our own [config](h
    "framework": "TensorFlow",
    "format": "SavedModel",
    "size": 9223372036854775807,
-   "metrics": [
-       {
-           "name": "acc",
-           "value": "0.928"
-       }
-   ],
+   "metrics": { 
+      "training": [
+           {
+               "name": "acc",
+               "value": "0.928"
+           }
+      ],
+   }
    "hyperParameters": [
        {
            "name": "batch_size",

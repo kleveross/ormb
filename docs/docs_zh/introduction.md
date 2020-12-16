@@ -277,12 +277,14 @@ spec:
    "framework": "TensorFlow",
    "format": "SavedModel",
    "size": 9223372036854775807,
-   "metrics": [
-       {
-           "name": "acc",
-           "value": "0.928"
-       }
-   ],
+   "metrics": { 
+      "training": [
+           {
+               "name": "acc",
+               "value": "0.928"
+           }
+      ],
+   }
    "hyperParameters": [
        {
            "name": "batch_size",

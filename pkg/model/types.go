@@ -20,15 +20,18 @@ type Metadata struct {
 	// GPUType is for TensorRT format only, it must be set when extract signature or serve
 	// as a online service, otherwise， it can not extract or serve as a service.
 	// for other model format, you can set empty string or not set.
-	GPUType            string           `json:"gpuType,omitempty" yaml:"gpuType,omitempty"`
-	Framework          string           `json:"framework,omitempty" yaml:"framework,omitempty"`
-	Metrics            []Metric         `json:"metrics,omitempty" yaml:"metrics,omitempty"`
-	HyperParameters    []HyperParameter `json:"hyperParameters,omitempty" yaml:"hyperParameters,omitempty"`
-	Signature          *Signature       `json:"signature,omitempty" yaml:"signature,omitempty"`
-	Training           *Training        `json:"training,omitempty" yaml:"training,omitempty"`
-	Dataset            *Dataset         `json:"dataset,omitempty" yaml:"dataset,omitempty"`
-	DirectoryStructure []string         `json:"directoryStructure,omitempty" yaml:"directoryStructure,omitempty"`
+	GPUType            string                `json:"gpuType,omitempty" yaml:"gpuType,omitempty"`
+	Framework          string                `json:"framework,omitempty" yaml:"framework,omitempty"`
+	Metrics            map[string]MetricList `json:"metrics,omitempty" yaml:"metrics,omitempty"`
+	HyperParameters    []HyperParameter      `json:"hyperParameters,omitempty" yaml:"hyperParameters,omitempty"`
+	Signature          *Signature            `json:"signature,omitempty" yaml:"signature,omitempty"`
+	Training           *Training             `json:"training,omitempty" yaml:"training,omitempty"`
+	Dataset            *Dataset              `json:"dataset,omitempty" yaml:"dataset,omitempty"`
+	DirectoryStructure []string              `json:"directoryStructure,omitempty" yaml:"directoryStructure,omitempty"`
 }
+
+// MetricList is the type for list of metric
+type MetricList = []Metric
 
 // Metric is the type for training metric (e.g. acc).
 type Metric struct {
@@ -43,9 +46,9 @@ type HyperParameter struct {
 }
 
 type Signature struct {
-	Inputs  []Tensor `json:"inputs,omitempty" yaml:"inputs,omitempty"`
-	Outputs []Tensor `json:"outputs,omitempty" yaml:"outputs,omitempty"`
-	Layers  map[string]int  `json:"layers,omitempty" yaml:"layers,omitempty"`
+	Inputs  []Tensor       `json:"inputs,omitempty" yaml:"inputs,omitempty"`
+	Outputs []Tensor       `json:"outputs,omitempty" yaml:"outputs,omitempty"`
+	Layers  map[string]int `json:"layers,omitempty" yaml:"layers,omitempty"`
 }
 
 type Tensor struct {
