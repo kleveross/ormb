@@ -157,7 +157,7 @@ func relayoutForMLflowModel(modelDir string) error {
 
 func relayoutModel(modelDir string) error {
 	// Rename the `model` directory as `1`.
-	// e.g. move /mnt/models/model to /mnt/models/1 (dstDir).
+	// e.g. move /mnt/{servingName}/model to /mnt/{servingName}/1 (dstDir).
 	// so that, the trtserver will serving, the refenence as
 	// https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/model_repository.html#section-onnx-models.
 	originalDir, err := filepath.Abs(
