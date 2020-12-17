@@ -165,6 +165,9 @@ container-skipbuild:
 	    -f $(BUILD_DIR)/$${target}/Dockerfile .;                                       \
 	done
 
+changelog:
+	github_changelog_generator -u kleveross --project ormb
+
 .PHONY: clean
 clean:
 	@-rm -vrf ${OUTPUT_DIR}
