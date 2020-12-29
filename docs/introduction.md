@@ -1,6 +1,6 @@
 # Introducing `ORMB`
 
-The container virtualization technology like Docker has become the mainstay of cloud computing industry. Software engineers from around the world have  flocked to support it. Based on the `Open Container Initiative` technology, the ecology of containers is evolving rapidly. There are also a lot of fast-growing projects such as `Docker Compose` and `Kata Containers`, in which `Kubernetes` has become the standard in the field of cluster scheduling.
+The container virtualization technology like Docker has become the mainstay of cloud computing industry. Software engineers from around the world have flocked to support it. Based on the `Open Container Initiative` technology, the ecology of containers is evolving rapidly. There are also a lot of fast-growing projects such as `Docker Compose` and `Kata Containers`, in which `Kubernetes` has become the standard in the field of cluster scheduling.
 
 When we look back, the reason why container virtualization technology represented by Docker can take a place in the world is because of its image distribution capability. The traditional application deployment is denounced by its complexity of deploying in different environments, which is solved by the image distribution. Docker brings the capability of `Build Once, Deploy Anywhere` to the traditional application scenario. Languages like Java, NodeJS, Rust, etc as well as various dependency libraries, can be built locally once into the OCI compliant container images, which can then be stored and distributed using image registry.
 
@@ -58,30 +58,30 @@ And so born the `ORMB`.`ORMB`(oh, RMB) is named from the OCI-based Registry for 
 
 In this section, we'll use image recognition as an example to show how `ORMB` can be used to distribute machine learning models.
 
-We will train a simple CNN image recognition model locally using  [Fashion MNIST](https://github.com/zalandoresearch/fashion-mnist) and push it to a remote image registry using `ORMB`. Later, we'll also use `ORMB` to pull the model from the registry in our remote server, and use the third-party model server to provide external serving. Then we can call the service with a RESTful interface and see the results.
+We will train a simple CNN image recognition model locally using [Fashion MNIST](https://github.com/zalandoresearch/fashion-mnist) and push it to a remote image registry using `ORMB`. Later, we'll also use `ORMB` to pull the model from the registry in our remote server, and use the third-party model server to provide external serving. Then we can call the service with a RESTful interface and see the results.
 
 The code of model training is shown below, but the specific training process will not be repeated in this article. Finally, the trained model is saved in SavedModel format. You can see the model in the [examples of ormb](https://github.com/caicloud/ormb/tree/master/examples/SavedModel-fashion).
 
 ```python
 # Modeling, set optimizer, and train
 model = keras.Sequential([
-  keras.layers.Conv2D(input_shape=(28,28,1), 
-                      filters=8, 
-                      kernel_size=3, 
-                      strides=2, 
-                      activation='relu', 
+  keras.layers.Conv2D(input_shape=(28,28,1),
+                      filters=8,
+                      kernel_size=3,
+                      strides=2,
+                      activation='relu',
                       name='Conv1'),
   keras.layers.Flatten(),
-  keras.layers.Dense(10, 
-                     activation=tf.nn.softmax, 
+  keras.layers.Dense(10,
+                     activation=tf.nn.softmax,
                      name='Softmax')
 ])
-model.compile(optimizer='adam', 
+model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 model.fit(train_images, train_labels, epochs=epochs)
 
-test_loss, test_acc = model.evaluate(test_images, 
+test_loss, test_acc = model.evaluate(test_images,
                                      test_labels)
 import tempfile
 
@@ -182,21 +182,21 @@ spec:
   name: mnist
   protocol: tensorflow
   predictors:
-  - graph:
-      children: []
-      implementation: TENSORFLOW_SERVER
-      modelUri: demo.goharbor.io/tensorflow/fashion_model:v1
-      serviceAccountName: ormb
-      name: mnist-model
-      parameters:
-        - name: signature_name
-          type: STRING
-          value: predict_images
-        - name: model_name
-          type: STRING
-          value: mnist-model
-    name: default
-    replicas: 1
+    - graph:
+        children: []
+        implementation: TENSORFLOW_SERVER
+        modelUri: demo.goharbor.io/tensorflow/fashion_model:v1
+        serviceAccountName: ormb
+        name: mnist-model
+        parameters:
+          - name: signature_name
+            type: STRING
+            value: predict_images
+          - name: model_name
+            type: STRING
+            value: mnist-model
+      name: default
+      replicas: 1
 ```
 
 As the algorithm engineer iterates over the new version of the model and package it, the new image can be pulled with `ORMB` and redeployed. `ORMB` can be used with any image registry that meets the [OCI Distribution Specification](https://github.com/opencontainers/distribution-spec), which means that `ORMB` can both support image registry on the public cloud and other open source image registry projects like Harbor.
@@ -213,7 +213,7 @@ In a word, `ORMB` is designed to be `Docker` in machine learning scenarios, aimi
 
 ### What happened with `docker pull`
 
-Before we get to the design, let's take a look at what happens when we download a container image. For image registries that conform to the OCI specification, they all follow the same rule, which is the  [OCI Distribution Specification](https://github.com/opencontainers/distribution-spec/blob/master/spec.md#pulling-an-image).
+Before we get to the design, let's take a look at what happens when we download a container image. For image registries that conform to the OCI specification, they all follow the same rule, which is the [OCI Distribution Specification](https://github.com/opencontainers/distribution-spec/blob/master/spec.md#pulling-an-image).
 
 <p align="center">
 <img src="./images/intro/docker-pull.png" height="550">
@@ -225,31 +225,30 @@ The config of container image has a fixed mediaType: `application/vnd.oci.image.
 
 ```json
 {
-    "created": "2015-10-31T22:22:56.015925234Z",    "architecture": "amd64",
-    "os": "linux",
-    "config": {
-        "Entrypoint": [
-            "/bin/my-app-binary"
-        ],
+  "created": "2015-10-31T22:22:56.015925234Z",
+  "architecture": "amd64",
+  "os": "linux",
+  "config": {
+    "Entrypoint": ["/bin/my-app-binary"]
+  },
+  "rootfs": {
+    "diff_ids": [
+      "sha256:c6f988f4874bb0add23a778f753c65efe992244e148a1d2ec2a8b664fb66bbd1",
+      "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef"
+    ],
+    "type": "layers"
+  },
+  "history": [
+    {
+      "created": "2015-10-31T22:22:54.690851953Z",
+      "created_by": "/bin/sh -c #(nop) ADD file:a3bc1e842b69636f9df5256c49c5374fb4eef1e281fe3f282c65fb853ee171c5 in /"
     },
-    "rootfs": {
-      "diff_ids": [
-        "sha256:c6f988f4874bb0add23a778f753c65efe992244e148a1d2ec2a8b664fb66bbd1",
-        "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef"
-      ],
-      "type": "layers"
-    },
-    "history": [
-      {
-        "created": "2015-10-31T22:22:54.690851953Z",
-        "created_by": "/bin/sh -c #(nop) ADD file:a3bc1e842b69636f9df5256c49c5374fb4eef1e281fe3f282c65fb853ee171c5 in /"
-      },
-      {
-        "created": "2015-10-31T22:22:55.613815829Z",
-        "created_by": "/bin/sh -c #(nop) CMD [\"sh\"]",
-        "empty_layer": true
-      }
-    ]
+    {
+      "created": "2015-10-31T22:22:55.613815829Z",
+      "created_by": "/bin/sh -c #(nop) CMD [\"sh\"]",
+      "empty_layer": true
+    }
+  ]
 }
 ```
 
@@ -283,7 +282,7 @@ When it comes to the specific supporting for model, we define our own [config](h
    "framework": "TensorFlow",
    "format": "SavedModel",
    "size": 9223372036854775807,
-   "metrics": { 
+   "metrics": {
       "training": [
            {
                "name": "acc",
