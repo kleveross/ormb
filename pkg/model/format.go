@@ -89,19 +89,12 @@ func ValidateError(modelPath string, modelName string, modelNum int32) error {
 
 func (f Format) validateForSavedModel(modelPath string, files []os.FileInfo) error {
 	var pbFileNum int32
-	var variablesDirNum int32
 	for _, file := range files {
 		if file.Name() == "saved_model.pb" {
 			pbFileNum++
 		}
-		if file.IsDir() && file.Name() == "variables" {
-			variablesDirNum++
-		}
 	}
 	if e := ValidateError(modelPath, "saved_model.pb", pbFileNum); e != nil {
-		return e
-	}
-	if e := ValidateError(modelPath, "variables", variablesDirNum); e != nil {
 		return e
 	}
 	return nil
