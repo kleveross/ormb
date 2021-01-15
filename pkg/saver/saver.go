@@ -14,6 +14,7 @@ import (
 	"github.com/kleveross/ormb/pkg/consts"
 	"github.com/kleveross/ormb/pkg/model"
 	"github.com/kleveross/ormb/pkg/parser"
+	"github.com/kleveross/ormb/pkg/util"
 )
 
 // Saver is the implementation.
@@ -30,17 +31,32 @@ func New() Interface {
 
 // Save saves the model from the path to the memory.
 func (d Saver) Save(path string) (*model.Model, error) {
+	modelPath := filepath.Join(path, consts.ORMBModelDirectory)
+	ormbfilePath := filepath.Join(path, consts.ORMBfileName)
+
+	if _, err := os.Stat(ormbfilePath); os.IsNotExist(err) {
+		format, err := util.InferModelFormat(modelPath)
+		if err != nil {
+			return nil, err
+		}
+
+		if format != "" {
+			err = util.WriteORMBFile(ormbfilePath, format)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+
 	// Save model config from <path>/ormbfile.yaml.
-	dat, err := ioutil.ReadFile(filepath.Join(path, consts.ORMBfileName))
+	dat, err := ioutil.ReadFile(ormbfilePath)
 	if err != nil {
 		return nil, err
 	}
-
 	metadata := &model.Metadata{}
 	if metadata, err = d.Parser.Parse(dat); err != nil {
 		return nil, err
 	}
-
 	format := model.Format(metadata.Format)
 	if err := format.ValidateDirectory(path); err != nil {
 		return nil, err
