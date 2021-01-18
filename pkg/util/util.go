@@ -11,7 +11,7 @@ import (
 	ormbmodel "github.com/kleveross/ormb/pkg/model"
 )
 
-// InferModelFormat infer model format by file ext.
+// InferModelFormat infers model format by files' ext.
 func InferModelFormat(dir string) (ormbmodel.Format, error) {
 	fileList, err := ioutil.ReadDir(dir)
 	if err != nil {
@@ -72,7 +72,7 @@ func InferModelFormat(dir string) (ormbmodel.Format, error) {
 	return ormbmodel.FormatOthers, nil
 }
 
-// WriteORMBFile write ormbfile.yaml if file file is not exist.
+// WriteORMBFile write ormbfile.yaml if file is not exist.
 func WriteORMBFile(filePath string, format ormbmodel.Format) error {
 	metadata := &ormbmodel.Metadata{
 		Format: string(format),

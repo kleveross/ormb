@@ -34,17 +34,21 @@ func (d Saver) Save(path string) (*model.Model, error) {
 	modelPath := filepath.Join(path, consts.ORMBModelDirectory)
 	ormbfilePath := filepath.Join(path, consts.ORMBfileName)
 
-	if _, err := os.Stat(ormbfilePath); os.IsNotExist(err) {
-		format, err := util.InferModelFormat(modelPath)
-		if err != nil {
-			return nil, err
-		}
-
-		if format != "" {
-			err = util.WriteORMBFile(ormbfilePath, format)
+	if _, err := os.Stat(ormbfilePath); err != nil {
+		if os.IsNotExist(err) {
+			format, err := util.InferModelFormat(modelPath)
 			if err != nil {
 				return nil, err
 			}
+
+			if format != "" {
+				err := util.WriteORMBFile(ormbfilePath, format)
+				if err != nil {
+					return nil, err
+				}
+			}
+		} else {
+			return nil, err
 		}
 	}
 
