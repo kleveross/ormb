@@ -89,7 +89,13 @@ func initConfig() {
 		viper.AddConfigPath(ormbHome)
 
 		viper.SetConfigName("config")
-		viper.SetDefault("rootPath", ormbHome)
+		rootPath, err := filepath.Abs(viper.GetString("rootPath"))
+		if err != nil {
+			logrus.WithField("error", err).Panicln("Failed to get `rootPath` env")
+		}
+		if rootPath == "" {
+			viper.SetDefault("rootPath", ormbHome)
+		}
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
