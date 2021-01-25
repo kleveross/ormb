@@ -8,8 +8,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"path"
+	"strconv"
 
-	auth "github.com/deislabs/oras/pkg/auth/docker"
 	"github.com/deislabs/oras/pkg/oras"
 	"github.com/kleveross/ormb/pkg/consts"
 	"github.com/kleveross/ormb/pkg/model"
@@ -19,7 +19,10 @@ import (
 	bts "github.com/kleveross/ormb/pkg/util/bytes"
 	"github.com/kleveross/ormb/pkg/util/ctx"
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
+
+	auth "github.com/deislabs/oras/pkg/auth/docker"
 	"github.com/pkg/errors"
+	"github.com/xeonx/timeago"
 )
 
 const (
@@ -233,6 +236,40 @@ func (c *Client) LoadModel(ref *oci.Reference) (*model.Model, error) {
 	}
 	c.printCacheRefSummary(r)
 	return r.Model, nil
+}
+
+func (c *Client) Models() error {
+	refs, err := c.cache.ListReferences()
+	if err != nil {
+		return err
+	}
+
+	maxLen := []int{0, 0, 12, 20, 0}
+	for _, ref := range refs {
+		if len(ref.Repo) > maxLen[0] {
+			maxLen[0] = len(ref.Repo)
+		}
+		if len(ref.Tag) > maxLen[1] {
+			maxLen[1] = len(ref.Tag)
+		}
+
+		size := bts.ByteCountBinary(ref.Size)
+		if len(size) > maxLen[4] {
+			maxLen[4] = len(size)
+		}
+	}
+
+	format := "%-" + strconv.Itoa(maxLen[0]) + "s "  // repo name
+	format += "%-" + strconv.Itoa(maxLen[1]) + "s "  // tag
+	format += "%-" + strconv.Itoa(maxLen[2]) + "s "  // digest
+	format += "%-" + strconv.Itoa(maxLen[3]) + "s "  // create at
+	format += "%-" + strconv.Itoa(maxLen[4]) + "s\n" // size
+	fmt.Fprintf(c.out, format, "REPOSITORY", "TAG", "MODEL ID", "CREATED", "SIZE")
+
+	for _, ref := range refs {
+		fmt.Fprintf(c.out, format, ref.Repo, ref.Tag, ref.Digest.Hex()[0:12], timeago.English.Format(ref.CreatedAt), bts.ByteCountBinary(ref.Size))
+	}
+	return nil
 }
 
 // printCacheRefSummary prints out model ref summary
