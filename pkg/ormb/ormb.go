@@ -20,6 +20,7 @@ type Interface interface {
 	Save(src, refStr string) error
 	Tag(refStr, targetStr string) error
 	Remove(refStr string) error
+	Models() error
 }
 
 type ORMB struct {
@@ -127,4 +128,8 @@ func (o ORMB) Remove(refStr string) error {
 	}
 
 	return o.client.RemoveModel(ref)
+}
+
+func (o ORMB) Models() error {
+	return o.client.Models()
 }

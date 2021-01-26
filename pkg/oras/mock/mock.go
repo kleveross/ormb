@@ -146,3 +146,17 @@ func (mr *MockInterfaceMockRecorder) TagModel(ref, target interface{}) *gomock.C
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "TagModel", reflect.TypeOf((*MockInterface)(nil).TagModel), ref, target)
 }
+
+// Models mocks base method
+func (m *MockInterface) Models() error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Models")
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Models indicates an expected call of Models
+func (mr *MockInterfaceMockRecorder) Models() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Models", reflect.TypeOf((*MockInterface)(nil).Models))
+}

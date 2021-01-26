@@ -129,3 +129,17 @@ func (mr *MockInterfaceMockRecorder) Remove(refStr interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Remove", reflect.TypeOf((*MockInterface)(nil).Remove), refStr)
 }
+
+// Models mocks base method
+func (m *MockInterface) Models() error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Models")
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Models indicates an expected call of Models
+func (mr *MockInterfaceMockRecorder) Models() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Models", reflect.TypeOf((*MockInterface)(nil).Models))
+}

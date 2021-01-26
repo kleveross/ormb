@@ -226,6 +226,8 @@ github.com/spf13/pflag
 github.com/spf13/viper
 # github.com/subosito/gotenv v1.2.0
 github.com/subosito/gotenv
+# github.com/xeonx/timeago v1.0.0-rc4
+github.com/xeonx/timeago
 # go.opencensus.io v0.22.0
 go.opencensus.io
 go.opencensus.io/internal

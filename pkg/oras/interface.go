@@ -15,4 +15,5 @@ type Interface interface {
 	PullModel(ref *oci.Reference) error
 	LoadModel(ref *oci.Reference) (*model.Model, error)
 	TagModel(ref *oci.Reference, target *oci.Reference) error
+	Models() error
 }
