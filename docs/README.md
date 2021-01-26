@@ -27,7 +27,7 @@ Login succeeded
 
 ### ormb save
 
-`ormb save` will store the model files in the current directory into the local cache and simultaneously parses `ormbfile.yaml` to get the model metadata. The model will be converted to the following format:
+`ormb save` will store the model files in the model directory into the local cache and simultaneously parses `ormbfile.yaml` to get the model metadata. The model will be converted to the following format:
 
 ```go
 type Model struct {
@@ -62,7 +62,7 @@ type CacheRefSummary struct {
 Command format:
 
 ```bash
-ormb save projectName/modelName:modelVersion
+ormb save <model directory> projectName/modelName:modelVersion
 ```
 
 ### ormb tag
