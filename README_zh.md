@@ -38,8 +38,8 @@ examples/SavedModel-fashion
 接下来，我们可以将在本地训练好的模型推送到远端镜像仓库中：
 
 ```bash
-# 将模型保存在本地文件系统的缓存中
-$ ormb save gaocegege/fashion_model:v1
+# 将模型目录中的文件保存在本地文件系统的缓存中
+$ ormb save <model directory> gaocegege/fashion_model:v1
 ref:       gaocegege/fashion_model:v1
 digest:    6b08cd25d01f71a09c1eb852b3a696ee2806abc749628de28a71b507f9eab996
 size:      162.1 KiB

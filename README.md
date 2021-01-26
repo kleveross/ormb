@@ -38,8 +38,8 @@ examples/SavedModel-fashion
 Next, we can push the trained model from local to remote image registry.
 
 ```bash
-# Save the model in local cache first
-$ ormb save gaocegege/fashion_model:v1
+# Save the model from model directory in local cache first
+$ ormb save <model directory> gaocegege/fashion_model:v1
 ref:       gaocegege/fashion_model:v1
 digest:    6b08cd25d01f71a09c1eb852b3a696ee2806abc749628de28a71b507f9eab996
 size:      162.1 KiB

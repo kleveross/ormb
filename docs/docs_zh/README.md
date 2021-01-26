@@ -62,7 +62,7 @@ type CacheRefSummary struct {
 命令格式：
 
 ```bash
-ormb save projectName/modelName:modelVersion
+ormb save <model directory> projectName/modelName:modelVersion
 ```
 
 ### ormb tag
