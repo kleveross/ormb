@@ -86,6 +86,12 @@ var _ = Describe("Format", func() {
 		Expect(err).To(BeNil())
 	})
 
+	It("Should validate Pickle format successfully", func() {
+		pickleFormat := model.FormatPickle
+		err := pickleFormat.ValidateDirectory("../../examples/Pickle-model")
+		Expect(err).To(BeNil())
+	})
+
 	It("Should validate Others for corruptted format successfully", func() {
 		others := model.FormatOthers
 		err := others.ValidateDirectory("../../test/Corrupt")
