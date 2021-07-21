@@ -26,6 +26,7 @@ const (
 	FormatSKLearn     Format = "SKLearn"
 	FormatXGBoost     Format = "XGBoost"
 	FormatMLflow      Format = "MLflow"
+	FormatPickle      Format = "Pickle"
 	FormatOthers      Format = "Others"
 )
 
@@ -67,6 +68,8 @@ func (f Format) ValidateDirectory(rootPath string) error {
 		err = f.validateForXGBoost(modelFilePath, fileList)
 	case FormatMLflow:
 		err = f.validateForMLflow(modelFilePath, fileList)
+	case FormatPickle:
+		err = f.validateForPickle(modelFilePath, fileList)
 	case FormatOthers:
 		return nil
 	default:
@@ -271,6 +274,19 @@ func (f Format) validateForMLflow(modelPath string, files []os.FileInfo) error {
 		}
 	}
 	if e := ValidateError(modelPath, "MLmodel", MLflowFileNum); e != nil {
+		return e
+	}
+	return nil
+}
+
+func (f Format) validateForPickle(modelPath string, files []os.FileInfo) error {
+	var pickleFileNum int32
+	for _, file := range files {
+		if path.Ext(file.Name()) == ".pickle" {
+			pickleFileNum++
+		}
+	}
+	if e := ValidateError(modelPath, "*.pickle", pickleFileNum); e != nil {
 		return e
 	}
 	return nil
