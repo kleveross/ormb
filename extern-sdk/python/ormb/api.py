@@ -24,7 +24,7 @@ def pull(ref: str):
 
 
 def export(ref: str, dst: str):
-    ex = Popen([join(BIN_PATH, "ormb"), "export", ref, dst])
+    ex = Popen([join(BIN_PATH, "ormb"), "export", ref, "-d", dst])
     status = ex.wait()
     return status
 
