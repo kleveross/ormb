@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"path"
 	"strconv"
 
@@ -27,9 +28,12 @@ import (
 
 const (
 	credentialsFileBasename = "config.json"
+	dockerCredentialsDirectory = "~/.docker/"
 )
 
 var _ Interface = (*Client)(nil)
+
+var credentialsFile string
 
 // Client works with OCI-compliant registries and local cache.
 type Client struct {
@@ -55,7 +59,14 @@ func NewClient(opts ...ClientOption) (Interface, error) {
 	}
 	// set defaults if fields are missing
 	if client.authorizer == nil {
-		credentialsFile := path.Join(client.rootPath, credentialsFileBasename)
+	
+		if fileExists(path.Join((dockerCredentialsDirectory))) {
+			credentialsFile = path.Join(dockerCredentialsDirectory, credentialsFileBasename)	
+			fmt.Println("Using Docker Config for Login")
+		} else {
+			credentialsFile = path.Join(client.rootPath, credentialsFileBasename)
+			fmt.Println("Using ORMB Config for Login")
+		}
 		authClient, err := auth.NewClient(credentialsFile)
 		if err != nil {
 			return nil, err
@@ -280,4 +291,13 @@ func (c *Client) printCacheRefSummary(r *cache.CacheRefSummary) {
 	if r.Model != nil && r.Model.Metadata != nil {
 		fmt.Fprintf(c.out, "format:    %s\n", r.Model.Metadata.Format)
 	}
+}
+
+// fileExists checks if a file exists
+func fileExists(filename string) bool {
+    info, err := os.Stat(filename)
+    if os.IsNotExist(err) {
+        return false
+    }
+    return !info.IsDir()
 }
