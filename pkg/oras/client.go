@@ -62,10 +62,10 @@ func NewClient(opts ...ClientOption) (Interface, error) {
 	
 		if fileExists(path.Join((dockerCredentialsDirectory))) {
 			credentialsFile = path.Join(dockerCredentialsDirectory, credentialsFileBasename)	
-			fmt.Println("Using Docker Config for Login")
+			fmt.Fprintf(client.out, "Using Docker Config for Login")
 		} else {
 			credentialsFile = path.Join(client.rootPath, credentialsFileBasename)
-			fmt.Println("Using ORMB Config for Login")
+			fmt.Fprintf(client.out, "Using ORMB Config for Login")
 		}
 		authClient, err := auth.NewClient(credentialsFile)
 		if err != nil {
