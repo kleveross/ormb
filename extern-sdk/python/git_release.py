@@ -41,6 +41,9 @@ def download():
     for asset in json_info["assets"]:
         if asset_name in asset["browser_download_url"]:
             asset_url = asset["url"]
+        # temporary fix for non existing Darwin i386 binaries
+        elif "Darwin_i386" in asset_name and os_name in asset["browser_download_url"]:
+            asset_url = asset["url"]
 
     # download the url contents in binary format
     headers = {'Accept': 'application/octet-stream'}
