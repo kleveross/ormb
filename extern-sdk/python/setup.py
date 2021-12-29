@@ -30,9 +30,6 @@ setup(
     maintainer="gaocegege, ZhuYuJin",
     description="ormb warehouse",
     python_requires=">=3.6",
-    install_requires=[
-        "requests"
-    ],
     packages=find_packages(include=("ormb", "ormb.*")),
     package_data={'ormb': ['bin/*']},
 )
