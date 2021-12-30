@@ -1,9 +1,9 @@
 import json
-import requests
+import os
 import platform
 import sys
 import tarfile
-import os
+import urllib.request
 
 
 REPOS = "kleveross/ormb"
@@ -21,12 +21,12 @@ def untar(fname, dirs):
 
 def download():
     url = 'https://api.github.com/repos/%s/releases/%s' % (REPOS, VERSION)
-    r = requests.get(url)
+    r = urllib.request.urlopen(url)
 
-    if r.status_code != 200:
-        raise Exception("get assets info err, ret code: %s" % r.status_code)
+    if r.status != 200:
+        raise Exception("get assets info err, ret code: %s" % r.status)
 
-    json_info = json.loads(r.text)
+    json_info = json.loads(r.read())
 
     cur_version = json_info["tag_name"][1:]
 
@@ -47,15 +47,15 @@ def download():
 
     # download the url contents in binary format
     headers = {'Accept': 'application/octet-stream'}
-    r = requests.get(asset_url, headers=headers)
+    req = urllib.request.Request(asset_url, headers=headers)
+    r = urllib.request.urlopen(req)
 
     # open method to open a file on your system and write the contents
     with open(asset_name, "wb") as code:
-        code.write(r.content)
+        code.write(r.read())
 
     if not os.path.exists(BIN_PATH):
         os.mkdir(BIN_PATH)
     untar(asset_name, BIN_PATH)
 
     os.remove(asset_name)
-
