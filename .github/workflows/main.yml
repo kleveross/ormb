@@ -18,10 +18,10 @@ jobs:
       - ubuntu-latest
     timeout-minutes: 60
     steps:
-      - name: Set up Go 1.14
+      - name: Set up Go
         uses: actions/setup-go@v1
         with:
-           go-version: 1.14.7
+           go-version: 1.17
         id: go
       - uses: actions/checkout@v2
         with:
@@ -34,10 +34,6 @@ jobs:
           echo "GOPATH=$(go env GOPATH):$GITHUB_WORKSPACE" >> $GITHUB_ENV
           echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
           echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
-      - name: before_install
-        run: |
-          # get coveralls.io support
-          go get github.com/kleveross/goveralls
       - name: install
         run: |
           cd src/github.com/kleveross/ormb
