@@ -3,7 +3,7 @@ module github.com/kleveross/ormb
 go 1.17
 
 require (
-	github.com/containerd/containerd v1.3.4
+	github.com/containerd/containerd v1.4.13
 	github.com/deislabs/oras v0.8.1
 	github.com/docker/docker v1.4.2-0.20200203170920-46ec8731fbce
 	github.com/golang/mock v1.4.4
@@ -38,8 +38,9 @@ require (
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/garyburd/redigo v1.6.0 // indirect
 	github.com/gofrs/uuid v3.3.0+incompatible // indirect
-	github.com/gogo/protobuf v1.3.1 // indirect
+	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.4.2 // indirect
+	github.com/google/go-cmp v0.5.5 // indirect
 	github.com/gorilla/handlers v1.4.2 // indirect
 	github.com/gorilla/mux v1.7.4 // indirect
 	github.com/hashicorp/golang-lru v0.5.1 // indirect
@@ -52,7 +53,6 @@ require (
 	github.com/mitchellh/mapstructure v1.1.2 // indirect
 	github.com/morikuni/aec v1.0.0 // indirect
 	github.com/nxadm/tail v1.4.4 // indirect
-	github.com/opencontainers/runc v0.1.1 // indirect
 	github.com/pelletier/go-toml v1.2.0 // indirect
 	github.com/prometheus/client_golang v1.1.0 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
@@ -68,16 +68,17 @@ require (
 	github.com/yvasiyarov/gorelic v0.0.7 // indirect
 	github.com/yvasiyarov/newrelic_platform_go v0.0.0-20160601141957-9c099fbc30e9 // indirect
 	go.opencensus.io v0.22.0 // indirect
-	golang.org/x/net v0.0.0-20200625001655-4c5254603344 // indirect
-	golang.org/x/sync v0.0.0-20200625203802-6e8e738ad208 // indirect
-	golang.org/x/sys v0.0.0-20200519105757-fe76b779f299 // indirect
-	golang.org/x/text v0.3.2 // indirect
-	golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543 // indirect
+	golang.org/x/net v0.0.0-20201021035429-f5854403a974 // indirect
+	golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9 // indirect
+	golang.org/x/sys v0.0.0-20210119212857-b64e53b001e4 // indirect
+	golang.org/x/text v0.3.3 // indirect
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/genproto v0.0.0-20191108220845-16a3f7862a1a // indirect
 	google.golang.org/grpc v1.27.0 // indirect
 	google.golang.org/protobuf v1.23.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	gopkg.in/ini.v1 v1.51.0 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
+	gotest.tools/v3 v3.1.0 // indirect
 	rsc.io/letsencrypt v0.0.3 // indirect
 )
