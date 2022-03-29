@@ -137,7 +137,8 @@ func (cache *Cache) FetchReference(ref *oci.Reference) (*CacheRefSummary, error)
 			r.Size = info.Size
 			r.Digest = info.Digest
 			r.CreatedAt = info.CreatedAt
-			contentBytes, err := cache.fetchBlob(contentLayer)
+			// contentBytes, err := cache.fetchBlob(contentLayer)
+			contentReader, err := cache.fetchBlobReader(contentLayer)
 			if err != nil {
 				return &r, err
 			}
@@ -152,9 +153,10 @@ func (cache *Cache) FetchReference(ref *oci.Reference) (*CacheRefSummary, error)
 
 			// TODO(gaocegege): Optimize the memory usage.
 			r.Model = &model.Model{
-				Content:  contentBytes,
-				Config:   configBytes,
-				Metadata: metadata,
+				Content:       []byte{},
+				ContentReader: contentReader,
+				Config:        configBytes,
+				Metadata:      metadata,
 			}
 		}
 	}
@@ -308,6 +310,49 @@ func (cache *Cache) init() error {
 	return nil
 }
 
+type readerConverter struct {
+	size   int64
+	at     io.ReaderAt
+	offset int64
+	left   int64
+}
+
+func (r *readerConverter) read(p []byte) (n int, err error) {
+	n, err = r.at.ReadAt(p, r.offset)
+	r.offset = r.offset + int64(n)
+	r.left = r.size - r.offset
+	return n, err
+}
+
+func (r *readerConverter) Read(p []byte) (n int, err error) {
+	if r.left == 0 {
+		return 0, io.EOF
+	}
+	if len(p) > int(r.left) {
+		tmp := make([]byte, r.left)
+		n, err = r.read(tmp)
+		copy(p, tmp)
+		return
+	}
+	if r.offset+int64(len(p)) > r.size {
+		return 0, fmt.Errorf("offset %d, current %d, size %d", r.offset, len(p), r.size)
+	}
+	n, err = r.read(p)
+	return n, err
+}
+
+func (cache *Cache) fetchBlobReader(desc *ocispec.Descriptor) (io.Reader, error) {
+	reader, err := cache.ociStore.ReaderAt(ctx.Context(cache.out, cache.debug), *desc)
+	if err != nil {
+		return nil, err
+	}
+	return &readerConverter{
+		size: desc.Size,
+		at:   reader,
+		left: desc.Size,
+	}, nil
+}
+
 // fetchBlob retrieves a blob from filesystem
 func (cache *Cache) fetchBlob(desc *ocispec.Descriptor) ([]byte, error) {
 	reader, err := cache.ociStore.ReaderAt(ctx.Context(cache.out, cache.debug), *desc)
@@ -362,7 +407,7 @@ func (cache *Cache) saveModelConfig(m *model.Model) (*ocispec.Descriptor, bool, 
 // saveModelContentLayer stores the model as tarball blob and returns a descriptor
 func (cache *Cache) saveModelContentLayer(m *model.Model) (*ocispec.Descriptor, bool, error) {
 	destDir := filepath.Join(cache.rootDir, ".build")
-	os.MkdirAll(destDir, 0755)
+	os.MkdirAll(destDir, 0o755)
 	// TODO: Save models instead of letting users do it.
 
 	contentExists, err := cache.storeBlob(m.Content)

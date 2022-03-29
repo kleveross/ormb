@@ -1,6 +1,9 @@
 package model
 
-import "time"
+import (
+	"io"
+	"time"
+)
 
 type Model struct {
 	// Metadata is the contents of the Chartfile.
@@ -8,6 +11,8 @@ type Model struct {
 	Path     string    `json:"path,omitempty"`
 	Content  []byte    `json:"content,omitempty"`
 	Config   []byte    `json:"config,omitempty"`
+
+	ContentReader io.Reader
 }
 
 type Metadata struct {

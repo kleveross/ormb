@@ -11,6 +11,7 @@ import (
 
 	"github.com/kleveross/ormb/pkg/consts"
 	"github.com/kleveross/ormb/pkg/model"
+	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
 )
 
@@ -23,12 +24,20 @@ func New() Interface {
 
 // Export saves the model to the destination.
 func (d Exporter) Export(m *model.Model, dst string) (string, error) {
+	var (
+		gzr *gzip.Reader
+		err error
+	)
 	if err := d.exportMetadata(m, dst); err != nil {
 		return "", err
 	}
 
 	// Export model.
-	gzr, err := gzip.NewReader(bytes.NewBuffer(m.Content))
+	if len(m.Content) == 0 {
+		gzr, err = gzip.NewReader(m.ContentReader)
+	} else {
+		gzr, err = gzip.NewReader(bytes.NewBuffer(m.Content))
+	}
 	if err != nil {
 		return "", err
 	}
@@ -37,7 +46,6 @@ func (d Exporter) Export(m *model.Model, dst string) (string, error) {
 	tr := tar.NewReader(gzr)
 	for {
 		header, err := tr.Next()
-
 		switch {
 
 		// if no more files are found return
@@ -55,6 +63,7 @@ func (d Exporter) Export(m *model.Model, dst string) (string, error) {
 
 		// the target location where the dir/file should be created
 		target := filepath.Join(dst, header.Name)
+		logrus.Infoln(target)
 
 		// the following switch could also be done using fi.Mode(), not sure if there
 		// a benefit of using one vs. the other.
@@ -66,7 +75,7 @@ func (d Exporter) Export(m *model.Model, dst string) (string, error) {
 		// if its a dir and it doesn't exist create it
 		case tar.TypeDir:
 			if _, err := os.Stat(target); err != nil {
-				if err := os.MkdirAll(target, 0755); err != nil {
+				if err := os.MkdirAll(target, 0o755); err != nil {
 					return "", err
 				}
 			}
@@ -75,7 +84,7 @@ func (d Exporter) Export(m *model.Model, dst string) (string, error) {
 		case tar.TypeReg:
 			// Create the parent directory first.
 			parentDir := filepath.Dir(target)
-			if err := os.MkdirAll(parentDir, 0755); err != nil {
+			if err := os.MkdirAll(parentDir, 0o755); err != nil {
 				return "", err
 			}
 			f, err := os.OpenFile(target, os.O_CREATE|os.O_RDWR, os.FileMode(header.Mode))
@@ -102,5 +111,5 @@ func (d Exporter) exportMetadata(m *model.Model, dst string) error {
 		return err
 	}
 
-	return ioutil.WriteFile(filepath.Join(dst, consts.ORMBfileName), yamlBytes, 0644)
+	return ioutil.WriteFile(filepath.Join(dst, consts.ORMBfileName), yamlBytes, 0o644)
 }
