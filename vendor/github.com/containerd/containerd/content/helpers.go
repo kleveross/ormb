@@ -25,10 +25,16 @@ import (
 	"time"
 
 	"github.com/containerd/containerd/errdefs"
+	"github.com/containerd/containerd/log"
 	"github.com/opencontainers/go-digest"
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
 	"github.com/pkg/errors"
 )
+
+// maxResets is the no.of times the Copy() method can tolerate a reset of the body
+const maxResets = 5
+
+var ErrReset = errors.New("writer has been reset")
 
 var bufPool = sync.Pool{
 	New: func() interface{} {
@@ -80,7 +86,7 @@ func WriteBlob(ctx context.Context, cs Ingester, ref string, r io.Reader, desc o
 			return errors.Wrap(err, "failed to open writer")
 		}
 
-		return nil // all ready present
+		return nil // already present
 	}
 	defer cw.Close()
 
@@ -131,30 +137,63 @@ func OpenWriter(ctx context.Context, cs Ingester, opts ...WriterOpt) (Writer, er
 // the size or digest is unknown, these values may be empty.
 //
 // Copy is buffered, so no need to wrap reader in buffered io.
-func Copy(ctx context.Context, cw Writer, r io.Reader, size int64, expected digest.Digest, opts ...Opt) error {
+func Copy(ctx context.Context, cw Writer, or io.Reader, size int64, expected digest.Digest, opts ...Opt) error {
 	ws, err := cw.Status()
 	if err != nil {
 		return errors.Wrap(err, "failed to get status")
 	}
-
+	r := or
 	if ws.Offset > 0 {
-		r, err = seekReader(r, ws.Offset, size)
+		r, err = seekReader(or, ws.Offset, size)
 		if err != nil {
 			return errors.Wrapf(err, "unable to resume write to %v", ws.Ref)
 		}
 	}
 
-	if _, err := copyWithBuffer(cw, r); err != nil {
-		return errors.Wrap(err, "failed to copy")
-	}
-
-	if err := cw.Commit(ctx, size, expected, opts...); err != nil {
-		if !errdefs.IsAlreadyExists(err) {
-			return errors.Wrapf(err, "failed commit on ref %q", ws.Ref)
+	for i := 0; i < maxResets; i++ {
+		if i >= 1 {
+			log.G(ctx).WithField("digest", expected).Debugf("retrying copy due to reset")
 		}
+		copied, err := copyWithBuffer(cw, r)
+		if errors.Is(err, ErrReset) {
+			ws, err := cw.Status()
+			if err != nil {
+				return errors.Wrap(err, "failed to get status")
+			}
+			r, err = seekReader(or, ws.Offset, size)
+			if err != nil {
+				return errors.Wrapf(err, "unable to resume write to %v", ws.Ref)
+			}
+			continue
+		}
+		if err != nil {
+			return errors.Wrap(err, "failed to copy")
+		}
+		if size != 0 && copied < size-ws.Offset {
+			// Short writes would return its own error, this indicates a read failure
+			errors.Wrapf(io.ErrUnexpectedEOF, "failed to read expected number of bytes")
+		}
+		if err := cw.Commit(ctx, size, expected, opts...); err != nil {
+			if errors.Is(err, ErrReset) {
+				ws, err := cw.Status()
+				if err != nil {
+					return errors.Wrap(err, "failed to get status: %w")
+				}
+				r, err = seekReader(or, ws.Offset, size)
+				if err != nil {
+					return errors.Wrapf(err, "unable to resume write to %v", ws.Ref)
+				}
+				continue
+			}
+			if !errdefs.IsAlreadyExists(err) {
+				return errors.Wrapf(err, "failed commit on ref %q", ws.Ref)
+			}
+		}
+		return nil
 	}
 
-	return nil
+	log.G(ctx).WithField("digest", expected).Errorf("failed to copy after %d retries", maxResets)
+	return errors.Errorf("failed to copy after %d retries", maxResets)
 }
 
 // CopyReaderAt copies to a writer from a given reader at for the given
@@ -165,8 +204,15 @@ func CopyReaderAt(cw Writer, ra ReaderAt, n int64) error {
 		return err
 	}
 
-	_, err = copyWithBuffer(cw, io.NewSectionReader(ra, ws.Offset, n))
-	return err
+	copied, err := copyWithBuffer(cw, io.NewSectionReader(ra, ws.Offset, n))
+	if err != nil {
+		return errors.Wrap(err, "failed to copy")
+	}
+	if copied < n {
+		// Short writes would return its own error, this indicates a read failure
+		return errors.Wrap(io.ErrUnexpectedEOF, "failed to read expected number of bytes")
+	}
+	return nil
 }
 
 // CopyReader copies to a writer from a given reader, returning
@@ -229,9 +275,47 @@ func seekReader(r io.Reader, offset, size int64) (io.Reader, error) {
 	return r, nil
 }
 
+// copyWithBuffer is very similar to  io.CopyBuffer https://golang.org/pkg/io/#CopyBuffer
+// but instead of using Read to read from the src, we use ReadAtLeast to make sure we have
+// a full buffer before we do a write operation to dst to reduce overheads associated
+// with the write operations of small buffers.
 func copyWithBuffer(dst io.Writer, src io.Reader) (written int64, err error) {
-	buf := bufPool.Get().(*[]byte)
-	written, err = io.CopyBuffer(dst, src, *buf)
-	bufPool.Put(buf)
+	// If the reader has a WriteTo method, use it to do the copy.
+	// Avoids an allocation and a copy.
+	if wt, ok := src.(io.WriterTo); ok {
+		return wt.WriteTo(dst)
+	}
+	// Similarly, if the writer has a ReadFrom method, use it to do the copy.
+	if rt, ok := dst.(io.ReaderFrom); ok {
+		return rt.ReadFrom(src)
+	}
+	bufRef := bufPool.Get().(*[]byte)
+	defer bufPool.Put(bufRef)
+	buf := *bufRef
+	for {
+		nr, er := io.ReadAtLeast(src, buf, len(buf))
+		if nr > 0 {
+			nw, ew := dst.Write(buf[0:nr])
+			if nw > 0 {
+				written += int64(nw)
+			}
+			if ew != nil {
+				err = ew
+				break
+			}
+			if nr != nw {
+				err = io.ErrShortWrite
+				break
+			}
+		}
+		if er != nil {
+			// If an EOF happens after reading fewer than the requested bytes,
+			// ReadAtLeast returns ErrUnexpectedEOF.
+			if er != io.EOF && er != io.ErrUnexpectedEOF {
+				err = er
+			}
+			break
+		}
+	}
 	return
 }
