@@ -1,6 +1,6 @@
 # Serving Models with Seldon Core and ormb (Experimental)
 
-ormb can be used to pull models in Seldon Core. First we need to deploy Seldon Core on Kubernetes.
+ormb can be used to pull models in Seldon Core. First, we need to deploy Seldon Core on Kubernetes.
 
 In this tutorial, we use [SavedModel-fashion](../examples/SavedModel-fashion) as an example, to illustrate the feature.
 
@@ -10,7 +10,7 @@ In this tutorial, we use [SavedModel-fashion](../examples/SavedModel-fashion) as
 
 ## Push the model to remote registry
 
-In this tutorial, we use [demo.goharbor.io][] as the remote registry. First you need to register an account in [demo.goharbor.io][]. We use `ormbtest` as username, `ORMBtest12345` as password here.
+In this tutorial, we use [demo.goharbor.io][] as the remote registry. First, you need to register an account in [demo.goharbor.io][]. We use `ormbtest` as username, `ORMBtest12345` as password here.
 
 <p align="center">
 <img src="images/harbor-registration.png" width="400">
@@ -24,7 +24,7 @@ Then, we should create a new project `tensorflow` in Harbor.
 <p align="center">https://demo.goharbor.io/harbor/projects</p>
 </p>
 
-After that, the model can be pushed to the remote registry under `tensorlfow` project.
+After that, the model can be pushed to the remote registry under `tensorflow` project.
 
 ```bash
 # Login to demo.goharbor.io
